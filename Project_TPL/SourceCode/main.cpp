@@ -187,10 +187,34 @@ void UpdateImGui()
 	// ※日本語フォントはu8リテラルで正しく表示できる
 	ImGui::Begin(u8"デバッグ画面");
 
-	// 項目
+	// テキスト表示
 	ImGui::Text("index");
 
+	// テキスト表示 (自動的に改行される)
+	ImGui::Text("index");
 
+	// 改行しないという明示。次のテキストが同じ行に表示される
+	ImGui::SameLine();
+
+	// テキスト
+	ImGui::Text(u8"です。");
+
+	// 区切り線
+	ImGui::Separator();
+
+	// チェックボックス
+	static bool check;
+	ImGui::Checkbox(u8"チェック", &check);
+
+	// 区切り線
+	ImGui::Separator();
+
+	// カラーピッカー
+	static float color;
+	ImGui::ColorPicker4(u8"カラー", &color);
+
+	//フレームレートを表示
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 
 	ImGui::End();
 }
