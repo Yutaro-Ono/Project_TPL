@@ -21,6 +21,18 @@
     <Filter Include="Source\DebugSystem">
       <UniqueIdentifier>{ae2ee081-5648-4d26-aa3c-b2c1a1d3d862}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Scene">
+      <UniqueIdentifier>{992cbc5e-3300-4fbd-abfd-a499ebda1c79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Scene\TestScene">
+      <UniqueIdentifier>{812f09e8-c832-4b16-aec5-17e393026e36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\std_image">
+      <UniqueIdentifier>{016031fa-b191-4678-b457-5917bfcbbece}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\GLSL">
+      <UniqueIdentifier>{f82beb12-9e69-4c6f-b267-a71432b3bd10}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -59,6 +71,12 @@
     <ClCompile Include="SourceCode\Debugger.cpp">
       <Filter>Source\DebugSystem</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\TestScene.cpp">
+      <Filter>Source\Scene\TestScene</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\GLSLprogram.cpp">
+      <Filter>Source\GLSL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -93,6 +111,18 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Debugger.h">
       <Filter>Source\DebugSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\SceneBase.h">
+      <Filter>Source\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TestScene.h">
+      <Filter>Source\Scene\TestScene</Filter>
+    </ClInclude>
+    <ClInclude Include="std\stb_image.h">
+      <Filter>リソース ファイル\std_image</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GLSLprogram.h">
+      <Filter>Source\GLSL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

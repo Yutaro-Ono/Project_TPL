@@ -48,6 +48,7 @@ bool Renderer::Initialize()
 	}
 	// 作成したウィンドウを現在のスレッドのメインコンテキストとして設定
 	glfwMakeContextCurrent(m_window);
+
 	
 	//---------------------------------------------------+
 	// gl3w初期化 (glfwMakeContextCurrent関数の後に)

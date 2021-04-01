@@ -7,6 +7,7 @@
 #include "GameMain.h"
 #include "Renderer.h"
 #include "Debugger.h"
+#include "SceneBase.h"
 
 #include <iostream>
 
@@ -16,6 +17,7 @@
 GameMain::GameMain()
 	:m_renderer(nullptr)
 	,m_debugger(nullptr)
+	,m_scene(nullptr)
 {
 
 }

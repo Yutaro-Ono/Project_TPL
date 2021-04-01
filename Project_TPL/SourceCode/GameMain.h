@@ -42,10 +42,10 @@ private:
 	void ProcessInput();
 
 
-	// メンバインスタンス
+	// メンバ インスタンス
 	class Renderer* m_renderer;     // レンダラー
 	class Debugger* m_debugger;     // デバッガ―
-
+	class SceneBase* m_scene;       // ゲームシーン
 
 };
 

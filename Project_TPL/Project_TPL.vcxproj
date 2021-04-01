@@ -157,8 +157,10 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="SourceCode\Debugger.cpp" />
     <ClCompile Include="SourceCode\GameMain.cpp" />
+    <ClCompile Include="SourceCode\GLSLprogram.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\Renderer.cpp" />
+    <ClCompile Include="SourceCode\TestScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h" />
@@ -171,7 +173,11 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="SourceCode\Debugger.h" />
     <ClInclude Include="SourceCode\GameMain.h" />
+    <ClInclude Include="SourceCode\GLSLprogram.h" />
     <ClInclude Include="SourceCode\Renderer.h" />
+    <ClInclude Include="SourceCode\SceneBase.h" />
+    <ClInclude Include="SourceCode\TestScene.h" />
+    <ClInclude Include="std\stb_image.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
