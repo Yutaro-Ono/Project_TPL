@@ -20,8 +20,11 @@ Renderer::~Renderer()
 /// <summary>
 /// 初期化処理
 /// </summary>
-/// <returns> 初期化失敗時にfalseを返す </returns>
-bool Renderer::Initialize()
+/// <param name="_width"> スクリーンの横幅 </param>
+/// <param name="_height"> スクリーンの縦幅 </param>
+/// <param name="_fullScreen"> フルスクリーンにするか </param>
+/// <returns> 初期化に失敗した場合falseを返す </returns>
+bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 {
 
 	//--------------------------------------+
@@ -38,8 +41,15 @@ bool Renderer::Initialize()
 	//--------------------------------------+
 	// ウィンドウオブジェクト定義
 	//--------------------------------------+
-	// ウィンドウ作成 (1920x1080)
-	m_window = glfwCreateWindow(1920, 1080, "Project_TPL", NULL, NULL);
+	// フルスクリーン化
+	if (_fullScreen)
+	{
+		m_window = glfwCreateWindow(_width, _height, "Project_TPL", glfwGetPrimaryMonitor(), NULL);
+	}
+	else
+	{
+		m_window = glfwCreateWindow(_width, _height, "Project_TPL", NULL, NULL);
+	}
 	// ウィンドウ作成失敗時
 	if (m_window == NULL)
 	{
@@ -59,7 +69,7 @@ bool Renderer::Initialize()
 	// ビューポートの設定
 	//---------------------------------------+
 	// ビューポート (0x0の座標から1920x1080までを描画範囲として設定)
-	glViewport(0, 0, 1920, 1080);
+	glViewport(0, 0, _width, _height);
 	// ウィンドウサイズ変更が行われた際に、コールバック関数 (今回は画面サイズの最適化関数)を呼び出すことを、GLFWに指示
 	glfwSetFramebufferSizeCallback(m_window, FrameBuffer_Size_Callback);
 
@@ -106,8 +116,8 @@ void Renderer::Draw()
 /// <param name="in_window"> ウィンドウオブジェクトのポインタ </param>
 /// <param name="in_windth"> 画面の横幅 </param>
 /// <param name="in_height"> 画面の縦幅 </param>
-void Renderer::FrameBuffer_Size_Callback(GLFWwindow* in_window, int in_windth, int in_height)
+void Renderer::FrameBuffer_Size_Callback(GLFWwindow* _window, int _width, int _height)
 {
 	// ビューポートのリサイズ
-	glViewport(0, 0, in_windth, in_height);
+	glViewport(0, 0, _width, _height);
 }

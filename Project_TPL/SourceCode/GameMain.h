@@ -42,7 +42,8 @@ private:
 	void ProcessInput();
 
 
-	// メンバ インスタンス
+	// メンバ クラス
+	class GameSettings* m_settings; // ゲーム設定
 	class Renderer* m_renderer;     // レンダラー
 	class Debugger* m_debugger;     // デバッガ―
 	class SceneBase* m_scene;       // ゲームシーン

@@ -77,6 +77,9 @@
     <ClCompile Include="SourceCode\GLSLprogram.cpp">
       <Filter>Source\GLSL</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\GameSettings.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -123,6 +126,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\GLSLprogram.h">
       <Filter>Source\GLSL</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\GameSettings.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

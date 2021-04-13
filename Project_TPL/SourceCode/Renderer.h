@@ -24,7 +24,7 @@ public:
 	Renderer();
 	~Renderer();
 
-	bool Initialize();
+	bool Initialize(int _width, int _height, bool _fullScreen);
 	void Delete();
 
 	void Draw();
@@ -34,7 +34,7 @@ public:
 
 private:
 
-	static void FrameBuffer_Size_Callback(GLFWwindow* in_window, int in_windth, int in_height);
+	static void FrameBuffer_Size_Callback(GLFWwindow* _window, int _width, int _height);
 
 
 	GLFWwindow* m_window;     // メインウィンドウ

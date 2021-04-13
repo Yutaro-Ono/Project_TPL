@@ -158,7 +158,6 @@ bool GLSLprogram::CompileShaderFromFile(const std::string& _shaderPath, GLenum _
 {
 
 
-
     // シェーダーファイルをオープン
     std::ifstream shaderFile(_shaderPath);
 

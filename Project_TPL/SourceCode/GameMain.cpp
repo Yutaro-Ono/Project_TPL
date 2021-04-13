@@ -5,6 +5,7 @@
 // @author      小野 湧太郎 (Yutaro Ono, @2021)
 //----------------------------------------------------------------------------------+
 #include "GameMain.h"
+#include "GameSettings.h"
 #include "Renderer.h"
 #include "Debugger.h"
 #include "SceneBase.h"
@@ -15,7 +16,8 @@
 /// コンストラクタ
 /// </summary>
 GameMain::GameMain()
-	:m_renderer(nullptr)
+	:m_settings(nullptr)
+	,m_renderer(nullptr)
 	,m_debugger(nullptr)
 	,m_scene(nullptr)
 {
@@ -36,6 +38,13 @@ GameMain::~GameMain()
 /// <returns> 初期化失敗時にfalseを返す </returns>
 bool GameMain::Initialize()
 {
+	// ゲーム設定クラスの読み込み処理
+	if (m_settings->GetInstance().Load("Project_TPL.ini"))
+	{
+		std::cout << "Error::GameSettings::Load" << std::endl;
+		return false;
+	}
+
 	m_renderer = new Renderer();
 	if (!m_renderer->Initialize())
 	{
@@ -74,9 +83,12 @@ void GameMain::ProcessInput()
 {
 	// ESCAPEが押されたら
     // ウィンドウ終了フラグをONする
-	if (glfwGetKey(m_renderer->GetMainWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(m_renderer->GetMainWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS || 
+		glfwGetKey(m_debugger->GetDebugWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
+		glfwSetWindowShouldClose(m_debugger->GetDebugWindow(), true);
 		glfwSetWindowShouldClose(m_renderer->GetMainWindow(), true);
+		
 	}
 }
 

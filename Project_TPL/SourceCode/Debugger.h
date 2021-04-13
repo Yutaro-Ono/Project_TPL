@@ -34,6 +34,9 @@ public:
 	void RenderImGui();
 
 
+	GLFWwindow* GetDebugWindow() { return m_debugWindow; }
+
+
 private:
 
 	
