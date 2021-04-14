@@ -38,16 +38,20 @@ private:
 	GameSettings();
 
 	bool LoadIntValue(const ptree& _pt, const std::string& _section, const std::string& _key, int& _val);
-	bool LoadBoolValue(const ptree& _pt, const std::string& _section, const std::string& _key, bool& _val);
+
+
+	// ini読み込み用のプロパティツリー
+	ptree m_pt;
 
 	// 画面設定用の変数
 	int m_displayHeight;
 	int m_displayWidth;
-	bool m_displayFullScreen;
+	int m_displayFullScreen;
 
 	// グラフィックス設定
-	bool m_graphicsEnableDeffered;
-	bool m_graphicsEnableEnvMap;
+	int m_graphicsEnableDeffered;
+	int m_graphicsEnableEnvMap;
 
+	friend class GameMain;
 
 };

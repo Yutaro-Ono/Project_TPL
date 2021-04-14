@@ -101,9 +101,7 @@ void Renderer::Draw()
     // 描画処理
     //------------------------------------------------+
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);      // 指定した色値で画面をクリア
-	glClear(GL_COLOR_BUFFER_BIT);              // 画面のカラーバッファをクリア
-	//glClear(GL_DEPTH_BUFFER_BIT);
-	//glClear(GL_STENCIL_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
 
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
 	glfwSwapBuffers(m_window);

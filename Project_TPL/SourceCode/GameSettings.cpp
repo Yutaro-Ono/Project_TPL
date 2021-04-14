@@ -10,14 +10,13 @@
 //----------------------------------------------------------------------------------+
 #include "GameSettings.h"
 
-
 // コンストラクタ
 GameSettings::GameSettings()
-	:m_displayHeight(1080)
-	,m_displayWidth(1920)
-	,m_displayFullScreen(true)
-	,m_graphicsEnableDeffered(true)
-	,m_graphicsEnableEnvMap(true)
+	:m_displayHeight(-1)
+	,m_displayWidth(-1)
+	,m_displayFullScreen(-1)
+	,m_graphicsEnableDeffered(-1)
+	,m_graphicsEnableEnvMap(-1)
 {
 	
 
@@ -27,6 +26,7 @@ GameSettings::GameSettings()
 // デストラクタ
 GameSettings::~GameSettings()
 {
+	
 }
 
 
@@ -43,6 +43,13 @@ bool GameSettings::Load(const std::string& _iniPath)
 
 	bool loadSuccess = true;
 
+	// iniからデータをロード
+	loadSuccess = LoadIntValue(pt, "Display", "ScreenWidth", m_displayWidth);
+	loadSuccess = LoadIntValue(pt, "Display", "ScreenHeight", m_displayHeight);
+
+	loadSuccess = LoadIntValue(pt, "Display", "FullScreen", m_displayFullScreen);
+	loadSuccess = LoadIntValue(pt, "Graphics", "EnableDefferedRendering", m_graphicsEnableDeffered);
+	loadSuccess = LoadIntValue(pt, "Graphics", "EnableEnvironmentMap", m_graphicsEnableEnvMap);
 
 	return loadSuccess;;
 }
@@ -59,23 +66,6 @@ bool GameSettings::Load(const std::string& _iniPath)
 bool GameSettings::LoadIntValue(const ptree& _pt, const std::string& _section, const std::string& _key, int& _val)
 {
 	std::string sectionKey = _section + "." + _key;
-
-	return _val = _pt.get_optional<int>(sectionKey);
+	_val = _pt.get<int>(sectionKey);
+	return _val == -1 ? false : true;
 }
-
-/// <summary>
-/// iniファイル内の指定セクションにある指定キーの値(bool)を取り出す
-/// </summary>
-/// <param name="_pt"> iniファイルを読み込んだプロパティツリー </param>
-/// <param name="_section"> iniファイル内のセクション名 ※[]に括られた文字列 </param>
-/// <param name="_key"> iniファイル内のキー名 ※"  " = の "" 内の文字列 </param>
-/// <param name="_val"> 読み込んだ値を格納する変数 </param>
-/// <returns></returns>
-bool GameSettings::LoadBoolValue(const ptree& _pt, const std::string& _section, const std::string& _key, bool& _val)
-{
-	std::string sectionKey = _section + "." + _key;
-
-	return _val = _pt.get_optional<bool>(sectionKey);
-
-}
-

@@ -39,14 +39,15 @@ GameMain::~GameMain()
 bool GameMain::Initialize()
 {
 	// ゲーム設定クラスの読み込み処理
-	if (m_settings->GetInstance().Load("Project_TPL.ini"))
+	if (!m_settings->GetInstance().Load("Project_TPL.ini"))
 	{
 		std::cout << "Error::GameSettings::Load" << std::endl;
 		return false;
 	}
 
+	// レンダラークラスの作成
 	m_renderer = new Renderer();
-	if (!m_renderer->Initialize())
+	if (!m_renderer->Initialize(m_settings->GetInstance().m_displayWidth, m_settings->GetInstance().m_displayHeight, m_settings->GetInstance().m_displayFullScreen))
 	{
 		std::cout << "Error::Renderer::Initialize" << std::endl;
 		return false;
@@ -54,6 +55,7 @@ bool GameMain::Initialize()
 	
 #ifdef _DEBUG
 
+	// デバッガ―クラスの作成
 	m_debugger = new Debugger();
 	if (!m_debugger->Initialize())
 	{
