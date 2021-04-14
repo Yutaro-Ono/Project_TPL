@@ -33,6 +33,9 @@
     <Filter Include="Source\GLSL">
       <UniqueIdentifier>{f82beb12-9e69-4c6f-b267-a71432b3bd10}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ShaderSource">
+      <UniqueIdentifier>{bb00bfff-2627-4568-88be-7615ef92ca0e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -130,5 +133,13 @@
     <ClInclude Include="SourceCode\GameSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\BasicShader.vert">
+      <Filter>ShaderSource</Filter>
+    </None>
+    <None Include="Shaders\BasicShader.frag">
+      <Filter>ShaderSource</Filter>
+    </None>
   </ItemGroup>
 </Project>

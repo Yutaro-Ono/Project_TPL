@@ -300,3 +300,94 @@ bool GLSLprogram::IsLinkProgram()
 
     return true;
 }
+
+/// <summary>
+/// シェーダープログラムのみを使用する
+/// </summary>
+void GLSLprogram::UseProgram()
+{
+    glUseProgram(m_shaderProgram);
+}
+
+//--------------------------------------------------------------+
+// uniformセット関数群
+//--------------------------------------------------------------+
+void GLSLprogram::SetUniform(const char* _name, int _val)
+{
+    int loc = glGetUniformLocation(m_shaderProgram, _name);
+
+    if (loc >= 0)
+    {
+        glUniform1i(loc, _val);
+    }
+}
+
+void GLSLprogram::SetUniform(const char* _name, float _val)
+{
+    int loc = glGetUniformLocation(m_shaderProgram, _name);
+
+    if (loc >= 0)
+    {
+        glUniform1f(loc, _val);
+    }
+}
+
+void GLSLprogram::SetUniform(const char* _name, bool _val)
+{
+    int loc = glGetUniformLocation(m_shaderProgram, _name);
+
+    if (loc >= 0)
+    {
+        glUniform1i(loc, _val);
+    }
+}
+
+void GLSLprogram::SetUniform(const char* _name, const glm::vec2& _vec)
+{
+    int loc = glGetUniformLocation(m_shaderProgram, _name);
+
+    if (loc >= 0)
+    {
+        glUniform2f(loc, _vec.x, _vec.y);
+    }
+}
+
+void GLSLprogram::SetUniform(const char* _name, const glm::vec3& _vec)
+{
+    int loc = glGetUniformLocation(m_shaderProgram, _name);
+
+    if (loc >= 0)
+    {
+        glUniform3f(loc, _vec.x, _vec.y, _vec.z);
+    }
+}
+
+void GLSLprogram::SetUniform(const char* _name, const glm::vec4& _vec)
+{
+    int loc = glGetUniformLocation(m_shaderProgram, _name);
+
+    if (loc >= 0)
+    {
+        glUniform4f(loc, _vec.x, _vec.y, _vec.z, _vec.w);
+    }
+}
+
+void GLSLprogram::SetUniform(const char* _name, const glm::mat3& _mat)
+{
+    int loc = glGetUniformLocation(m_shaderProgram, _name);
+
+    if (loc >= 0)
+    {
+        glUniformMatrix3fv(loc, 1, GL_FALSE, &_mat[0][0]);
+    }
+}
+
+void GLSLprogram::SetUniform(const char* _name, const glm::mat4& _mat)
+{
+    int loc = glGetUniformLocation(m_shaderProgram, _name);
+
+    if (loc >= 0)
+    {
+        glUniformMatrix4fv(loc, 1, GL_FALSE, &_mat[0][0]);
+    }
+}

@@ -18,7 +18,6 @@ GameSettings::GameSettings()
 	,m_graphicsEnableDeffered(-1)
 	,m_graphicsEnableEnvMap(-1)
 {
-	
 
 }
 

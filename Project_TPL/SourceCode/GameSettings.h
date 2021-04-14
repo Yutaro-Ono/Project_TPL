@@ -10,11 +10,20 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include <string>
+#include <unordered_map>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 using namespace boost::property_tree;
 
+enum class SECTION_NAME : unsigned char
+{
+	DISPLAY_HEIGHT,
+	DISPLAY_WIDTH,
+	DISPLAY_FULLSCREEN,
 
+	GRAPHICS_DEFFERED,
+	GRAPHICS_ENVMAP
+};
 
 class GameSettings
 {
@@ -51,6 +60,11 @@ private:
 	// グラフィックス設定
 	int m_graphicsEnableDeffered;
 	int m_graphicsEnableEnvMap;
+
+
+	std::unordered_map<unsigned char, int> m_settingVal;
+
+
 
 	friend class GameMain;
 
