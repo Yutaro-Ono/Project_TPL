@@ -1,8 +1,8 @@
 //----------------------------------------------------------------------------------+
 // @file        BasicShader.frag
-// @brief       ベーシックシェーダー (フラグメント)
-// @note        クリップ座標上の1ピクセルのカラーを計算し、出力する
-// @author      小野 湧太郎 (Yutaro Ono, @2021)
+// @brief       BasicShader (fragment)
+// @note        output 1 dot color on clip space.
+// @author      Yutaro Ono, @2021
 //----------------------------------------------------------------------------------+
 #version 420
 out vec4 out_fragColor;

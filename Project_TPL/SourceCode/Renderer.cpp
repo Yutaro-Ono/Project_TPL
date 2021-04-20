@@ -6,7 +6,12 @@
 /// </summary>
 Renderer::Renderer()
 	:m_window(NULL)
+	,m_uboMatrices(0)
+	,m_uboCamera(0)
 {
+
+	
+
 }
 
 /// <summary>
@@ -30,7 +35,11 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	//--------------------------------------+
     // GLFW初期化
     //--------------------------------------+
-	glfwInit();
+	if (!glfwInit())
+	{
+		std::cout << "Error::GLFW Initialize" << std::endl;
+		return false;
+	}
 	// GLFW構成オプションの設定
 	// (0：選択するオプション(列挙型), 1：オプションに設定する値)
 	// ver4.2を使用。※バージョンがインストールされていない場合、動作しない
@@ -63,7 +72,12 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	//---------------------------------------------------+
 	// gl3w初期化 (glfwMakeContextCurrent関数の後に)
 	//---------------------------------------------------+
-	gl3wInit();
+	GLenum error = gl3wInit();
+	if (GL3W_OK != error)
+	{
+		std::cout << "Error::GL3W Initialize" << std::endl;
+		return false;
+	}
 
 	//---------------------------------------+
 	// ビューポートの設定
@@ -73,6 +87,27 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	// ウィンドウサイズ変更が行われた際に、コールバック関数 (今回は画面サイズの最適化関数)を呼び出すことを、GLFWに指示
 	glfwSetFramebufferSizeCallback(m_window, FrameBuffer_Size_Callback);
 
+	// デバッグ用三角形
+	m_triangle = new BasicTriangle();
+
+	//---------------------------------------+
+	// uniformバッファ生成
+	//---------------------------------------+
+	// ビュー行列・プロジェクション行列UBO
+	glGenBuffers(1, &m_uboMatrices);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_uboMatrices, 0, 2 * sizeof(glm::mat4));
+
+	// カメラ情報FBO
+	glGenBuffers(1, &m_uboCamera);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3::x) + sizeof(glm::vec3::y) + sizeof(glm::vec3::z), NULL, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_uboCamera, 0, sizeof(glm::vec3::x) + sizeof(glm::vec3::y) + sizeof(glm::vec3::z));
+
+
 	return true;
 }
 
@@ -81,6 +116,8 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 /// </summary>
 void Renderer::Delete()
 {
+	delete m_triangle;
+
 	// windowの破棄・GLFWのクリーンアップ
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
@@ -102,6 +139,10 @@ void Renderer::Draw()
     //------------------------------------------------+
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);      // 指定した色値で画面をクリア
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
+
+	m_triangle->Draw();
+
+
 
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
 	glfwSwapBuffers(m_window);

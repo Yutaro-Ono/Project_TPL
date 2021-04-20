@@ -14,6 +14,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 #include <string>
 
 namespace GLSLshader
@@ -30,18 +33,18 @@ class GLSLprogram
 
 public:
 
-	GLSLprogram(const std::string& _vertPath, const std::string& _fragPath, const std::string& _geomPath = nullptr);
+	GLSLprogram(const char* _vertPath, const char* _fragPath, const char* _geomPath = nullptr);
 	~GLSLprogram();
 
-	bool LoadShaders(const std::string& _vertPath, const std::string& _fragPath, const std::string& _geomPath);
-	bool CompileShaderFromFile(const std::string& _shaderPath, GLenum _shaderType, GLuint& _outShader);
-	bool LinkShaders(const GLuint& _vertShader, const GLuint& _fragShader, const GLuint& _geomShader, GLuint& _program);
+	bool LoadShaders(const char* _vertPath, const char* _fragPath, const char* _geomPath);
+	bool CompileShaderFromFile(const char* _shaderPath, GLenum _shaderType, unsigned int& _outShader);
+	bool LinkShaders(const unsigned int& _vertShader, const unsigned int& _fragShader, const unsigned int& _geomShader, unsigned int& _program);
 
-	void SetUniformBlockFromIndex(const std::string& _uniformIndex);
+	void SetUniformBlockFromIndex(const char* _uniformIndex);
 
 	void Delete();
 
-	bool IsCompiled(GLuint _shader);
+	bool IsCompiled(unsigned int _shader);
 
 	bool IsLinkProgram();
 

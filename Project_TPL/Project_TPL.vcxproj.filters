@@ -33,8 +33,11 @@
     <Filter Include="Source\GLSL">
       <UniqueIdentifier>{f82beb12-9e69-4c6f-b267-a71432b3bd10}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ShaderSource">
+    <Filter Include="Source\ShaderSource">
       <UniqueIdentifier>{bb00bfff-2627-4568-88be-7615ef92ca0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\VertexArray">
+      <UniqueIdentifier>{03bc2672-2235-4eac-98f0-547a2c9d7e14}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +85,12 @@
     </ClCompile>
     <ClCompile Include="SourceCode\GameSettings.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\BasicTriangle.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\VertexArray.cpp">
+      <Filter>Source\VertexArray</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,13 +142,19 @@
     <ClInclude Include="SourceCode\GameSettings.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\BasicTriangle.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\VertexArray.h">
+      <Filter>Source\VertexArray</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\BasicShader.vert">
-      <Filter>ShaderSource</Filter>
+      <Filter>Source\ShaderSource</Filter>
     </None>
     <None Include="Shaders\BasicShader.frag">
-      <Filter>ShaderSource</Filter>
+      <Filter>Source\ShaderSource</Filter>
     </None>
   </ItemGroup>
 </Project>

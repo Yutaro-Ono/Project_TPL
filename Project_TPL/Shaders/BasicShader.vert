@@ -1,10 +1,10 @@
 //----------------------------------------------------------------------------------+
 // @file        BasicShader.vert
-// @brief       ベーシックシェーダー (頂点)
-// @note        頂点座標・カラーを読み込む
-//              クリップ座標情報を計算し、後のプロセスに渡す
-//              カラー情報はそのままフラグメントに出力
-// @author      小野 湧太郎 (Yutaro Ono, @2021)
+// @brief       BasicShader (vertex)
+// @note        vertex position & color(rgb)
+//              output clipspace to shader
+//              output color to shader
+// @author      Yutaro Ono, @2021
 //----------------------------------------------------------------------------------+
 #version 420
 layout (location = 0) in vec3 a_vertexPos;

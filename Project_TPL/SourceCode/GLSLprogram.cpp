@@ -6,12 +6,10 @@
 //----------------------------------------------------------------------------------+
 #include "GLSLprogram.h"
 
-#include <fstream>
-#include <sstream>
-#include <iostream>
 
 
-GLSLprogram::GLSLprogram(const std::string& _vertPath, const std::string& _fragPath, const std::string& _geomPath)
+
+GLSLprogram::GLSLprogram(const char* _vertPath, const char* _fragPath, const char* _geomPath)
     :m_shaderProgram(0)
     ,m_uniformBlockIndex(0)
     ,m_uniformBlockBinding(0)
@@ -33,7 +31,7 @@ GLSLprogram::~GLSLprogram()
 /// <param name="_fragPath"> フラグメントシェーダーのファイルパス </param>
 /// <param name="_geomPath"> ジオメトリシェーダーのファイルパス </param>
 /// <returns> ロード処理に成功したか(true)・失敗したか(false) </returns>
-bool GLSLprogram::LoadShaders(const std::string& _vertPath, const std::string& _fragPath, const std::string& _geomPath)
+bool GLSLprogram::LoadShaders(const char* _vertPath, const char* _fragPath, const char* _geomPath)
 {
 
     // ファイルパスからシェーダーソースコードを取得する
@@ -71,7 +69,7 @@ bool GLSLprogram::LoadShaders(const std::string& _vertPath, const std::string& _
         fragCode = fShaderStream.str();
 
         // ジオメトリシェーダーが指定されていた場合
-        if (&_geomPath != nullptr)
+        if (_geomPath != nullptr)
         {
             gShaderFile.open(_geomPath);
             std::stringstream gShaderStream;
@@ -88,11 +86,11 @@ bool GLSLprogram::LoadShaders(const std::string& _vertPath, const std::string& _
     }
 
     // 文字列に保管
-    const GLchar* vShaderCode = vertCode.c_str();
-    const GLchar* fShaderCode = fragCode.c_str();
+    const char* vShaderCode = vertCode.c_str();
+    const char* fShaderCode = fragCode.c_str();
 
     // シェーダーのコンパイル
-    GLuint vertex, fragment;
+    unsigned int vertex, fragment;
 
     // 頂点シェーダー
     vertex = glCreateShader(GL_VERTEX_SHADER);
@@ -112,11 +110,11 @@ bool GLSLprogram::LoadShaders(const std::string& _vertPath, const std::string& _
     }
 
     // ジオメトリシェーダー
-    GLuint geometry = 0;
-    if (&_geomPath != nullptr)
+    unsigned int geometry = 0;
+    if (_geomPath != nullptr)
     {
 
-        const GLchar* gShaderCode = geomCode.c_str();
+        const char* gShaderCode = geomCode.c_str();
         geometry = glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(geometry, 1, &gShaderCode, NULL);
         glCompileShader(geometry);
@@ -154,7 +152,7 @@ void GLSLprogram::Delete()
 /// <param name="_shaderType"> シェーダーの種類 (頂点、フラグメントetc...) </param>
 /// <param name="_outShader"> コンパイルしたシェーダーを格納する変数 </param>
 /// <returns> コンパイル成功したらtrueを返す </returns>
-bool GLSLprogram::CompileShaderFromFile(const std::string& _shaderPath, GLenum _shaderType, GLuint& _outShader)
+bool GLSLprogram::CompileShaderFromFile(const char* _shaderPath, GLenum _shaderType, unsigned int& _outShader)
 {
 
 
@@ -181,14 +179,14 @@ bool GLSLprogram::CompileShaderFromFile(const std::string& _shaderPath, GLenum _
         // 正常にコンパイルできたかチェック
         if (!IsCompiled(_outShader))
         {
-            std::cout << "Failed::Shader::Compiled " << _shaderPath.c_str() << std::endl;
+            std::cout << "Failed::Shader::Compiled " << _shaderPath << std::endl;
             return false;
         }
 
     }
     else
     {
-        std::cout << "Error::Shader::" << _shaderPath.c_str() << " Not Found" << std::endl;
+        std::cout << "Error::Shader::" << _shaderPath << " Not Found" << std::endl;
 
         return false;
     }
@@ -202,7 +200,7 @@ bool GLSLprogram::CompileShaderFromFile(const std::string& _shaderPath, GLenum _
 /// シェーダープログラムへのリンクを行う関数
 /// </summary>
 /// <returns> リンクされたらtrueを返す </returns>
-bool GLSLprogram::LinkShaders(const GLuint& _vertShader, const GLuint& _fragShader, const GLuint& _geomShader, GLuint& _program)
+bool GLSLprogram::LinkShaders(const unsigned int& _vertShader, const unsigned int& _fragShader, const unsigned int& _geomShader, unsigned int& _program)
 {
     // シェーダープログラムの作成
     m_shaderProgram = glCreateProgram();
@@ -238,9 +236,9 @@ bool GLSLprogram::LinkShaders(const GLuint& _vertShader, const GLuint& _fragShad
 /// 指定した名前のuniformブロックへバインドする関数
 /// </summary>
 /// <param name="_uniformIndex"> バインドしたいuniform名 </param>
-void GLSLprogram::SetUniformBlockFromIndex(const std::string& _uniformIndex)
+void GLSLprogram::SetUniformBlockFromIndex(const char* _uniformIndex)
 {
-    m_uniformBlockIndex = glGetUniformBlockIndex(m_shaderProgram, _uniformIndex.c_str());
+    m_uniformBlockIndex = glGetUniformBlockIndex(m_shaderProgram, _uniformIndex);
     glUniformBlockBinding(m_shaderProgram, m_uniformBlockIndex, m_uniformBlockBinding);
     m_uniformBlockBinding++;
 }
@@ -260,7 +258,7 @@ bool GLSLprogram::IsCompiled(GLuint _shader)
 
     if (status != GL_TRUE)
     {
-        GLchar buffer[512];
+        char buffer[512];
         memset(buffer, 0, 512);
 
         glGetShaderInfoLog(_shader, 511, nullptr, buffer);
@@ -280,14 +278,14 @@ bool GLSLprogram::IsCompiled(GLuint _shader)
 /// <returns> 異常がなければtrueを返す </returns>
 bool GLSLprogram::IsLinkProgram()
 {
-    GLint status;
+    int status;
 
     // シェーダープログラムのリンク状態を問い合わせる
-    glGetShaderiv(m_shaderProgram, GL_LINK_STATUS, &status);
+    glGetProgramiv(m_shaderProgram, GL_LINK_STATUS, &status);
 
     if (status != GL_TRUE)
     {
-        GLchar buffer[512];
+        char buffer[512];
         memset(buffer, 0, 512);
 
         glGetProgramInfoLog(m_shaderProgram, 511, nullptr, buffer);
