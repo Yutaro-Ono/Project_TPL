@@ -18,7 +18,6 @@
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
-#include "BasicTriangle.h"
 
 class Renderer
 {
@@ -37,10 +36,15 @@ public:
 
 private:
 
+
+	void SetUniformBuffer();
+
 	static void FrameBuffer_Size_Callback(GLFWwindow* _window, int _width, int _height);
 
 
 	GLFWwindow* m_window;                     // メインウィンドウ
+
+	class ShaderManager* m_shaderManager;     // シェーダーマネージャークラス
 
 	class BasicTriangle* m_triangle;          // デバッグ用三角形
 

@@ -19,24 +19,15 @@
 #include <iostream>
 #include <string>
 
-namespace GLSLshader
-{
-	enum SHADER_TYPE
-	{
-		BASIC_MESH,
-		GBUFFER_MESH
-	};
-}
-
 class GLSLprogram
 {
 
 public:
 
-	GLSLprogram(const char* _vertPath, const char* _fragPath, const char* _geomPath = nullptr);
+	GLSLprogram();
 	~GLSLprogram();
 
-	bool LoadShaders(const char* _vertPath, const char* _fragPath, const char* _geomPath);
+	bool LoadShaders(const char* _vertPath, const char* _fragPath, const char* _geomPath = nullptr);
 	bool CompileShaderFromFile(const char* _shaderPath, GLenum _shaderType, unsigned int& _outShader);
 	bool LinkShaders(const unsigned int& _vertShader, const unsigned int& _fragShader, const unsigned int& _geomShader, unsigned int& _program);
 
@@ -64,8 +55,5 @@ public:
 private:
 
 	GLuint m_shaderProgram;         // シェーダープログラム
-
-	GLuint m_uniformBlockIndex;     // ユニフォームバッファID
-	GLuint m_uniformBlockBinding;   // ユニフォームブロックのバインド番号
 
 };

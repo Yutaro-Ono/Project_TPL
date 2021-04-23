@@ -1,15 +1,12 @@
 //----------------------------------------------------------------------------------+
-// @file        BasicShader.frag
+// @file        BasicShader_SamplingTexture.frag
 // @brief       BasicShader (fragment)
 // @note        output 1 dot color on clip space.
-//              not texture sampling
+//              texture sampling enabled (only diffuse)
 // @author      Yutaro Ono, @2021
 //----------------------------------------------------------------------------------+
 #version 420
-// output
-out vec4 out_fragColor;
-
-in vec3 fragColor;
+out vec4 out_fragColor;     // output color
 
 // input structure from vertex shader
 in VS_OUT
@@ -18,10 +15,20 @@ in VS_OUT
 	vec3 fragColor;
 }fs_in;
 
+// material structure (textures and shininess...)
+struct Material
+{
+	sampler2D diffuseMap;
+	sampler2D specularMap;
+	sampler2D normalMap;
+	sampler2D shininess;
+};
+uniform Material u_mat;
+
 void main()
 {
-	//result color calcuration
-	vec4 resultColor = vec4(fs_in.fragColor, 1.0);
+	// result color calculation
+	vec4 resultColor = texture(u_mat.diffuseMap, fs_in.fragTexCoords);
 
 	// pass to output color
 	out_fragColor = resultColor;

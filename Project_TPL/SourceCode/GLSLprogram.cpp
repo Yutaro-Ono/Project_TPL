@@ -7,15 +7,9 @@
 #include "GLSLprogram.h"
 
 
-
-
-GLSLprogram::GLSLprogram(const char* _vertPath, const char* _fragPath, const char* _geomPath)
+GLSLprogram::GLSLprogram()
     :m_shaderProgram(0)
-    ,m_uniformBlockIndex(0)
-    ,m_uniformBlockBinding(0)
 {
-    // シェーダーファイルのロード・コンパイル・リンク
-    LoadShaders(_vertPath, _fragPath, _geomPath);
 }
 
 GLSLprogram::~GLSLprogram()
@@ -132,6 +126,13 @@ bool GLSLprogram::LoadShaders(const char* _vertPath, const char* _fragPath, cons
         return false;
     }
 
+    // uniformブロックへのリンク
+    // 行列 (ビュー・プロジェクション)
+    unsigned int uniformBlockIndex = glGetUniformBlockIndex(m_shaderProgram, "Matrices");
+    glUniformBlockBinding(m_shaderProgram, uniformBlockIndex, 0);
+    // カメラ関係 (座標、向き)
+    uniformBlockIndex = glGetUniformBlockIndex(m_shaderProgram, "CameraVariable");
+    glUniformBlockBinding(m_shaderProgram, uniformBlockIndex, 1);
 
     return true;
 }
@@ -249,7 +250,7 @@ void GLSLprogram::SetUniformBlockFromIndex(const char* _uniformIndex)
 /// </summary>
 /// <param name="_shader"> 検証したいシェーダー </param>
 /// <returns> 正常にコンパイルされていた場合はtrueを返す </returns>
-bool GLSLprogram::IsCompiled(GLuint _shader)
+bool GLSLprogram::IsCompiled(unsigned int _shader)
 {
     GLint status;
 

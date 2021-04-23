@@ -75,7 +75,13 @@ bool GameMain::Initialize()
 void GameMain::Delete()
 {
 	delete m_renderer;
+
+#ifdef _DEBUG
+
 	delete m_debugger;
+
+#endif
+
 }
 
 /// <summary>
@@ -85,13 +91,20 @@ void GameMain::ProcessInput()
 {
 	// ESCAPEが押されたら
     // ウィンドウ終了フラグをONする
-	if (glfwGetKey(m_renderer->GetMainWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS || 
-		glfwGetKey(m_debugger->GetDebugWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	if (glfwGetKey(m_renderer->GetMainWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(m_renderer->GetMainWindow(), true);
+	}
+
+#ifdef _DEBUG
+
+	// デバッグ画面
+	if (glfwGetKey(m_debugger->GetDebugWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(m_debugger->GetDebugWindow(), true);
-		glfwSetWindowShouldClose(m_renderer->GetMainWindow(), true);
-		
 	}
+
+#endif
 }
 
 /// <summary>
@@ -115,6 +128,11 @@ bool GameMain::RunLoop()
 	m_debugger->UpdateImGui();
 
 #endif
+
+	//------------------------------------------------+
+	// 描画処理
+	//------------------------------------------------+
+	m_renderer->Draw();
 
 	//------------------------------------------------+
 	// GLイベントの更新

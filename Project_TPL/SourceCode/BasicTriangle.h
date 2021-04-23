@@ -9,6 +9,7 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include <string>
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
@@ -20,9 +21,11 @@ public:
 	BasicTriangle();
 	~BasicTriangle();
 
-	void Draw();
+	void Draw(class GLSLprogram* _shader);
 
 	unsigned int GetTriangleVAO() { return m_vao; }     // 三角形用頂点配列オブジェクトのゲッター
+
+	void SetTriangleColor(const glm::vec3& _color) { m_color = _color; }
 
 
 private:
@@ -31,11 +34,15 @@ private:
 	unsigned int m_vbo;
 	unsigned int m_vao;
 
-	// 行列関連
-	glm::mat4 m_worldMat;
-	glm::mat4 m_scaleMat;
-	glm::mat4 m_rotationMat;
+	class Texture* m_diffuseMap;
 
-	class GLSLprogram* m_shader;       // シェーダー
+	// ワールド変換行列
+	glm::mat4 m_worldTrans;
+	// 拡大率、回転値
+	glm::vec3 m_scale;
+	float m_radian;
+
+	// カラー情報
+	glm::vec3 m_color;
 
 };

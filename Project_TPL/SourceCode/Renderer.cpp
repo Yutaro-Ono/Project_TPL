@@ -1,16 +1,28 @@
+//----------------------------------------------------------------------------------+
+// @file        Renderer.cpp
+// @brief       描画処理
+//              メッシュ・テクスチャ・シェーダー情報の保持
+// @note        
+// @author      小野 湧太郎 (Yutaro Ono, @2021)
+//
+// @changelog
+// 2021/ 3/22   新規作成
+//----------------------------------------------------------------------------------+
 #include "Renderer.h"
 #include <iostream>
+#include "BasicTriangle.h"
+#include "ShaderManager.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 Renderer::Renderer()
 	:m_window(NULL)
+	,m_shaderManager(nullptr)
+	,m_triangle(nullptr)
 	,m_uboMatrices(0)
 	,m_uboCamera(0)
 {
-
-	
 
 }
 
@@ -87,8 +99,12 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	// ウィンドウサイズ変更が行われた際に、コールバック関数 (今回は画面サイズの最適化関数)を呼び出すことを、GLFWに指示
 	glfwSetFramebufferSizeCallback(m_window, FrameBuffer_Size_Callback);
 
-	// デバッグ用三角形
-	m_triangle = new BasicTriangle();
+
+	//---------------------------------------+
+	// 行列の初期化
+	//---------------------------------------+
+	m_viewMat = glm::lookAt(glm::vec3(0.0), glm::vec3(0.0, 0.0, 1.0), glm::vec3(00, 1.0, 0.0));
+	m_projMat = glm::perspective(glm::radians(75.0f), (float)_width / (float)_height, 0.1f, 10000.0f);
 
 	//---------------------------------------+
 	// uniformバッファ生成
@@ -107,6 +123,16 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_uboCamera, 0, sizeof(glm::vec3::x) + sizeof(glm::vec3::y) + sizeof(glm::vec3::z));
 
+	// シェーダーマネージャー
+	m_shaderManager = new ShaderManager();
+	if (!m_shaderManager->CreateShaders())
+	{
+		std::cout << "Error::ShaderManager CreateShaders()" << std::endl;
+		return false;
+	}
+
+	// デバッグ用三角形
+	m_triangle = new BasicTriangle();
 
 	return true;
 }
@@ -117,6 +143,7 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 void Renderer::Delete()
 {
 	delete m_triangle;
+	delete m_shaderManager;
 
 	// windowの破棄・GLFWのクリーンアップ
 	glfwDestroyWindow(m_window);
@@ -140,12 +167,29 @@ void Renderer::Draw()
 	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);      // 指定した色値で画面をクリア
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
 
-	m_triangle->Draw();
-
-
+	// (デバッグ用)三角形の描画
+	//m_shaderManager->EnableShaderProgram(GLSLshader::SIMPLE_POS_COLOR);
+	m_shaderManager->EnableShaderProgram(GLSLshader::SIMPLE_POS_TEXTURE);
+	m_triangle->Draw(m_shaderManager->GetShader(GLSLshader::SIMPLE_POS_TEXTURE));
 
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
 	glfwSwapBuffers(m_window);
+}
+
+/// <summary>
+/// uniformバッファへの変数セット関数
+/// </summary>
+void Renderer::SetUniformBuffer()
+{
+	// 行列UBO
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &m_viewMat);
+	glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(glm::mat4), sizeof(glm::mat4), &m_projMat);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	// カメラUBO
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
+
 }
 
 /// <summary>

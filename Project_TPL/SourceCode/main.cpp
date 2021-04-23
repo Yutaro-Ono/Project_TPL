@@ -16,7 +16,6 @@
 // インクルードファイル
 #include "GameMain.h"
 
-
 int main()
 {
 

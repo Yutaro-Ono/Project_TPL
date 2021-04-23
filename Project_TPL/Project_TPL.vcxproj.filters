@@ -30,14 +30,44 @@
     <Filter Include="リソース ファイル\std_image">
       <UniqueIdentifier>{016031fa-b191-4678-b457-5917bfcbbece}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\GLSL">
-      <UniqueIdentifier>{f82beb12-9e69-4c6f-b267-a71432b3bd10}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\ShaderSource">
       <UniqueIdentifier>{bb00bfff-2627-4568-88be-7615ef92ca0e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\VertexArray">
       <UniqueIdentifier>{03bc2672-2235-4eac-98f0-547a2c9d7e14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ShaderSource\Basic">
+      <UniqueIdentifier>{40ea75f8-bb82-4396-a84e-d0f722f6330c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ShaderSource\Basic\TextureSample">
+      <UniqueIdentifier>{e9710761-58e6-4d94-aa98-49841ffedb11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader">
+      <UniqueIdentifier>{f82beb12-9e69-4c6f-b267-a71432b3bd10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderManager">
+      <UniqueIdentifier>{9080b65f-d11b-42e0-ae40-29163c417cfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ShaderSource\Simple">
+      <UniqueIdentifier>{abcfc2f1-4b0c-4307-b758-d312b326a7f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Texture">
+      <UniqueIdentifier>{75188af1-ae18-43c8-8039-051f44de0914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\BasicObject">
+      <UniqueIdentifier>{4efb3bee-af82-4ea5-b372-cee58532c010}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\BasicObject\Triangle">
+      <UniqueIdentifier>{475f3ad9-a589-4c08-b33a-bf5ffe71d4b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\BasicObject\Square">
+      <UniqueIdentifier>{eb8507a8-7cb3-457f-8d60-b1c87e22453c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\BasicObject\Cube">
+      <UniqueIdentifier>{9cb006d8-f793-473f-8006-6b7d5eb06ba4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actor">
+      <UniqueIdentifier>{1306b811-efef-4af1-9bec-1e2b0333ccf6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -81,16 +111,25 @@
       <Filter>Source\Scene\TestScene</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\GLSLprogram.cpp">
-      <Filter>Source\GLSL</Filter>
+      <Filter>Source\Shader</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\GameSettings.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\BasicTriangle.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\VertexArray.cpp">
       <Filter>Source\VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ShaderManager.cpp">
+      <Filter>Source\Shader\ShaderManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Texture.cpp">
+      <Filter>Source\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\BasicTriangle.cpp">
+      <Filter>Source\BasicObject\Triangle</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Actor.cpp">
+      <Filter>Source\Actor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,24 +176,48 @@
       <Filter>リソース ファイル\std_image</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\GLSLprogram.h">
-      <Filter>Source\GLSL</Filter>
+      <Filter>Source\Shader</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\GameSettings.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="SourceCode\BasicTriangle.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\VertexArray.h">
       <Filter>Source\VertexArray</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\ShaderManager.h">
+      <Filter>Source\Shader\ShaderManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Texture.h">
+      <Filter>Source\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\BasicTriangle.h">
+      <Filter>Source\BasicObject\Triangle</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\BasicSquare.h">
+      <Filter>Source\BasicObject\Square</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\DebugTriangle.h">
+      <Filter>Source\BasicObject\Triangle</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Actor.h">
+      <Filter>Source\Actor</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\BasicShader.vert">
-      <Filter>Source\ShaderSource</Filter>
+      <Filter>Source\ShaderSource\Basic</Filter>
+    </None>
+    <None Include="Shaders\BasicShader_SamplingTexture.frag">
+      <Filter>Source\ShaderSource\Basic\TextureSample</Filter>
+    </None>
+    <None Include="Shaders\SimpleShader_pos_color.frag">
+      <Filter>Source\ShaderSource\Simple</Filter>
+    </None>
+    <None Include="Shaders\SimpleShader_pos_color.vert">
+      <Filter>Source\ShaderSource\Simple</Filter>
     </None>
     <None Include="Shaders\BasicShader.frag">
-      <Filter>Source\ShaderSource</Filter>
+      <Filter>Source\ShaderSource\Basic</Filter>
     </None>
   </ItemGroup>
 </Project>

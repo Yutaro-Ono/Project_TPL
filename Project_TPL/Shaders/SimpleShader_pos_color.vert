@@ -33,7 +33,7 @@ out VS_OUT
 }vs_out;
 
 
-uniform mat4 u_worldTransform;     // world space
+
 
 void main()
 {
@@ -41,10 +41,7 @@ void main()
 	vs_out.fragColor = a_color;
 	vs_out.fragTexCoords = a_texCoords;
 
-	// convert to clip space
-	vec4 pos =  u_worldTransform * vec4(a_vertexPos, 1.0);
-
 	// pass to gl_position
-	gl_Position = pos;
+	gl_Position = vec4(a_vertexPos, 1.0);
 
 }
