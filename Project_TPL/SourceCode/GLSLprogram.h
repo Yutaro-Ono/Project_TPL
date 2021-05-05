@@ -19,6 +19,7 @@
 #include <iostream>
 #include <string>
 
+
 class GLSLprogram
 {
 
@@ -30,8 +31,6 @@ public:
 	bool LoadShaders(const char* _vertPath, const char* _fragPath, const char* _geomPath = nullptr);
 	bool CompileShaderFromFile(const char* _shaderPath, GLenum _shaderType, unsigned int& _outShader);
 	bool LinkShaders(const unsigned int& _vertShader, const unsigned int& _fragShader, const unsigned int& _geomShader, unsigned int& _program);
-
-	void SetUniformBlockFromIndex(const char* _uniformIndex);
 
 	void Delete();
 

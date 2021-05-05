@@ -15,15 +15,15 @@ in VS_OUT
 	vec3 fragColor;
 }fs_in;
 
-// material structure (textures and shininess...)
-struct Material
+// material information structure (textures and shininess...)
+uniform struct MaterialInfo
 {
 	sampler2D diffuseMap;
 	sampler2D specularMap;
 	sampler2D normalMap;
 	sampler2D shininess;
-};
-uniform Material u_mat;
+}u_mat;
+
 
 void main()
 {

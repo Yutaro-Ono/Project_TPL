@@ -234,18 +234,6 @@ bool GLSLprogram::LinkShaders(const unsigned int& _vertShader, const unsigned in
 
 
 /// <summary>
-/// 指定した名前のuniformブロックへバインドする関数
-/// </summary>
-/// <param name="_uniformIndex"> バインドしたいuniform名 </param>
-void GLSLprogram::SetUniformBlockFromIndex(const char* _uniformIndex)
-{
-    m_uniformBlockIndex = glGetUniformBlockIndex(m_shaderProgram, _uniformIndex);
-    glUniformBlockBinding(m_shaderProgram, m_uniformBlockIndex, m_uniformBlockBinding);
-    m_uniformBlockBinding++;
-}
-
-
-/// <summary>
 /// シェーダーが正常にコンパイルされたかを検証する
 /// </summary>
 /// <param name="_shader"> 検証したいシェーダー </param>

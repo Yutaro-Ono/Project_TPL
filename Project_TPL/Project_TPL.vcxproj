@@ -160,6 +160,7 @@
     <ClCompile Include="SourceCode\Actor.cpp" />
     <ClCompile Include="SourceCode\BasicTriangle.cpp" />
     <ClCompile Include="SourceCode\Debugger.cpp" />
+    <ClCompile Include="SourceCode\DebugObjectBase.cpp" />
     <ClCompile Include="SourceCode\GameMain.cpp" />
     <ClCompile Include="SourceCode\GameSettings.cpp" />
     <ClCompile Include="SourceCode\GLSLprogram.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="SourceCode\BasicSquare.h" />
     <ClInclude Include="SourceCode\BasicTriangle.h" />
     <ClInclude Include="SourceCode\Debugger.h" />
+    <ClInclude Include="SourceCode\DebugObjectBase.h" />
     <ClInclude Include="SourceCode\DebugTriangle.h" />
     <ClInclude Include="SourceCode\GameMain.h" />
     <ClInclude Include="SourceCode\GameSettings.h" />

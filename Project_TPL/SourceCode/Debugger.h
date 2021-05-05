@@ -14,7 +14,7 @@
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
-
+#include <vector>
 #include "Renderer.h"
 
 class Debugger
@@ -44,5 +44,7 @@ private:
 
 	int m_windowH;                 // デバッグ用ウィンドウ縦サイズ
 	int m_windowW;                 // デバッグ用ウィンドウ横サイズ
+
+	std::vector<class DebugObjectBase*> m_debugObjects;
 
 };

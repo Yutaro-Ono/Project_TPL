@@ -21,14 +21,25 @@ void Actor::Update(float _deltaTime)
 {
 }
 
+/// <summary>
+/// コンポーネントの更新処理
+/// </summary>
+/// <param name="_deltaTime"></param>
 void Actor::UpdateComponents(float _deltaTime)
 {
 }
 
+/// <summary>
+/// アクター固有の更新処理
+/// </summary>
+/// <param name="_deltaTime"></param>
 void Actor::UpdateActor(float _deltaTime)
 {
 }
 
+/// <summary>
+/// ワールド変換行列の更新処理
+/// </summary>
 void Actor::CalcWorldTransform()
 {
 }

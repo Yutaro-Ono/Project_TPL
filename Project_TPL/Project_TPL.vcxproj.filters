@@ -131,6 +131,9 @@
     <ClCompile Include="SourceCode\Actor.cpp">
       <Filter>Source\Actor</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\DebugObjectBase.cpp">
+      <Filter>Source\DebugSystem</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -201,6 +204,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Actor.h">
       <Filter>Source\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\DebugObjectBase.h">
+      <Filter>Source\DebugSystem</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
