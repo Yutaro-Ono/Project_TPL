@@ -35,6 +35,9 @@ public:
 	bool RunLoop();
 
 
+	class Renderer* GetRenderer() { return m_renderer; }
+	class TexturePool* GetTexturePool() { return m_texturePool; }
+
 private:
 
 	GameMain();
@@ -44,11 +47,15 @@ private:
 
 
 	// メンバ クラス
-	class GameSettings* m_settings; // ゲーム設定
-	class Renderer* m_renderer;     // レンダラー
-	class Debugger* m_debugger;     // デバッガ―
-	class SceneBase* m_scene;       // ゲームシーン
+	class GameSettings* m_settings;        // ゲーム設定
+	class Renderer* m_renderer;            // レンダラー
+	class Debugger* m_debugger;            // デバッガ―
+	class SceneBase* m_scene;              // ゲームシーン
+
+	class TexturePool* m_texturePool;      // テクスチャプール
+	class MeshPool* m_meshPool;            // メッシュプール
 
 };
 
 #define GAME_INSTANCE GameMain::GetInstance()
+#define RENDERER GameMain::GetRenderer()

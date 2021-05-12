@@ -13,6 +13,7 @@
 #include <string>
 #include <iostream>
 
+
 class Texture
 {
 
@@ -23,15 +24,15 @@ public:
 
 	bool LoadTexture(const std::string& _filePath);
 
-
-
 	unsigned int GetTextureID() { return m_textureID; }
+
+	
+
 
 private:
 
 	//void WrappingTexture()
 	//void FilteringTexture()
-
 
 	unsigned int m_textureID;
 

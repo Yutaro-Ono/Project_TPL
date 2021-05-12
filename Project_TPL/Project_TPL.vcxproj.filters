@@ -69,6 +69,21 @@
     <Filter Include="Source\Actor">
       <UniqueIdentifier>{1306b811-efef-4af1-9bec-1e2b0333ccf6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Mesh">
+      <UniqueIdentifier>{406cefc8-bbe0-4d3f-8434-7dfa94703690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Pool">
+      <UniqueIdentifier>{34f692c6-b224-48c7-bb65-2770ca341b03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Pool\TexturePool">
+      <UniqueIdentifier>{7302c3a4-5039-49df-973f-85427f902bfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Pool\MeshPool">
+      <UniqueIdentifier>{1ae2d1bd-a079-4ddf-9f66-6932f8f01dc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Mesh\OBJ">
+      <UniqueIdentifier>{dd802d36-0134-478e-86dd-9804fabfc90e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -133,6 +148,18 @@
     </ClCompile>
     <ClCompile Include="SourceCode\DebugObjectBase.cpp">
       <Filter>Source\DebugSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TexturePool.cpp">
+      <Filter>Source\Pool\TexturePool</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\MeshPool.cpp">
+      <Filter>Source\Pool\MeshPool</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Mesh.cpp">
+      <Filter>Source\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\MeshObj.cpp">
+      <Filter>Source\Mesh\OBJ</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -207,6 +234,21 @@
     </ClInclude>
     <ClInclude Include="SourceCode\DebugObjectBase.h">
       <Filter>Source\DebugSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Mesh.h">
+      <Filter>Source\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ObjectPool.h">
+      <Filter>Source\Pool</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\TexturePool.h">
+      <Filter>Source\Pool\TexturePool</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\MeshPool.h">
+      <Filter>Source\Pool\MeshPool</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\MeshObj.h">
+      <Filter>Source\Mesh\OBJ</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

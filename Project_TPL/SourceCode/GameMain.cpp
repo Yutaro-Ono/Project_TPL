@@ -9,6 +9,8 @@
 #include "Renderer.h"
 #include "Debugger.h"
 #include "SceneBase.h"
+#include "TexturePool.h"
+#include "MeshPool.h"
 
 #include <iostream>
 
@@ -17,6 +19,8 @@
 /// </summary>
 GameMain::GameMain()
 	:m_settings(nullptr)
+	,m_texturePool(nullptr)
+	,m_meshPool(nullptr)
 	,m_renderer(nullptr)
 	,m_debugger(nullptr)
 	,m_scene(nullptr)
@@ -45,6 +49,10 @@ bool GameMain::Initialize()
 		return false;
 	}
 
+	// 各種オブジェクトプールの生成
+	m_texturePool = new TexturePool();
+	m_meshPool = new MeshPool();
+
 	// レンダラークラスの作成
 	m_renderer = new Renderer();
 	if (!m_renderer->Initialize(m_settings->GetInstance().m_displayWidth, m_settings->GetInstance().m_displayHeight, m_settings->GetInstance().m_displayFullScreen))
@@ -53,6 +61,7 @@ bool GameMain::Initialize()
 		return false;
 	}
 	
+
 #ifdef _DEBUG
 
 	// デバッガ―クラスの作成
@@ -75,6 +84,9 @@ bool GameMain::Initialize()
 void GameMain::Delete()
 {
 	delete m_renderer;
+
+	delete m_texturePool;
+	delete m_meshPool;
 
 #ifdef _DEBUG
 

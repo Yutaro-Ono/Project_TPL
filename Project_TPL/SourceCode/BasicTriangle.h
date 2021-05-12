@@ -45,4 +45,6 @@ private:
 	// ƒJƒ‰[î•ñ
 	glm::vec3 m_color;
 
+	static const std::string TEXTURE_KEY;
+
 };

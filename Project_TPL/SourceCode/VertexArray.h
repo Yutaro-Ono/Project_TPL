@@ -58,10 +58,10 @@ public:
 private:
 
 
-	GLuint m_vertsNum;                          // 頂点数
-	GLuint m_numInDices;                        // インデックス数
-	GLuint m_vao;                               // 頂点配列オブジェクト(ID)
-	GLuint m_vbo;                               // 頂点バッファオブジェクト(ID)
-	GLuint m_indexBuffer;                       // インデックスバッファ(ID)
+	unsigned int m_vertsNum;                          // 頂点数
+	unsigned int m_numInDices;                        // インデックス数
+	unsigned int m_vao;                               // 頂点配列オブジェクト(ID)
+	unsigned int m_vbo;                               // 頂点バッファオブジェクト(ID)
+	unsigned int m_indexBuffer;                       // インデックスバッファ(ID)
 
 };

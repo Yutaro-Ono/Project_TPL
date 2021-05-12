@@ -12,6 +12,9 @@
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include "GameMain.h"
+#include "Renderer.h"
+#include "TexturePool.h"
 
 Texture::Texture()
     :m_textureID(0)
@@ -63,5 +66,9 @@ bool Texture::LoadTexture(const std::string& _filePath)
     // 解放
     stbi_image_free(data);
 
+    // テクスチャプールに追加
+    GAME_INSTANCE.GetTexturePool()->AddObject(_filePath, this);
+
     return true;
 }
+

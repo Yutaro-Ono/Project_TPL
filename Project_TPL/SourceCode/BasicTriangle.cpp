@@ -15,6 +15,10 @@
 #include "VertexArray.h"
 #include "GLSLprogram.h"
 #include "Texture.h"
+#include "GameMain.h"
+#include "TexturePool.h"
+
+const std::string BasicTriangle::TEXTURE_KEY = "Data/Textures/Test/TestTexture.jpg";
 
 BasicTriangle::BasicTriangle()
 	:m_vao(0)
@@ -75,13 +79,13 @@ BasicTriangle::BasicTriangle()
 
 	// テクスチャの生成
 	m_diffuseMap = new Texture();
-	m_diffuseMap->LoadTexture("Data/Textures/Test/TestTexture.jpg");
+	m_diffuseMap->LoadTexture(TEXTURE_KEY);
 
 }
 
 BasicTriangle::~BasicTriangle()
 {
-	delete m_diffuseMap;
+	GAME_INSTANCE.GetTexturePool()->DeleteObject(TEXTURE_KEY);
 	glDeleteBuffers(1, &m_vbo);
 	glDeleteVertexArrays(1, &m_vao);
 }

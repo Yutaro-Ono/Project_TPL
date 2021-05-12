@@ -165,10 +165,14 @@
     <ClCompile Include="SourceCode\GameSettings.cpp" />
     <ClCompile Include="SourceCode\GLSLprogram.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
+    <ClCompile Include="SourceCode\Mesh.cpp" />
+    <ClCompile Include="SourceCode\MeshObj.cpp" />
+    <ClCompile Include="SourceCode\MeshPool.cpp" />
     <ClCompile Include="SourceCode\Renderer.cpp" />
     <ClCompile Include="SourceCode\ShaderManager.cpp" />
     <ClCompile Include="SourceCode\TestScene.cpp" />
     <ClCompile Include="SourceCode\Texture.cpp" />
+    <ClCompile Include="SourceCode\TexturePool.cpp" />
     <ClCompile Include="SourceCode\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -189,11 +193,16 @@
     <ClInclude Include="SourceCode\GameMain.h" />
     <ClInclude Include="SourceCode\GameSettings.h" />
     <ClInclude Include="SourceCode\GLSLprogram.h" />
+    <ClInclude Include="SourceCode\Mesh.h" />
+    <ClInclude Include="SourceCode\MeshObj.h" />
+    <ClInclude Include="SourceCode\MeshPool.h" />
+    <ClInclude Include="SourceCode\ObjectPool.h" />
     <ClInclude Include="SourceCode\Renderer.h" />
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\ShaderManager.h" />
     <ClInclude Include="SourceCode\TestScene.h" />
     <ClInclude Include="SourceCode\Texture.h" />
+    <ClInclude Include="SourceCode\TexturePool.h" />
     <ClInclude Include="SourceCode\VertexArray.h" />
     <ClInclude Include="std\stb_image.h" />
   </ItemGroup>
