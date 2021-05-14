@@ -11,7 +11,7 @@
 #include <GL/gl3w.h>
 #include <GLFW/glfw3.h>
 
-namespace Vertex
+namespace VERTEX_LAYOUT
 {
 	//-------------------------------------------------------------------------------------------------------------------+
     // 頂点レイアウトのデータサイズ
@@ -28,7 +28,7 @@ namespace Vertex
     //                                    ※WEIGHTの確保はcharだが、精度が必要ないので8bit固定小数として使用する
     //-------------------------------------------------------------------------------------------------------------------+
 	// 頂点レイアウト (アトリビュートに登録する頂点のデータ形式)
-	enum LAYOUT_TYPE
+	enum TYPE
 	{
 
 		POS_NORMAL_UV,                     // 座標、法線、UV座標
@@ -46,7 +46,7 @@ class VertexArray
 public:
 
 	VertexArray();
-	VertexArray(const void* _verts, unsigned int _vertsNum, Vertex::LAYOUT_TYPE _layout,
+	VertexArray(const void* _verts, unsigned int _vertsNum, VERTEX_LAYOUT::TYPE _layout,
 		                        const unsigned int* _inDices, unsigned int _numInDices);
 
 	VertexArray(const float* _verts, unsigned int _vertsNum,

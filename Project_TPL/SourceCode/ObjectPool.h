@@ -9,7 +9,7 @@
 // 2021/ 5/12  プールを連想配列に変更
 //----------------------------------------------------------------------------------+
 #pragma once
-#include <list>
+#include <vector>
 #include <unordered_map>
 #include <string>
 
@@ -24,12 +24,19 @@ public:
 	void Create(int _size);
 	void Delete();
 
-	void AddObject(const std::string& _key, T* _obj);
-	void DeleteObject(const std::string& _key);
+	void AddObject(T* _obj);
+	void DeleteObject(T* _obj);
+
+	void AddKeyObject(const std::string& _key, T* _obj);
+	void DeleteKeyObject(const std::string& _key);
+
+	virtual void UpdateObjects(float _deltaTime) = 0;
+
 
 protected:
 	
-	std::unordered_map<std::string, T*> m_objPool;
+	std::vector<T*> m_objPool;
+	std::unordered_map<std::string, T*> m_keyObjPool;
 };
 
 template<class T>
@@ -46,40 +53,64 @@ template<class T>
 inline void ObjectPool<T>::Delete()
 {
 	// オブジェクトプール解放処理
-	for (auto itr : m_objPool)
+	while (!m_objPool.empty())
 	{
-		printf("RELEASE::Object %s\n", itr.first.c_str());
-		delete itr.second;
+		delete m_objPool.back();
 	}
 
-	m_objPool.clear();
+
+	// オブジェクトプール(unordered_map)解放処理
+	for (auto itr : m_keyObjPool)
+	{
+		printf("RELEASE::Object Key = %s\n", itr.first.c_str());
+		delete itr.second;
+	}
+	m_keyObjPool.clear();
 }
 
 template<class T>
-inline void ObjectPool<T>::AddObject(const std::string& _key, T* _obj)
+inline void ObjectPool<T>::AddObject(T* _obj)
 {
-	auto itr = m_objPool.find(_key);
+	m_objPool.emplace_back(_obj);
+}
 
-	if (itr != m_objPool.end())
+template<class T>
+inline void ObjectPool<T>::DeleteObject(T* _obj)
+{
+	auto iter = std::find(m_objPool.begin(), m_objPool.end(), _obj);
+
+	if (iter != m_objPool.end())
+	{
+		std::iter_swap(iter, m_objPool.end() - 1);
+		m_objPool.pop_back();
+	}
+}
+
+template<class T>
+inline void ObjectPool<T>::AddKeyObject(const std::string& _key, T* _obj)
+{
+	auto itr = m_keyObjPool.find(_key);
+
+	if (itr != m_keyObjPool.end())
 	{
 		return;
 	}
 	else
 	{
-		m_objPool.emplace(_key, _obj);
+		m_keyObjPool.emplace(_key, _obj);
 	}
 }
 
 template<class T>
-inline void ObjectPool<T>::DeleteObject(const std::string& _key)
+inline void ObjectPool<T>::DeleteKeyObject(const std::string& _key)
 {
-	auto itr = m_objPool.find(_key);
+	auto itr = m_keyObjPool.find(_key);
 
-	if (itr != m_objPool.end())
+	if (itr != m_keyObjPool.end())
 	{
 		printf("DELETE::Object %s\n", _key.c_str());
 		delete itr->second;
-		m_objPool.erase(itr);
+		m_keyObjPool.erase(itr);
 	}
 	else
 	{

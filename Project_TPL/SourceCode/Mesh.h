@@ -12,8 +12,9 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include "rapidjson/document.h"
-#include "tinyObj/tiny_obj_loader.h"
 
 // テクスチャの種類 (PBRマテリアル)
 enum class PBR_MATERIAL : unsigned char
@@ -39,8 +40,13 @@ public:
 	void AddTextureStage(const std::string& _fileName);
 	int CreateTextureStage(PBR_MATERIAL _type, const std::string& _fileName);
 
+	void CalcTangentVec(glm::vec3& destTangent_,
+		                const glm::vec3& _pos1, const glm::vec3& _pos2, const glm::vec3& _pos3,
+		                const glm::vec2& _uv1, const glm::vec2& _uv2, const glm::vec2& _uv3);
 
-private:
+	void SetTangent(std::vector<float>& destfv_, int _index, const glm::vec3& _tangent);
+
+protected:
 
 	unsigned int m_vao;
 	unsigned int m_vbo;

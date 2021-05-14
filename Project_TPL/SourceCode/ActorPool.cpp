@@ -1,24 +1,23 @@
 //----------------------------------------------------------------------------------+
-// @file        TexturePool.cpp
-// @brief       テクスチャプール (テクスチャクラスを管理する)
+// @file        ActorPool.cpp
+// @brief       アクタープール (Actorクラスを管理する)
 // @note        
 // @author      小野 湧太郎 (Yutaro Ono, @2021)
 //
 // @changelog
-// 2021/ 5/7   新規作成
+// 2021/ 5/14   新規作成
 //----------------------------------------------------------------------------------+
-#include "TexturePool.h"
+#include "ActorPool.h"
 
-TexturePool::TexturePool()
+ActorPool::ActorPool()
 {
 }
 
-TexturePool::~TexturePool()
+ActorPool::~ActorPool()
 {
 	Delete();
 }
 
-void TexturePool::UpdateObjects(float _deltaTime)
+void ActorPool::UpdateObjects(float _deltaTime)
 {
 }
-

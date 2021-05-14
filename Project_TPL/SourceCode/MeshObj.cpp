@@ -7,6 +7,7 @@
 //
 // @changelog
 // 2021/ 5/12   新規作成
+// 2021/ 5/14   メッシュの読み込み処理が完成
 //----------------------------------------------------------------------------------+
 #include "MeshObj.h"
 #include "VertexArray.h"
@@ -26,7 +27,7 @@ MeshObj::~MeshObj()
 /// <returns> 問題なくロードできたか </returns>
 bool MeshObj::Load(const std::string& _filePath)
 {
-	Vertex::LAYOUT_TYPE layout = Vertex::LAYOUT_TYPE::POS_NORMAL_UV;
+	VERTEX_LAYOUT::TYPE layout = VERTEX_LAYOUT::TYPE::POS_NORMAL_UV;
 
 	tinyobj::attrib_t attrib;                      // 座標コンテナ
 	std::vector<tinyobj::shape_t> shapes;          // 形状コンテナ
@@ -69,7 +70,81 @@ bool MeshObj::Load(const std::string& _filePath)
 	std::vector<float> vertexVec(vertNum * attribStride);
 
 	// タンジェント空間計算用
-	
+	glm::vec3 tangent;
+	// 頂点座標・テクスチャUV格納用
+	std::vector<glm::vec3> destPos(3);
+	std::vector<glm::vec2> uvPos(3);
+
+	// 形状ループ
+	for (const auto& shape : shapes)
+	{
+		size_t indexOffset = 0;
+
+		// 面数ループ
+		for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); f++)
+		{
+			size_t num_vertices = shape.mesh.num_face_vertices[f];
+
+			// 頂点数ループ (1面に3回)
+			for (size_t v = 0; v < num_vertices; v++)
+			{
+
+				// 面を構成するインデックスを取得
+				tinyobj::index_t idx = shape.mesh.indices[indexOffset + v];
+
+				// 頂点座標を頂点配列にコピー
+				vertexVec[idx.vertex_index * attribStride + 0] = attrib.vertices[3 * idx.vertex_index + 0];
+				vertexVec[idx.vertex_index * attribStride + 1] = attrib.vertices[3 * idx.vertex_index + 1];
+				vertexVec[idx.vertex_index * attribStride + 2] = attrib.vertices[3 * idx.vertex_index + 2];
+
+				// 法線データを頂点配列にコピー
+				vertexVec[idx.vertex_index * attribStride + 3] = attrib.vertices[3 * idx.normal_index + 0];
+				vertexVec[idx.vertex_index * attribStride + 4] = attrib.vertices[3 * idx.normal_index + 1];
+				vertexVec[idx.vertex_index * attribStride + 5] = attrib.vertices[3 * idx.normal_index + 2];
+
+				// uvデータを頂点配列にコピー
+				vertexVec[idx.vertex_index * attribStride + 6] = attrib.texcoords[2 * idx.texcoord_index + 0];
+				vertexVec[idx.vertex_index * attribStride + 7] = 1.0f - attrib.texcoords[2 * idx.texcoord_index + 1];
+
+
+				//-------------------------------------------------------+
+				// 当たり判定ボックス・半径の算出
+				//-------------------------------------------------------+
+				// 
+
+
+
+				// ポリゴンを構成する頂点座標を一時保存
+				destPos[v] = glm::vec3(vertexVec[idx.vertex_index * attribStride + 0],
+					                   vertexVec[idx.vertex_index * attribStride + 1],
+					                   vertexVec[idx.vertex_index * attribStride + 2]);
+
+				// テクスチャ座標を一時保存
+				uvPos[v] = glm::vec2(vertexVec[idx.vertex_index * attribStride + 6], 
+					                 vertexVec[idx.vertex_index * attribStride + 7]);
+
+			}
+
+			// タンジェントの算出
+			CalcTangentVec(tangent, destPos[0], destPos[1], destPos[2], uvPos[0], uvPos[1], uvPos[2]);
+			// タンジェント情報を頂点配列に格納
+			for (int i = 0; i < 3; i++)
+			{
+				SetTangent(vertexVec, indexOffset + i, tangent);
+			}
+
+			// 基準インデックスを変更
+			indexOffset += num_vertices;
+
+		}
+	}
+
+	// 読み込んだ頂点配列情報をGLに登録する
+	m_vertexArray = new VertexArray( static_cast<float*>(vertexVec.data()), static_cast<unsigned>(vertNum),
+		                             layout, indices.data(), static_cast<unsigned>(indices.size()) );
+
+	// テクスチャの追加
+	AddTextureStage(_filePath);
 
 
 	return true;

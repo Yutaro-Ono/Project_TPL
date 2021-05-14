@@ -84,6 +84,18 @@
     <Filter Include="Source\Mesh\OBJ">
       <UniqueIdentifier>{dd802d36-0134-478e-86dd-9804fabfc90e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Component">
+      <UniqueIdentifier>{f1e8ab69-7994-44d2-93b4-f10cfec6a5f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\tinyobj">
+      <UniqueIdentifier>{207c9d3f-de26-40d5-ac36-801ea7cf1385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Component\MeshComponent">
+      <UniqueIdentifier>{79cd4911-e9eb-4790-9c4b-c9f757294736}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Pool\ActorPool">
+      <UniqueIdentifier>{9b78c7ce-c970-478b-ba11-cdbfe9a037d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -160,6 +172,21 @@
     </ClCompile>
     <ClCompile Include="SourceCode\MeshObj.cpp">
       <Filter>Source\Mesh\OBJ</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Component.cpp">
+      <Filter>Source\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\tiny_obj_loader.cc">
+      <Filter>リソース ファイル\tinyobj</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\MeshComponent.cpp">
+      <Filter>Source\Component\MeshComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ActorPool.cpp">
+      <Filter>Source\Pool\ActorPool</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\DrawableObjectManager.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -249,6 +276,21 @@
     </ClInclude>
     <ClInclude Include="SourceCode\MeshObj.h">
       <Filter>Source\Mesh\OBJ</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Component.h">
+      <Filter>Source\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\tiny_obj_loader.h">
+      <Filter>リソース ファイル\tinyobj</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\MeshComponent.h">
+      <Filter>Source\Component\MeshComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\ActorPool.h">
+      <Filter>Source\Pool\ActorPool</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\DrawableObjectManager.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

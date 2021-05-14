@@ -22,7 +22,7 @@ public:
 	TexturePool();
 	~TexturePool();
 
-
+	void UpdateObjects(float _deltaTime) override;
 	
 private:
 

@@ -67,7 +67,7 @@ bool Texture::LoadTexture(const std::string& _filePath)
     stbi_image_free(data);
 
     // テクスチャプールに追加
-    GAME_INSTANCE.GetTexturePool()->AddObject(_filePath, this);
+    GAME_INSTANCE.GetTexturePool()->AddKeyObject(_filePath, this);
 
     return true;
 }

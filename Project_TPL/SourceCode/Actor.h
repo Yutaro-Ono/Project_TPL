@@ -8,9 +8,11 @@
 // 2021/ 4/23   新規作成
 //----------------------------------------------------------------------------------+
 #pragma once
+#include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include "Component.h"
 
 namespace ActorEnum
 {
@@ -34,7 +36,12 @@ public:
 	void UpdateComponents(float _deltaTime);
 	virtual void UpdateActor(float _deltaTime);
 
-	void CalcWorldTransform();
+	void ComputeWorldTransform();
+
+	// コンポーネントの追加・削除処理
+	void AddComponent(class Component* _comp);
+	void RemoveComponent(class Component* _comp);
+
 
 private:
 
@@ -45,7 +52,17 @@ private:
 	glm::mat4 m_worldTrans;
 	// 変換
 	glm::vec3 m_scale;
-	glm::quat m_quaternion;
+	// 回転行列
+	glm::quat m_rotationX;
+	glm::quat m_rotationY;
+	glm::quat m_rotationZ;
 	
+	bool m_recomputeWorldTransform;
+
+
+	std::vector<class Component*> m_components;
+
+	int m_ID;                          // アクター識別ID
+	static int m_globalActorNo;        // ゲーム全体におけるアクター番号
 
 };

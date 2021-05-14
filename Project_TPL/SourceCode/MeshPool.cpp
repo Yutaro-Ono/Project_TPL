@@ -17,3 +17,7 @@ MeshPool::~MeshPool()
 {
 	Delete();
 }
+
+void MeshPool::UpdateObjects(float _deltaTime)
+{
+}

@@ -1,23 +1,28 @@
 //----------------------------------------------------------------------------------+
-// @file        MeshPool.h
-// @brief       メッシュプール (テクスチャクラスを管理する)
+// @file        ActorPool.h
+// @brief       アクタープール (Actorクラスを管理する)
 // @note        
 // @author      小野 湧太郎 (Yutaro Ono, @2021)
 //
 // @changelog
-// 2021/ 5/12   新規作成
+// 2021/ 5/14   新規作成
 //----------------------------------------------------------------------------------+
 #pragma once
 #include "ObjectPool.h"
-#include "Mesh.h"
+#include "Actor.h"
 
-class MeshPool : public ObjectPool<Mesh>
+class ActorPool : public ObjectPool<Actor>
 {
+
 public:
 
-	MeshPool();
-	~MeshPool();
+	ActorPool();
+	~ActorPool();
 
 	void UpdateObjects(float _deltaTime) override;
+
+private:
+
+
 
 };

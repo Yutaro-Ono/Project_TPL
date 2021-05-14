@@ -34,9 +34,11 @@ public:
 	bool Initialize();
 	bool RunLoop();
 
-
+	// Getter
 	class Renderer* GetRenderer() { return m_renderer; }
 	class TexturePool* GetTexturePool() { return m_texturePool; }
+	class MeshPool* GetMeshPool() { return m_meshPool; }
+	class ActorPool* GetActorPool() { return m_actorPool; }
 
 private:
 
@@ -54,6 +56,7 @@ private:
 
 	class TexturePool* m_texturePool;      // テクスチャプール
 	class MeshPool* m_meshPool;            // メッシュプール
+	class ActorPool* m_actorPool;          // アクタープール
 
 };
 

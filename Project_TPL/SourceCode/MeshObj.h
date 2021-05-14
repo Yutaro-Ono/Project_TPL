@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include "Mesh.h"
+#include "tiny_obj_loader.h"
 
 class MeshObj : public Mesh
 {

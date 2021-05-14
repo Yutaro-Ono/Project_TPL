@@ -158,14 +158,18 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="SourceCode\Actor.cpp" />
+    <ClCompile Include="SourceCode\ActorPool.cpp" />
     <ClCompile Include="SourceCode\BasicTriangle.cpp" />
+    <ClCompile Include="SourceCode\Component.cpp" />
     <ClCompile Include="SourceCode\Debugger.cpp" />
     <ClCompile Include="SourceCode\DebugObjectBase.cpp" />
+    <ClCompile Include="SourceCode\DrawableObjectManager.cpp" />
     <ClCompile Include="SourceCode\GameMain.cpp" />
     <ClCompile Include="SourceCode\GameSettings.cpp" />
     <ClCompile Include="SourceCode\GLSLprogram.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\Mesh.cpp" />
+    <ClCompile Include="SourceCode\MeshComponent.cpp" />
     <ClCompile Include="SourceCode\MeshObj.cpp" />
     <ClCompile Include="SourceCode\MeshPool.cpp" />
     <ClCompile Include="SourceCode\Renderer.cpp" />
@@ -173,6 +177,7 @@
     <ClCompile Include="SourceCode\TestScene.cpp" />
     <ClCompile Include="SourceCode\Texture.cpp" />
     <ClCompile Include="SourceCode\TexturePool.cpp" />
+    <ClCompile Include="SourceCode\tiny_obj_loader.cc" />
     <ClCompile Include="SourceCode\VertexArray.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -185,15 +190,19 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="SourceCode\Actor.h" />
+    <ClInclude Include="SourceCode\ActorPool.h" />
     <ClInclude Include="SourceCode\BasicSquare.h" />
     <ClInclude Include="SourceCode\BasicTriangle.h" />
+    <ClInclude Include="SourceCode\Component.h" />
     <ClInclude Include="SourceCode\Debugger.h" />
     <ClInclude Include="SourceCode\DebugObjectBase.h" />
     <ClInclude Include="SourceCode\DebugTriangle.h" />
+    <ClInclude Include="SourceCode\DrawableObjectManager.h" />
     <ClInclude Include="SourceCode\GameMain.h" />
     <ClInclude Include="SourceCode\GameSettings.h" />
     <ClInclude Include="SourceCode\GLSLprogram.h" />
     <ClInclude Include="SourceCode\Mesh.h" />
+    <ClInclude Include="SourceCode\MeshComponent.h" />
     <ClInclude Include="SourceCode\MeshObj.h" />
     <ClInclude Include="SourceCode\MeshPool.h" />
     <ClInclude Include="SourceCode\ObjectPool.h" />
@@ -203,6 +212,7 @@
     <ClInclude Include="SourceCode\TestScene.h" />
     <ClInclude Include="SourceCode\Texture.h" />
     <ClInclude Include="SourceCode\TexturePool.h" />
+    <ClInclude Include="SourceCode\tiny_obj_loader.h" />
     <ClInclude Include="SourceCode\VertexArray.h" />
     <ClInclude Include="std\stb_image.h" />
   </ItemGroup>

@@ -18,6 +18,7 @@
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
+#include <vector>
 
 class Renderer
 {
@@ -47,6 +48,8 @@ private:
 	class ShaderManager* m_shaderManager;     // シェーダーマネージャークラス
 
 	class BasicTriangle* m_triangle;          // デバッグ用三角形
+
+	std::vector<class MeshComponent*> m_meshComponents;
 
 	// 描画用の行列関連
 	glm::mat4 m_viewMat;                      // ビュー行列

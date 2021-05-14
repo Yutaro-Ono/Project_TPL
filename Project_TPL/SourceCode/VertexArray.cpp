@@ -22,7 +22,7 @@ VertexArray::VertexArray()
 /// <param name="_layout"> 頂点レイアウトの種類 </param>
 /// <param name="_inDices"> インデックスバッファ </param>
 /// <param name="_numInDices"> インデックス数 </param>
-VertexArray::VertexArray(const void* _verts, unsigned int _vertsNum, Vertex::LAYOUT_TYPE _layout, const unsigned int* _inDices, unsigned int _numInDices)
+VertexArray::VertexArray(const void* _verts, unsigned int _vertsNum, VERTEX_LAYOUT::TYPE _layout, const unsigned int* _inDices, unsigned int _numInDices)
 	:m_vertsNum(_vertsNum)
 	,m_numInDices(_numInDices)
 {
@@ -33,15 +33,15 @@ VertexArray::VertexArray(const void* _verts, unsigned int _vertsNum, Vertex::LAY
 	// 頂点データサイズの計算 (計算式についてはLayoutの定義の部分に明記)
 	unsigned vertexSize = 8 * sizeof(float);    // POS_NORMAL_
 
-	if (_layout == Vertex::LAYOUT_TYPE::POS_NORMAL_UV_TAN)
+	if (_layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN)
 	{
 		vertexSize = 11 * sizeof(float);
 	}
-	if (_layout == Vertex::LAYOUT_TYPE::POS_NORMAL_SKIN_UV)
+	if (_layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV)
 	{
 		vertexSize = 8 * sizeof(float) + 8 * sizeof(char);
 	}
-	if (_layout == Vertex::LAYOUT_TYPE::POS_NORMAL_SKIN_UV_TAN)
+	if (_layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV_TAN)
 	{
 		vertexSize = 11 * sizeof(float) + 8 * sizeof(char);
 	}

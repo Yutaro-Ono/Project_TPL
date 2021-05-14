@@ -11,6 +11,7 @@
 #include "SceneBase.h"
 #include "TexturePool.h"
 #include "MeshPool.h"
+#include "ActorPool.h"
 
 #include <iostream>
 
@@ -52,6 +53,7 @@ bool GameMain::Initialize()
 	// 各種オブジェクトプールの生成
 	m_texturePool = new TexturePool();
 	m_meshPool = new MeshPool();
+	m_actorPool = new ActorPool();
 
 	// レンダラークラスの作成
 	m_renderer = new Renderer();
@@ -87,6 +89,7 @@ void GameMain::Delete()
 
 	delete m_texturePool;
 	delete m_meshPool;
+	delete m_actorPool;
 
 #ifdef _DEBUG
 
