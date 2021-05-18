@@ -10,8 +10,10 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include "Component.h"
+#include <string>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+
 
 class MeshComponent : public Component
 {
@@ -19,9 +21,12 @@ class MeshComponent : public Component
 public:
 
 	MeshComponent(class Actor* _owner);
+	MeshComponent(class Actor* _owner, const std::string& _filePath);
 	~MeshComponent();
 
-	void DrawShadow(class GLSLprogram* _shader);
+	void Load(const std::string& _filePath);
+
+	void DrawShadow(class GLSLprogram* _depthShader);
 	void Draw(class GLSLprogram* _shader);
 
 

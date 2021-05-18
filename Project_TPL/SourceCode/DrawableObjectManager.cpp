@@ -20,11 +20,19 @@ DrawableObjectManager::~DrawableObjectManager()
 {
 }
 
+/// <summary>
+/// メッシュコンポーネントクラスを配列に追加する
+/// </summary>
+/// <param name="_meshComp"> 配列に追加するメッシュコンポーネントクラス </param>
 void DrawableObjectManager::AddMeshComp(MeshComponent* _meshComp)
 {
 	m_meshComponents.emplace_back(_meshComp);
 }
 
+/// <summary>
+/// メッシュコンポーネントクラスの削除
+/// </summary>
+/// <param name="_meshComp"> 削除したいメッシュコンポーネントクラス </param>
 void DrawableObjectManager::DeleteMeshComp(MeshComponent* _meshComp)
 {
 	auto iter = std::find(m_meshComponents.begin(), m_meshComponents.end(), _meshComp);
@@ -37,6 +45,10 @@ void DrawableObjectManager::DeleteMeshComp(MeshComponent* _meshComp)
 
 }
 
+/// <summary>
+/// メッシュコンポ―ネントの描画処理
+/// </summary>
+/// <param name="_shaderManager"> 描画に用いるシェーダークラス </param>
 void DrawableObjectManager::Draw(ShaderManager* _shaderManager)
 {
 	for (auto mc : m_meshComponents)

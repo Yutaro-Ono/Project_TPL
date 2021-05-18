@@ -25,14 +25,44 @@ MeshComponent::MeshComponent(Actor* _owner)
 	
 }
 
+MeshComponent::MeshComponent(Actor* _owner, const std::string& _filePath)
+	:Component(_owner)
+	,m_mesh(nullptr)
+	,m_isVisible(false)
+	,m_isDrawShadow(true)
+	,m_isDrawHUD(true)
+	,m_hudColor(glm::vec3(1.0))
+{
+	Load(_filePath);
+}
+
 MeshComponent::~MeshComponent()
 {
 }
 
-void MeshComponent::DrawShadow(GLSLprogram* _shader)
+/// <summary>
+/// メッシュのロード
+/// </summary>
+/// <param name="_filePath"></param>
+void MeshComponent::Load(const std::string& _filePath)
+{
+	// メッシュプールからメッシュを取得
+	m_mesh = MESH_POOL->GetMesh(_filePath);
+}
+
+/// <summary>
+/// 深度マップに影を描画する
+/// </summary>
+/// <param name="_depthShader"> 深度マップ描画に用いるシェーダー </param>
+void MeshComponent::DrawShadow(GLSLprogram* _depthShader)
 {
 }
 
+
+/// <summary>
+/// メッシュの描画処理
+/// </summary>
+/// <param name="_shader"> 描画に用いるシェーダークラス </param>
 void MeshComponent::Draw(GLSLprogram* _shader)
 {
 	if (m_mesh != nullptr && !m_isVisible)

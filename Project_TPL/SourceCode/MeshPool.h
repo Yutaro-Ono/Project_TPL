@@ -10,6 +10,7 @@
 #pragma once
 #include "ObjectPool.h"
 #include "Mesh.h"
+#include <iostream>
 
 class MeshPool : public ObjectPool<Mesh>
 {
@@ -19,5 +20,8 @@ public:
 	~MeshPool();
 
 	void UpdateObjects(float _deltaTime) override;
+
+	class Mesh* GetMesh(const std::string& _meshPath);
+
 
 };

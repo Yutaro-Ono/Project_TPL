@@ -35,8 +35,8 @@ public:
 
 protected:
 	
-	std::vector<T*> m_objPool;
-	std::unordered_map<std::string, T*> m_keyObjPool;
+	std::vector<class T*> m_objPool;
+	std::unordered_map<std::string, class T*> m_keyObjPool;
 };
 
 template<class T>

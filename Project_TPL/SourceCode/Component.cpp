@@ -16,8 +16,9 @@ Component::Component(Actor* _owner, int _updateOrder)
 	:m_owner(_owner)
 	,m_updateOrder(_updateOrder)
 {
-	// オーナーアクタにこのコンポーネントを追加
+	// オーナーアクタにコンポーネントを追加
 	m_owner->AddComponent(this);
+	// 個別IDの登録とグローバルIDのインクリメント
 	m_ID = m_globalID;
 	m_globalID++;
 }

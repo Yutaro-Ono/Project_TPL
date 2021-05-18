@@ -86,7 +86,6 @@ bool GameMain::Initialize()
 void GameMain::Delete()
 {
 	delete m_renderer;
-
 	delete m_texturePool;
 	delete m_meshPool;
 	delete m_actorPool;

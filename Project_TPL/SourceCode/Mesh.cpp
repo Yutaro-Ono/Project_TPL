@@ -83,7 +83,7 @@ int Mesh::CreateTextureStage(PBR_MATERIAL _type, const std::string& _fileName)
 /// <summary>
 /// タンジェントベクトル計算
 /// </summary>
-/// <param name="_destTangent"></param>
+/// <param name="_destTangent"> 計算結果を保存する3次元ベクトルクラス </param>
 /// <param name="_pos1"></param>
 /// <param name="_pos2"></param>
 /// <param name="_pos3"></param>
