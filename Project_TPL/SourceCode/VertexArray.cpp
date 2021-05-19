@@ -46,6 +46,31 @@ VertexArray::VertexArray(const void* _verts, unsigned int _vertsNum, VERTEX_LAYO
 		vertexSize = 11 * sizeof(float) + 8 * sizeof(char);
 	}
 
+	// 頂点バッファオブジェクトの生成
+	glGenBuffers(1, &m_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+	glBufferData(GL_ARRAY_BUFFER, _vertsNum * vertexSize, _verts, GL_STATIC_DRAW);
+
+	// インデックスバッファの生成
+	glGenBuffers(1, &m_indexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _numInDices * sizeof(unsigned int), _inDices, GL_STATIC_DRAW);
+
+	// 頂点属性ごとに処理を派生
+	if (_layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV)
+	{
+		// float 3個分　→　位置 x,y,z　位置属性をセット
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, 0);
+		// 次のfloat 3個分 → 法線 nx, ny, nz　法線属性をセット
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertexSize,
+			reinterpret_cast<void*>(sizeof(float) * 3));
+		// 次のfloat 2個分 u, v  テクスチャ座標属性をセット
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize,
+			reinterpret_cast<void*>(sizeof(float) * 6));
+	}
 }
 
 /// <summary>
@@ -65,5 +90,12 @@ VertexArray::~VertexArray()
 	glDeleteBuffers(1, &m_vbo);
 	glDeleteBuffers(1, &m_indexBuffer);
 	glDeleteVertexArrays(1, &m_vao);
+}
 
+/// <summary>
+/// 頂点配列オブジェクトをバインドし、描画の準備をする
+/// </summary>
+void VertexArray::SetActive()
+{
+	glBindVertexArray(m_vao);
 }

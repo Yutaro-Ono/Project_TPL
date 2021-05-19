@@ -42,6 +42,8 @@ public:
 	void AddComponent(class Component* _comp);
 	void RemoveComponent(class Component* _comp);
 
+	const glm::mat3& GetWorldTransform() { return m_worldTrans; }
+
 
 private:
 

@@ -35,8 +35,8 @@ public:
 
 protected:
 	
-	std::vector<class T*> m_objPool;
-	std::unordered_map<std::string, class T*> m_keyObjPool;
+	std::vector<T*> m_objPool;
+	std::unordered_map<std::string, T*> m_keyObjPool;
 };
 
 template<class T>
@@ -56,8 +56,8 @@ inline void ObjectPool<T>::Delete()
 	while (!m_objPool.empty())
 	{
 		delete m_objPool.back();
+		m_objPool.pop_back();
 	}
-
 
 	// オブジェクトプール(unordered_map)解放処理
 	for (auto itr : m_keyObjPool)

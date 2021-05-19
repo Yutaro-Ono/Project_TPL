@@ -43,6 +43,14 @@ bool ShaderManager::CreateShaders()
 	}
 	m_shaders[GLSLshader::SIMPLE_POS_TEXTURE]->SetUniform("u_mat.diffuseMap", 0);
 
+
+	m_shaders[GLSLshader::BASIC_MESH] = new GLSLprogram();
+	if (!m_shaders[GLSLshader::BASIC_MESH]->LoadShaders("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag"))
+	{
+		return false;
+	}
+	m_shaders[GLSLshader::BASIC_MESH]->SetUniform("u_mat.albedo", 0);
+
 	return true;
 }
 

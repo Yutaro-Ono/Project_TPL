@@ -18,6 +18,11 @@ DrawableObjectManager::DrawableObjectManager()
 
 DrawableObjectManager::~DrawableObjectManager()
 {
+	// メッシュコンポーネント解放処理
+	while (!m_meshComponents.empty())
+	{
+		delete m_meshComponents.back();
+	}
 }
 
 /// <summary>

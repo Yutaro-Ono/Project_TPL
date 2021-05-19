@@ -24,6 +24,8 @@ public:
 
 	void UpdateObjects(float _deltaTime) override;
 	
+	class Texture* GetTexture(const std::string& _texturePath);
+
 private:
 
 

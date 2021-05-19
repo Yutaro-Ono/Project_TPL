@@ -85,7 +85,7 @@ BasicTriangle::BasicTriangle()
 
 BasicTriangle::~BasicTriangle()
 {
-	GAME_INSTANCE.GetTexturePool()->DeleteObject(TEXTURE_KEY);
+	GAME_INSTANCE.GetTexturePool()->DeleteObject(m_diffuseMap);
 	glDeleteBuffers(1, &m_vbo);
 	glDeleteVertexArrays(1, &m_vao);
 }

@@ -54,6 +54,10 @@ public:
 
 	~VertexArray();
 
+	void SetActive();
+
+	const int& GetNumIndices() { return m_numInDices; }
+
 
 private:
 

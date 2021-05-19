@@ -29,7 +29,7 @@ public:
 	void DrawShadow(class GLSLprogram* _depthShader);
 	void Draw(class GLSLprogram* _shader);
 
-
+	void SetMaterialToUniform();
 
 
 private:

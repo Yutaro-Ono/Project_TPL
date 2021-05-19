@@ -20,6 +20,7 @@ public:
 	~DrawableObjectManager();
 
 
+
 	void AddMeshComp(class MeshComponent* _meshComp);
 	void DeleteMeshComp(class MeshComponent* _meshComp);
 

@@ -12,6 +12,9 @@
 #include <iostream>
 #include "BasicTriangle.h"
 #include "ShaderManager.h"
+#include "DrawableObjectManager.h"
+#include "Actor.h"
+#include "TestSphere.h"
 
 /// <summary>
 /// コンストラクタ
@@ -19,6 +22,7 @@
 Renderer::Renderer()
 	:m_window(NULL)
 	,m_shaderManager(nullptr)
+	,m_drawableObject(nullptr)
 	,m_triangle(nullptr)
 	,m_uboMatrices(0)
 	,m_uboCamera(0)
@@ -131,8 +135,16 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 		return false;
 	}
 
+	// 描画可能オブジェクト管理クラス
+	m_drawableObject = new DrawableObjectManager();
+
 	// デバッグ用三角形
 	m_triangle = new BasicTriangle();
+
+
+	TestSphere* sphere = new TestSphere();
+	TestSphere* sphere1 = new TestSphere();
+	TestSphere* sphere2 = new TestSphere();
 
 	return true;
 }
@@ -144,6 +156,7 @@ void Renderer::Delete()
 {
 	delete m_triangle;
 	delete m_shaderManager;
+	delete m_drawableObject;
 
 	// windowの破棄・GLFWのクリーンアップ
 	glfwDestroyWindow(m_window);
@@ -169,8 +182,13 @@ void Renderer::Draw()
 
 	// (デバッグ用)三角形の描画
 	//m_shaderManager->EnableShaderProgram(GLSLshader::SIMPLE_POS_COLOR);
-	m_shaderManager->EnableShaderProgram(GLSLshader::SIMPLE_POS_TEXTURE);
-	m_triangle->Draw(m_shaderManager->GetShader(GLSLshader::SIMPLE_POS_TEXTURE));
+	//m_shaderManager->EnableShaderProgram(GLSLshader::SIMPLE_POS_TEXTURE);
+	//m_triangle->Draw(m_shaderManager->GetShader(GLSLshader::SIMPLE_POS_TEXTURE));
+
+	// メッシュの描画
+	m_shaderManager->EnableShaderProgram(GLSLshader::BASIC_MESH);
+	m_drawableObject->Draw(m_shaderManager);
+
 
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
 	glfwSwapBuffers(m_window);

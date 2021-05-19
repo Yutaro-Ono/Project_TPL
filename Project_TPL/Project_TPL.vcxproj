@@ -175,6 +175,7 @@
     <ClCompile Include="SourceCode\Renderer.cpp" />
     <ClCompile Include="SourceCode\ShaderManager.cpp" />
     <ClCompile Include="SourceCode\TestScene.cpp" />
+    <ClCompile Include="SourceCode\TestSphere.cpp" />
     <ClCompile Include="SourceCode\Texture.cpp" />
     <ClCompile Include="SourceCode\TexturePool.cpp" />
     <ClCompile Include="SourceCode\tiny_obj_loader.cc" />
@@ -210,6 +211,7 @@
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\ShaderManager.h" />
     <ClInclude Include="SourceCode\TestScene.h" />
+    <ClInclude Include="SourceCode\TestSphere.h" />
     <ClInclude Include="SourceCode\Texture.h" />
     <ClInclude Include="SourceCode\TexturePool.h" />
     <ClInclude Include="SourceCode\tiny_obj_loader.h" />
@@ -217,6 +219,8 @@
     <ClInclude Include="std\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Shaders\BasicMesh.frag" />
+    <None Include="Shaders\BasicMesh.vert" />
     <None Include="Shaders\BasicShader.frag" />
     <None Include="Shaders\BasicShader.vert" />
     <None Include="Shaders\BasicShader_SamplingTexture.frag" />

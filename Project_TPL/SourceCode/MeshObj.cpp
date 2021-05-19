@@ -125,13 +125,18 @@ bool MeshObj::Load(const std::string& _filePath)
 
 			}
 
-			// タンジェントの算出
-			CalcTangentVec(tangent, destPos[0], destPos[1], destPos[2], uvPos[0], uvPos[1], uvPos[2]);
-			// タンジェント情報を頂点配列に格納
-			for (int i = 0; i < 3; i++)
+			// タンジェント空間情報が必要なモデルのみ
+			if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN || layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV_TAN)
 			{
-				SetTangent(vertexVec, indexOffset + i, tangent);
+				// タンジェントの算出
+				CalcTangentVec(tangent, destPos[0], destPos[1], destPos[2], uvPos[0], uvPos[1], uvPos[2]);
+				// タンジェント情報を頂点配列に格納
+				for (int i = 0; i < 3; i++)
+				{
+					SetTangent(vertexVec, indexOffset + i, tangent);
+				}
 			}
+
 
 			// 基準インデックスを変更
 			indexOffset += num_vertices;

@@ -19,7 +19,7 @@
 // テクスチャの種類 (PBRマテリアル)
 enum class PBR_MATERIAL : unsigned char
 {
-	ALBEDO,
+	ALBEDO = 0,
 	NORMAL,
 	METALLIC,
 	ROUGHNESS,
@@ -40,6 +40,12 @@ public:
 	void AddTextureStage(const std::string& _fileName);
 	int CreateTextureStage(PBR_MATERIAL _type, const std::string& _fileName);
 
+	void SetActiveVAO();
+
+	const int& GetTextureID(PBR_MATERIAL _type) { return m_textureStages[_type]; }
+
+	class VertexArray* GetVertexArray() { return m_vertexArray; }
+
 	void CalcTangentVec(glm::vec3& destTangent_,
 		                const glm::vec3& _pos1, const glm::vec3& _pos2, const glm::vec3& _pos3,
 		                const glm::vec2& _uv1, const glm::vec2& _uv2, const glm::vec2& _uv3);
@@ -48,8 +54,6 @@ public:
 
 protected:
 
-	unsigned int m_vao;
-	unsigned int m_vbo;
 
 	class VertexArray* m_vertexArray;
 

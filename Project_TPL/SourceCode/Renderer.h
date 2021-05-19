@@ -35,6 +35,9 @@ public:
 
 	GLFWwindow* GetMainWindow() { return m_window; }    // ウィンドウコンテキストのゲッター
 
+	class DrawableObjectManager* GetDrawableObjectManager() { return m_drawableObject; }
+
+
 private:
 
 
@@ -43,20 +46,18 @@ private:
 	static void FrameBuffer_Size_Callback(GLFWwindow* _window, int _width, int _height);
 
 
-	GLFWwindow* m_window;                     // メインウィンドウ
+	GLFWwindow* m_window;                            // メインウィンドウ
 
-	class ShaderManager* m_shaderManager;     // シェーダーマネージャークラス
-
-	class BasicTriangle* m_triangle;          // デバッグ用三角形
-
-	std::vector<class MeshComponent*> m_meshComponents;
+	class ShaderManager* m_shaderManager;            // シェーダーマネージャークラス
+	class DrawableObjectManager* m_drawableObject;       // 描画可能オブジェクト管理クラス
+	class BasicTriangle* m_triangle;                 // デバッグ用三角形
 
 	// 描画用の行列関連
-	glm::mat4 m_viewMat;                      // ビュー行列
-	glm::mat4 m_projMat;                      // プロジェクション行列
+	glm::mat4 m_viewMat;                             // ビュー行列
+	glm::mat4 m_projMat;                             // プロジェクション行列
 
 	// uniformバッファ
-	unsigned int m_uboMatrices;               // ビュー・プロジェクション行列用UBO
-	unsigned int m_uboCamera;                 // カメラ情報
+	unsigned int m_uboMatrices;                      // ビュー・プロジェクション行列用UBO
+	unsigned int m_uboCamera;                        // カメラ情報
 
 };

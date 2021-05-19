@@ -25,7 +25,7 @@ Actor::Actor()
 	,m_ID(m_globalActorNo)
 {
 	// アクタープールに追加する
-	GAME_INSTANCE.GetActorPool()->AddObject(this);
+	ACTOR_POOL->AddObject(this);
 
 	// ゲーム全体のアクター番号をインクリメント
 	m_globalActorNo++;
@@ -78,10 +78,13 @@ void Actor::ComputeWorldTransform()
 		trans = glm::scale(trans, m_scale);
 
 		// 回転
-		trans *= m_rotationX * m_rotationY * m_rotationZ;
+		//trans *= m_rotationX * m_rotationY * m_rotationZ;
 
 		// 平行移動
 		trans = glm::translate(trans, m_position);
+
+		// ワールド変換行列を更新
+		m_worldTrans = trans;
 
 		// アクターの全コンポーネントも更新
 		for (auto comp : m_components)

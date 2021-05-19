@@ -12,14 +12,15 @@
 #include "GameMain.h"
 #include "Renderer.h"
 #include "Texture.h"
-
+#include "TexturePool.h"
+#include "VertexArray.h"
 
 const char* PBR_MATERIAL_NAME[static_cast<int>(PBR_MATERIAL::ALL)] =
 {
-	"_ALBEDO",
-	"_NORMAL",
-	"_METALLIC",
-	"_ROUGHNESS",
+	"_Albedo",
+	"_Normal",
+	"_Metallic",
+	"_Roughness",
 	"_AO"
 };
 
@@ -63,21 +64,30 @@ void Mesh::AddTextureStage(const std::string& _fileName)
 /// <returns> テクスチャID </returns>
 int Mesh::CreateTextureStage(PBR_MATERIAL _type, const std::string& _fileName)
 {
-	// マテリアルタイプごとのテクスチャパスを作成
-	std::string texturePath = _fileName + PBR_MATERIAL_NAME[static_cast<int>(_type)];
 
-	// テクスチャの生成
+	// テクスチャタイプごとにstringをセット
+	std::string texturePath = _fileName + PBR_MATERIAL_NAME[static_cast<int>(_type)] + ".png";
+
+	// テクスチャクラスのポインタをプールから取得または生成
 	Texture* t = nullptr;
-	t->LoadTexture(texturePath);
-
+	t = TEXTURE_POOL->GetTexture(texturePath);
+	
 	// テクスチャの取得に成功したらIDを返す
 	if (t != nullptr)
 	{
 		return t->GetTextureID();
 	}
 
-
+	// テクスチャがロードできなかった場合は0を返す
 	return 0;
+}
+
+/// <summary>
+/// 頂点配列オブジェクトのバインド
+/// </summary>
+void Mesh::SetActiveVAO()
+{
+	m_vertexArray->SetActive();
 }
 
 /// <summary>

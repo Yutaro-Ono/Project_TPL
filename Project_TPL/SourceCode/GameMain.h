@@ -63,3 +63,5 @@ private:
 #define GAME_INSTANCE GameMain::GetInstance()
 #define RENDERER GameMain::GetInstance().GetRenderer()
 #define MESH_POOL GameMain::GetInstance().GetMeshPool()
+#define TEXTURE_POOL GameMain::GetInstance().GetTexturePool()
+#define ACTOR_POOL GameMain::GetInstance().GetActorPool()

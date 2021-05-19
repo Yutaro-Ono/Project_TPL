@@ -96,6 +96,15 @@
     <Filter Include="Source\Pool\ActorPool">
       <UniqueIdentifier>{9b78c7ce-c970-478b-ba11-cdbfe9a037d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Actor\TestActor">
+      <UniqueIdentifier>{03862977-c3fa-4817-adc7-fced563b8f7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actor\TestActor\Sphere">
+      <UniqueIdentifier>{3fbb8a09-2ac5-4a18-a1df-749ad6bb5625}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ShaderSource\Basic\BasicMesh">
+      <UniqueIdentifier>{9251573b-52af-4ffc-b1f2-cb001bae11fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -187,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\DrawableObjectManager.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\TestSphere.cpp">
+      <Filter>Source\Actor\TestActor\Sphere</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -292,6 +304,9 @@
     <ClInclude Include="SourceCode\DrawableObjectManager.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\TestSphere.h">
+      <Filter>Source\Actor\TestActor\Sphere</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\BasicShader.vert">
@@ -308,6 +323,12 @@
     </None>
     <None Include="Shaders\BasicShader.frag">
       <Filter>Source\ShaderSource\Basic</Filter>
+    </None>
+    <None Include="Shaders\BasicMesh.vert">
+      <Filter>Source\ShaderSource\Basic\BasicMesh</Filter>
+    </None>
+    <None Include="Shaders\BasicMesh.frag">
+      <Filter>Source\ShaderSource\Basic\BasicMesh</Filter>
     </None>
   </ItemGroup>
 </Project>
