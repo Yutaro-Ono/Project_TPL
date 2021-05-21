@@ -10,6 +10,7 @@
 //----------------------------------------------------------------------------------+
 #include "Renderer.h"
 #include <iostream>
+#include <glm/gtc/type_ptr.hpp>
 #include "BasicTriangle.h"
 #include "ShaderManager.h"
 #include "DrawableObjectManager.h"
@@ -107,7 +108,7 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	//---------------------------------------+
 	// 行列の初期化
 	//---------------------------------------+
-	m_viewMat = glm::lookAt(glm::vec3(0.0), glm::vec3(0.0, 0.0, 1.0), glm::vec3(00, 1.0, 0.0));
+	m_viewMat = glm::lookAt(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, 1.0, 0.0));
 	m_projMat = glm::perspective(glm::radians(75.0f), (float)_width / (float)_height, 0.1f, 10000.0f);
 
 	//---------------------------------------+
@@ -123,7 +124,7 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	// カメラ情報FBO
 	glGenBuffers(1, &m_uboCamera);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3::x) + sizeof(glm::vec3::y) + sizeof(glm::vec3::z), NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_uboCamera, 0, sizeof(glm::vec3::x) + sizeof(glm::vec3::y) + sizeof(glm::vec3::z));
 
@@ -143,8 +144,14 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 
 
 	TestSphere* sphere = new TestSphere();
+	sphere->SetPosition(glm::vec3(10.0f, 5.0f, 10.0f));
+	sphere->SetScale(glm::vec3(0.1f));
 	TestSphere* sphere1 = new TestSphere();
+	sphere1->SetPosition(glm::vec3(-10.0f, 0.0f, 7.0f));
+	sphere1->SetScale(glm::vec3(0.1f));
 	TestSphere* sphere2 = new TestSphere();
+	sphere2->SetPosition(glm::vec3(4.0f, -5.0f, 1.0f));
+	sphere2->SetScale(glm::vec3(0.1f));
 
 	return true;
 }
@@ -174,10 +181,14 @@ void Renderer::Draw()
 	// ビューポートの更新
 	glViewport(0, 0, 1920, 1080);
 
+	// uniformバッファのセット
+	SetUniformBuffer();
+
+
 	//------------------------------------------------+
     // 描画処理
     //------------------------------------------------+
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);      // 指定した色値で画面をクリア
+	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
 
 	// (デバッグ用)三角形の描画
@@ -186,6 +197,7 @@ void Renderer::Draw()
 	//m_triangle->Draw(m_shaderManager->GetShader(GLSLshader::SIMPLE_POS_TEXTURE));
 
 	// メッシュの描画
+	glEnable(GL_DEPTH_TEST);
 	m_shaderManager->EnableShaderProgram(GLSLshader::BASIC_MESH);
 	m_drawableObject->Draw(m_shaderManager);
 
@@ -201,12 +213,12 @@ void Renderer::SetUniformBuffer()
 {
 	// 行列UBO
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), &m_viewMat);
-	glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(glm::mat4), sizeof(glm::mat4), &m_projMat);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(m_viewMat));
+	glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(m_projMat));
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// カメラUBO
-	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
+	//glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
 
 }
 

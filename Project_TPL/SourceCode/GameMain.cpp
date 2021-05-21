@@ -25,6 +25,7 @@ GameMain::GameMain()
 	,m_renderer(nullptr)
 	,m_debugger(nullptr)
 	,m_scene(nullptr)
+	,m_deltaTime(1.0f)
 {
 
 }
@@ -133,6 +134,10 @@ bool GameMain::RunLoop()
 	// “ü—Í‚É‘Î‚·‚éˆ—
 	//------------------------------------------------+
 	ProcessInput();      // “ü—Í‚É‚æ‚éˆ—
+
+	m_actorPool->UpdateObjects(m_deltaTime);
+
+
 
 #ifdef _DEBUG
 

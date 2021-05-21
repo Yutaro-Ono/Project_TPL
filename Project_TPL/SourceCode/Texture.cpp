@@ -59,7 +59,7 @@ bool Texture::LoadTexture(const std::string& _filePath)
     }
     else
     {
-        std::cout << "Failed::Load Texture" << std::endl;
+        std::cout << "Failed::Load Texture::" << _filePath << std::endl;
         return false;
     }
 

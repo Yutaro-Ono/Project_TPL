@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------------+
 #include "MeshPool.h"
 #include "MeshObj.h"
-//#include "MeshGpmesh.h"
+#include "MeshGpmesh.h"
 
 MeshPool::MeshPool()
 {
@@ -67,7 +67,20 @@ Mesh* MeshPool::GetMesh(const std::string& _meshPath)
 		// .gpmesh形式
 		if (extension == ".gpmesh")
 		{
-			
+			mesh = new MeshGpmesh();
+
+			// メッシュのロード
+			if (mesh->Load(_meshPath))
+			{
+				// 成功
+				m_keyObjPool.emplace(_meshPath, mesh);
+			}
+			else
+			{
+				// 失敗
+				delete mesh;
+				mesh = nullptr;
+			}
 		}
 	}
 

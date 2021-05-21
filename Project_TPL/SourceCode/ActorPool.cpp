@@ -20,4 +20,9 @@ ActorPool::~ActorPool()
 
 void ActorPool::UpdateObjects(float _deltaTime)
 {
+	for (auto iter : m_objPool)
+	{
+		iter->UpdateActor(_deltaTime);
+		iter->Update(_deltaTime);
+	}
 }

@@ -27,6 +27,15 @@ enum class PBR_MATERIAL : unsigned char
 	ALL
 };
 
+namespace
+{
+	union Vertex
+	{
+		float f;
+		uint8_t b[4];
+	};
+}
+
 class Mesh
 {
 

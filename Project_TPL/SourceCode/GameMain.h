@@ -58,6 +58,8 @@ private:
 	class MeshPool* m_meshPool;            // メッシュプール
 	class ActorPool* m_actorPool;          // アクタープール
 
+	float m_deltaTime;
+
 };
 
 #define GAME_INSTANCE GameMain::GetInstance()

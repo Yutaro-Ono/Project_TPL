@@ -38,6 +38,9 @@ public:
 	class DrawableObjectManager* GetDrawableObjectManager() { return m_drawableObject; }
 
 
+	const glm::mat4 GetViewMatrix() { return m_viewMat; }
+	const glm::mat4 GetProjectionMatrix() { return m_projMat; }
+
 private:
 
 

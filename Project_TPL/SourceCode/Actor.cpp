@@ -15,12 +15,12 @@ int Actor::m_globalActorNo = 0;
 
 Actor::Actor()
 	:m_state(ActorEnum::ACTOR_STATE::ACTIVE)
-	,m_position(glm::vec3(0.0f))
+	,m_worldTrans(glm::mat4(1.0f))
+	,m_position(glm::vec3(1.0f))
 	,m_scale(glm::vec3(1.0f))
 	,m_rotationX(glm::quat(glm::vec3(0.0f)))
 	,m_rotationY(glm::quat(glm::vec3(0.0f)))
 	,m_rotationZ(glm::quat(glm::vec3(0.0f)))
-	,m_worldTrans(glm::mat4(1.0f))
 	,m_recomputeWorldTransform(true)
 	,m_ID(m_globalActorNo)
 {
@@ -29,6 +29,8 @@ Actor::Actor()
 
 	// ゲーム全体のアクター番号をインクリメント
 	m_globalActorNo++;
+
+	ComputeWorldTransform();
 }
 
 Actor::~Actor()
@@ -46,6 +48,7 @@ Actor::~Actor()
 
 void Actor::Update(float _deltaTime)
 {
+	ComputeWorldTransform();
 }
 
 /// <summary>
@@ -62,6 +65,7 @@ void Actor::UpdateComponents(float _deltaTime)
 /// <param name="_deltaTime"></param>
 void Actor::UpdateActor(float _deltaTime)
 {
+	
 }
 
 /// <summary>
@@ -72,19 +76,14 @@ void Actor::ComputeWorldTransform()
 	// ワールド変換行列の再計算が必要な場合のみ実行
 	if (m_recomputeWorldTransform)
 	{
-		glm::mat4 trans = m_worldTrans;
 
+		// 平行移動
+		m_worldTrans = glm::translate(m_worldTrans, m_position);
 		// スケーリング
-		trans = glm::scale(trans, m_scale);
+		m_worldTrans = glm::scale(m_worldTrans, m_scale);
 
 		// 回転
 		//trans *= m_rotationX * m_rotationY * m_rotationZ;
-
-		// 平行移動
-		trans = glm::translate(trans, m_position);
-
-		// ワールド変換行列を更新
-		m_worldTrans = trans;
 
 		// アクターの全コンポーネントも更新
 		for (auto comp : m_components)
@@ -131,4 +130,26 @@ void Actor::RemoveComponent(Component* _comp)
 	{
 		m_components.erase(iter);
 	}
+}
+
+/// <summary>
+/// 座標のセット
+/// ワールド変換行列の再計算のフラグを立てる
+/// </summary>
+/// <param name="_pos"></param>
+void Actor::SetPosition(const glm::vec3& _pos)
+{
+	m_position = _pos;
+	m_recomputeWorldTransform = true;
+}
+
+/// <summary>
+/// スケールのセット
+/// ワールド変換行列の再計算のフラグを立てる
+/// </summary>
+/// <param name="_scale"></param>
+void Actor::SetScale(const glm::vec3& _scale)
+{
+	m_scale = _scale;
+	m_recomputeWorldTransform = true;
 }

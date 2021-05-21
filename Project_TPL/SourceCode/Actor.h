@@ -42,10 +42,15 @@ public:
 	void AddComponent(class Component* _comp);
 	void RemoveComponent(class Component* _comp);
 
-	const glm::mat3& GetWorldTransform() { return m_worldTrans; }
+
+	void SetPosition(const glm::vec3& _pos);
+	void SetScale(const glm::vec3& _scale);
 
 
-private:
+	const glm::mat4& GetWorldTransform() { return m_worldTrans; }
+
+
+protected:
 
 	ActorEnum::ACTOR_STATE m_state;
 

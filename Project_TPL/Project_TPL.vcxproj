@@ -170,6 +170,7 @@
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\Mesh.cpp" />
     <ClCompile Include="SourceCode\MeshComponent.cpp" />
+    <ClCompile Include="SourceCode\MeshGpmesh.cpp" />
     <ClCompile Include="SourceCode\MeshObj.cpp" />
     <ClCompile Include="SourceCode\MeshPool.cpp" />
     <ClCompile Include="SourceCode\Renderer.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="SourceCode\GLSLprogram.h" />
     <ClInclude Include="SourceCode\Mesh.h" />
     <ClInclude Include="SourceCode\MeshComponent.h" />
+    <ClInclude Include="SourceCode\MeshGpmesh.h" />
     <ClInclude Include="SourceCode\MeshObj.h" />
     <ClInclude Include="SourceCode\MeshPool.h" />
     <ClInclude Include="SourceCode\ObjectPool.h" />

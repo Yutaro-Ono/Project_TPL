@@ -105,6 +105,9 @@
     <Filter Include="Source\ShaderSource\Basic\BasicMesh">
       <UniqueIdentifier>{9251573b-52af-4ffc-b1f2-cb001bae11fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Mesh\GPMESH">
+      <UniqueIdentifier>{f576bc90-4d13-4496-b29e-690f742576ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -199,6 +202,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\TestSphere.cpp">
       <Filter>Source\Actor\TestActor\Sphere</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\MeshGpmesh.cpp">
+      <Filter>Source\Mesh\GPMESH</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -306,6 +312,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\TestSphere.h">
       <Filter>Source\Actor\TestActor\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\MeshGpmesh.h">
+      <Filter>Source\Mesh\GPMESH</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

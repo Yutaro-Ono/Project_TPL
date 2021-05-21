@@ -76,6 +76,7 @@ void MeshComponent::Draw(GLSLprogram* _shader)
 		// ワールド変換行列をシェーダーに送る
 		_shader->SetUniform("u_worldTransform", m_owner->GetWorldTransform());
 
+
 		// マテリアル情報のバインド
 		SetMaterialToUniform();
 

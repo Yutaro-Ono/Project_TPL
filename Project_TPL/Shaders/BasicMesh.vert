@@ -34,5 +34,5 @@ uniform mat4 u_worldTransform;     // world space
 void main()
 {
 	vs_out.fragTexCoords = a_texCoords;
-	gl_Position = u_worldTransform * vec4(a_vertexPos, 1.0);
+	gl_Position = u_projection * u_view * u_worldTransform * vec4(a_vertexPos, 1.0);
 }

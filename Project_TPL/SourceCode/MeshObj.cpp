@@ -45,11 +45,19 @@ bool MeshObj::Load(const std::string& _filePath)
 	const int attribVertNum = 3;
 	const int attribNormNum = 3;
 	const int attribUVNum = 2;
-	// タンジェント空間 (ノーマルマップで使用)
-	const int attribTanNum = 3;
+
 
 	// ストライドの定義
-	const int attribStride = attribVertNum + attribNormNum + attribUVNum + attribTanNum;
+	int attribStride = attribVertNum + attribNormNum + attribUVNum;
+	// タンジェント情報が必要な場合はストライドを拡張
+	if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN || layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV_TAN)
+	{
+		// タンジェント空間 (ノーマルマップで使用)
+		const int attribTanNum = 3;
+
+		attribStride += attribTanNum;
+	}
+
 
 	// 頂点数の計算 (頂点座標の合計 / ポリゴンの頂点数(3))
 	int vertNum = attrib.vertices.size() / attribVertNum;
@@ -93,8 +101,8 @@ bool MeshObj::Load(const std::string& _filePath)
 				tinyobj::index_t idx = shape.mesh.indices[indexOffset + v];
 
 				// 頂点座標を頂点配列にコピー
-				vertexVec[idx.vertex_index * attribStride + 0] = attrib.vertices[3 * idx.vertex_index + 0];
-				vertexVec[idx.vertex_index * attribStride + 1] = attrib.vertices[3 * idx.vertex_index + 1];
+				vertexVec[idx.vertex_index * attribStride + 0] = attrib.vertices[3 * idx.vertex_index + 1];
+				vertexVec[idx.vertex_index * attribStride + 1] = attrib.vertices[3 * idx.vertex_index + 0];
 				vertexVec[idx.vertex_index * attribStride + 2] = attrib.vertices[3 * idx.vertex_index + 2];
 
 				// 法線データを頂点配列にコピー
@@ -115,13 +123,13 @@ bool MeshObj::Load(const std::string& _filePath)
 
 
 				// ポリゴンを構成する頂点座標を一時保存
-				destPos[v] = glm::vec3(vertexVec[idx.vertex_index * attribStride + 0],
-					                   vertexVec[idx.vertex_index * attribStride + 1],
-					                   vertexVec[idx.vertex_index * attribStride + 2]);
+				destPos[v] = glm::vec3(vertexVec[(int)idx.vertex_index * attribStride + 0],
+					                   vertexVec[(int)idx.vertex_index * attribStride + 1],
+					                   vertexVec[(int)idx.vertex_index * attribStride + 2]);
 
 				// テクスチャ座標を一時保存
-				uvPos[v] = glm::vec2(vertexVec[idx.vertex_index * attribStride + 6], 
-					                 vertexVec[idx.vertex_index * attribStride + 7]);
+				uvPos[v] = glm::vec2(vertexVec[(int)idx.vertex_index * attribStride + 6],
+					                 vertexVec[(int)idx.vertex_index * attribStride + 7]);
 
 			}
 
