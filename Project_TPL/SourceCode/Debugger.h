@@ -29,9 +29,12 @@ public:
 
 	void Delete();
 
-	void UpdateImGui();
+	void UpdateImGui(float _deltaTime);
 
 	void RenderImGui();
+
+	void AddDebugObject(class DebugObjectBase* _debugObj);
+	void DeleteDebugObject(class DebugObjectBase* _debugObj);
 
 
 	GLFWwindow* GetDebugWindow() { return m_debugWindow; }
@@ -45,6 +48,6 @@ private:
 	int m_windowH;                 // デバッグ用ウィンドウ縦サイズ
 	int m_windowW;                 // デバッグ用ウィンドウ横サイズ
 
-	std::vector<class DebugObjectBase*> m_debugObjects;
+	class DebugObjectPool* m_debugObjectPool;
 
 };

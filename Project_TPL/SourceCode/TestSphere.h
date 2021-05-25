@@ -10,7 +10,6 @@
 #pragma once
 #include "Actor.h"
 
-
 class TestSphere : public Actor
 {
 
@@ -23,7 +22,7 @@ public:
 
 private:
 
-
-
+	class TestSphereDebug* m_debugObj;
 
 };
+

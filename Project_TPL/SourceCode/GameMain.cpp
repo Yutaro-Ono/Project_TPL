@@ -12,6 +12,7 @@
 #include "TexturePool.h"
 #include "MeshPool.h"
 #include "ActorPool.h"
+#include "TestSphere.h"
 
 #include <iostream>
 
@@ -77,6 +78,17 @@ bool GameMain::Initialize()
 
 #endif
 
+
+
+	TestSphere* sphere = new TestSphere();
+	sphere->SetPosition(glm::vec3(10.0f, 5.0f, 10.0f));
+	sphere->SetScale(glm::vec3(0.1f));
+	TestSphere* sphere1 = new TestSphere();
+	sphere1->SetPosition(glm::vec3(-10.0f, 0.0f, 7.0f));
+	sphere1->SetScale(glm::vec3(0.1f));
+	TestSphere* sphere2 = new TestSphere();
+	sphere2->SetPosition(glm::vec3(4.0f, -5.0f, 1.0f));
+	sphere2->SetScale(glm::vec3(0.1f));
 
 	return true;
 }
@@ -144,7 +156,7 @@ bool GameMain::RunLoop()
 	//------------------------------------------------+
 	// imgui更新・描画処理 (Debugビルドでのみ行う)
 	//------------------------------------------------+
-	m_debugger->UpdateImGui();
+	m_debugger->UpdateImGui(m_deltaTime);
 
 #endif
 

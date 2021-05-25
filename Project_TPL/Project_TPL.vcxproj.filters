@@ -108,6 +108,9 @@
     <Filter Include="Source\Mesh\GPMESH">
       <UniqueIdentifier>{f576bc90-4d13-4496-b29e-690f742576ad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Pool\DebugObjectPool">
+      <UniqueIdentifier>{cdbd8675-679f-4f2c-8a8a-59c48c1a2678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -170,9 +173,6 @@
     <ClCompile Include="SourceCode\Actor.cpp">
       <Filter>Source\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="SourceCode\DebugObjectBase.cpp">
-      <Filter>Source\DebugSystem</Filter>
-    </ClCompile>
     <ClCompile Include="SourceCode\TexturePool.cpp">
       <Filter>Source\Pool\TexturePool</Filter>
     </ClCompile>
@@ -205,6 +205,12 @@
     </ClCompile>
     <ClCompile Include="SourceCode\MeshGpmesh.cpp">
       <Filter>Source\Mesh\GPMESH</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\DebugObjectPool.cpp">
+      <Filter>Source\Pool\DebugObjectPool</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\DebugObjectBase.cpp">
+      <Filter>Source\DebugSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -315,6 +321,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\MeshGpmesh.h">
       <Filter>Source\Mesh\GPMESH</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\DebugObjectPool.h">
+      <Filter>Source\Pool\DebugObjectPool</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,7 +6,8 @@
 // @author      小野 湧太郎 (Yutaro Ono, @2021)
 //----------------------------------------------------------------------------------+
 #include "Debugger.h"
-
+#include "DebugObjectBase.h"
+#include "DebugObjectPool.h"
 #include <iostream>
 
 /// <summary>
@@ -16,7 +17,9 @@ Debugger::Debugger()
 	:m_debugWindow(NULL)
 	,m_windowH(640)
 	,m_windowW(480)
+	,m_debugObjectPool(nullptr)
 {
+	m_debugObjectPool = new DebugObjectPool();
 }
 
 /// <summary>
@@ -73,6 +76,9 @@ bool Debugger::Initialize()
 /// </summary>
 void Debugger::Delete()
 {
+	// デバッグオブジェクトのプールを解放
+	delete m_debugObjectPool;
+
 	// imguiのクリーンアップ
 	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
@@ -85,7 +91,7 @@ void Debugger::Delete()
 /// ImGuiの更新処理
 /// デバッグクラス群の更新を行う予定
 /// </summary>
-void Debugger::UpdateImGui()
+void Debugger::UpdateImGui(float _deltaTime)
 {
 	// アクティブなウィンドウとしてデバッグ画面を設定
 	glfwMakeContextCurrent(m_debugWindow);
@@ -129,6 +135,10 @@ void Debugger::UpdateImGui()
 	ImGui::Text("Application average %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
 	ImGui::Text("FrameRate >> %.1f FPS", ImGui::GetIO().Framerate);
 
+	// デバッグオブジェクトプールの更新処理
+	m_debugObjectPool->UpdateObjects(_deltaTime);
+
+
 	ImGui::End();
 
 	// 描画処理
@@ -156,8 +166,21 @@ void Debugger::RenderImGui()
 	// フレームバッファにImGuiの描画結果を書き出す
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
 	glfwSwapBuffers(m_debugWindow);
+}
+
+
+void Debugger::AddDebugObject(DebugObjectBase* _debugObj)
+{
+	m_debugObjectPool->AddObject(_debugObj);
+}
+
+
+void Debugger::DeleteDebugObject(DebugObjectBase* _debugObj)
+{
+	m_debugObjectPool->DeleteObject(_debugObj);
 }
 
 

@@ -15,7 +15,7 @@
 #include "ShaderManager.h"
 #include "DrawableObjectManager.h"
 #include "Actor.h"
-#include "TestSphere.h"
+
 
 /// <summary>
 /// コンストラクタ
@@ -143,15 +143,7 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	m_triangle = new BasicTriangle();
 
 
-	TestSphere* sphere = new TestSphere();
-	sphere->SetPosition(glm::vec3(10.0f, 5.0f, 10.0f));
-	sphere->SetScale(glm::vec3(0.1f));
-	TestSphere* sphere1 = new TestSphere();
-	sphere1->SetPosition(glm::vec3(-10.0f, 0.0f, 7.0f));
-	sphere1->SetScale(glm::vec3(0.1f));
-	TestSphere* sphere2 = new TestSphere();
-	sphere2->SetPosition(glm::vec3(4.0f, -5.0f, 1.0f));
-	sphere2->SetScale(glm::vec3(0.1f));
+
 
 	return true;
 }

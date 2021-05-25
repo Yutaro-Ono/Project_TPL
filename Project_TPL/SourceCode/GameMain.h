@@ -36,6 +36,7 @@ public:
 
 	// Getter
 	class Renderer* GetRenderer() { return m_renderer; }
+	class Debugger* GetDebugger() { return m_debugger; }
 	class TexturePool* GetTexturePool() { return m_texturePool; }
 	class MeshPool* GetMeshPool() { return m_meshPool; }
 	class ActorPool* GetActorPool() { return m_actorPool; }
@@ -64,6 +65,7 @@ private:
 
 #define GAME_INSTANCE GameMain::GetInstance()
 #define RENDERER GameMain::GetInstance().GetRenderer()
+#define DEBUGGER GameMain::GetInstance().GetDebugger()
 #define MESH_POOL GameMain::GetInstance().GetMeshPool()
 #define TEXTURE_POOL GameMain::GetInstance().GetTexturePool()
 #define ACTOR_POOL GameMain::GetInstance().GetActorPool()

@@ -13,6 +13,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include "Component.h"
+#include "DebugObjectBase.h"
 
 namespace ActorEnum
 {
@@ -42,10 +43,9 @@ public:
 	void AddComponent(class Component* _comp);
 	void RemoveComponent(class Component* _comp);
 
-
 	void SetPosition(const glm::vec3& _pos);
 	void SetScale(const glm::vec3& _scale);
-
+	void SetEulerAngle(const glm::vec3& _angle);
 
 	const glm::mat4& GetWorldTransform() { return m_worldTrans; }
 
@@ -60,6 +60,7 @@ protected:
 	// 変換
 	glm::vec3 m_scale;
 	// 回転行列
+	glm::vec3 m_eulerAngles;
 	glm::quat m_rotationX;
 	glm::quat m_rotationY;
 	glm::quat m_rotationZ;
@@ -71,5 +72,32 @@ protected:
 
 	int m_ID;                          // アクター識別ID
 	static int m_globalActorNo;        // ゲーム全体におけるアクター番号
+
+
+	class ActorDebugObject* m_debugObj;
+
+	friend class ActorDebugObject;
+};
+
+
+
+class ActorDebugObject : public DebugObjectBase
+{
+
+public:
+
+
+	ActorDebugObject(class Actor* _owner);
+	~ActorDebugObject();
+
+	void Update(float _deltaTime) override;
+	void Render() override;
+
+private:
+
+
+	class Actor* m_owner;
+
+	bool m_isShowDebug;
 
 };
