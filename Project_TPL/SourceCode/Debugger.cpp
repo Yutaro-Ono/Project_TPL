@@ -103,33 +103,33 @@ void Debugger::UpdateImGui(float _deltaTime)
 
 	// ウィンドウタイトル
 	// ※日本語フォントはu8リテラルで正しく表示できる
-	ImGui::Begin(u8"デバッグ画面");
+	ImGui::Begin("Debug Screen");
 
 	// テキスト表示
-	ImGui::Text("index");
+	//ImGui::Text("index");
 
 	// テキスト表示 (自動的に改行される)
-	ImGui::Text("index");
+	//ImGui::Text("index");
 
 	// 改行しないという明示。次のテキストが同じ行に表示される
-	ImGui::SameLine();
+	//ImGui::SameLine();
 
 	// テキスト
-	ImGui::Text(u8"です。");
+	//ImGui::Text(u8"です。");
 
 	// 区切り線
-	ImGui::Separator();
+	//ImGui::Separator();
 
 	// チェックボックス
-	static bool check;
-	ImGui::Checkbox(u8"チェック", &check);
+	//static bool check;
+	//ImGui::Checkbox(u8"チェック", &check);
 
 	// 区切り線
-	ImGui::Separator();
+	//ImGui::Separator();
 
 	// カラーピッカー
-	static float color;
-	ImGui::ColorPicker4(u8"カラー", &color);
+	//static float color;
+	//ImGui::ColorPicker4(u8"カラー", &color);
 
 	//フレームレートを表示
 	ImGui::Text("Application average %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);

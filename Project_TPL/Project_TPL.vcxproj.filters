@@ -111,6 +111,9 @@
     <Filter Include="Source\Pool\DebugObjectPool">
       <UniqueIdentifier>{cdbd8675-679f-4f2c-8a8a-59c48c1a2678}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Lighting">
+      <UniqueIdentifier>{e462256d-e780-478f-b9bd-36001f344c27}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -211,6 +214,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\DebugObjectBase.cpp">
       <Filter>Source\DebugSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\DirectionalLight.cpp">
+      <Filter>Source\Lighting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,6 +330,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\DebugObjectPool.h">
       <Filter>Source\Pool\DebugObjectPool</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\DirectionalLight.h">
+      <Filter>Source\Lighting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -35,7 +35,7 @@ Actor::Actor()
 
 	ComputeWorldTransform();
 
-
+	// デバッグオブジェクトの生成
 #ifdef _DEBUG
 
 	m_debugObj = new ActorDebugObject(this);
@@ -87,7 +87,7 @@ void Actor::ComputeWorldTransform()
 	// ワールド変換行列の再計算が必要な場合のみ実行
 	if (m_recomputeWorldTransform)
 	{
-
+		// 変換行列
 		glm::mat4 trans(1.0f);
 
 		// 平行移動
@@ -101,9 +101,6 @@ void Actor::ComputeWorldTransform()
 		trans = glm::scale(trans, m_scale);
 
 		m_worldTrans = trans;
-
-		// 回転
-		//trans *= m_rotationX * m_rotationY * m_rotationZ;
 
 		// アクターの全コンポーネントも更新
 		for (auto comp : m_components)
@@ -185,10 +182,13 @@ void Actor::SetEulerAngle(const glm::vec3& _angle)
 
 
 
-
+/// <summary>
+/// アクター用デバッグオブジェクト
+/// コンストラクタ
+/// </summary>
+/// <param name="_owner"> オーナー </param>
 ActorDebugObject::ActorDebugObject(Actor* _owner)
 	:m_owner(_owner)
-	,m_isShowDebug(true)
 {
 }
 
@@ -196,14 +196,16 @@ ActorDebugObject::~ActorDebugObject()
 {
 }
 
+/// <summary>
+/// ImGuiによるデバッグ更新処理
+/// </summary>
+/// <param name="_deltaTime"> デルタタイム </param>
 void ActorDebugObject::Update(float _deltaTime)
 {
 
 	// ラベルとID
-	std::string label;
 	std::string id = std::to_string(m_owner->m_ID);
-
-	label = "Actor ID : " + id;
+	std::string label = "Actor ID : " + id;
 
 	// 区切り線
 	ImGui::Separator();
@@ -213,6 +215,7 @@ void ActorDebugObject::Update(float _deltaTime)
 
 	if (m_isShowDebug)
 	{
+		//------------------------------------------------------------------------+
 		// 座標
 		ImGui::Text(u8"座標");
 		glm::vec3 pos;
@@ -220,35 +223,41 @@ void ActorDebugObject::Update(float _deltaTime)
 		pos.y = m_owner->m_position.y;
 		pos.z = m_owner->m_position.z;
 
-		label = "x (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &pos.x, 0.1f, 0.0f);
-		label = "y (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &pos.y, 0.1f, 0.0f);
-		label = "z (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &pos.z, 0.1f, 0.0f);
-
+		// インプット形式
+		label = "Position X (ID : " + id + ")";
+		ImGui::InputFloat(label.c_str(), &pos.x, 1.0f, 0.0f);
+		label = "Position Y (ID : " + id + ")";
+		ImGui::InputFloat(label.c_str(), &pos.y, 1.0f, 0.0f);
+		label = "Position Z (ID : " + id + ")";
+		ImGui::InputFloat(label.c_str(), &pos.z, 1.0f, 0.0f);
+		
+		// 更新されたら
 		if (pos.x != m_owner->m_position.x || pos.y != m_owner->m_position.y || pos.z != m_owner->m_position.z)
 		{
 			m_owner->SetPosition(pos);
 		}
+		//--------------------------------------------------------------------------+
 
+		//--------------------------------------------------------------------------+
 		// 回転
 		ImGui::Text(u8"回転");
 		glm::vec3 rot = m_owner->m_eulerAngles;
 
-		label = "rx (ID : " + id + ")";
+		label = "Rotation X (ID : " + id + ")";
 		ImGui::SliderFloat(label.c_str(), &rot.x, -360.0f, 360.0f);
-		label = "ry (ID : " + id + ")";
+		label = "Rotation Y (ID : " + id + ")";
 		ImGui::SliderFloat(label.c_str(), &rot.y, -360.0f, 360.0f);
-		label = "rz (ID : " + id + ")";
+		label = "Rotation Z (ID : " + id + ")";
 		ImGui::SliderFloat(label.c_str(), &rot.z, -360.0f, 360.0f);
 
+		// 更新されたら
 		if (rot.x != m_owner->m_eulerAngles.x || rot.y != m_owner->m_eulerAngles.y || rot.z != m_owner->m_eulerAngles.z)
 		{
 			m_owner->SetEulerAngle(rot);
 		}
+		//---------------------------------------------------------------------------+
 
-
+		//---------------------------------------------------------------------------+
 		// スケール
 		ImGui::Text(u8"拡大率");
 		glm::vec3 scale;
@@ -256,17 +265,20 @@ void ActorDebugObject::Update(float _deltaTime)
 		scale.y = m_owner->m_scale.y;
 		scale.z = m_owner->m_scale.z;
 
-		label = "sx (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &scale.x, 0.05f, 1.0f);
-		label = "sy (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &scale.y, 0.05f, 1.0f);
-		label = "sz (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &scale.z, 0.05f, 1.0f);
+		label = "Scale X (ID : " + id + ")";
+		ImGui::InputFloat(label.c_str(), &scale.x, 0.005f, 1.0f);
+		label = "Scale Y (ID : " + id + ")";
+		ImGui::InputFloat(label.c_str(), &scale.y, 0.005f, 1.0f);
+		label = "Scale Z (ID : " + id + ")";
+		ImGui::InputFloat(label.c_str(), &scale.z, 0.005f, 1.0f);
 
+		// 更新されたら
 		if (scale.x != m_owner->m_scale.x || scale.y != m_owner->m_scale.y || scale.z != m_owner->m_scale.z)
 		{
 			m_owner->SetScale(scale);
 		}
+		//----------------------------------------------------------------------------+
+
 	}
 
 }

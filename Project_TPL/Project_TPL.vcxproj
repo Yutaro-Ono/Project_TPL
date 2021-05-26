@@ -164,6 +164,7 @@
     <ClCompile Include="SourceCode\Debugger.cpp" />
     <ClCompile Include="SourceCode\DebugObjectBase.cpp" />
     <ClCompile Include="SourceCode\DebugObjectPool.cpp" />
+    <ClCompile Include="SourceCode\DirectionalLight.cpp" />
     <ClCompile Include="SourceCode\DrawableObjectManager.cpp" />
     <ClCompile Include="SourceCode\GameMain.cpp" />
     <ClCompile Include="SourceCode\GameSettings.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="SourceCode\DebugObjectBase.h" />
     <ClInclude Include="SourceCode\DebugObjectPool.h" />
     <ClInclude Include="SourceCode\DebugTriangle.h" />
+    <ClInclude Include="SourceCode\DirectionalLight.h" />
     <ClInclude Include="SourceCode\DrawableObjectManager.h" />
     <ClInclude Include="SourceCode\GameMain.h" />
     <ClInclude Include="SourceCode\GameSettings.h" />

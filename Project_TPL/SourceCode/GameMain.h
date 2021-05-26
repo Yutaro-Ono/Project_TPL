@@ -35,6 +35,7 @@ public:
 	bool RunLoop();
 
 	// Getter
+	class GameSettings* GetGameSettings() { return m_settings; }
 	class Renderer* GetRenderer() { return m_renderer; }
 	class Debugger* GetDebugger() { return m_debugger; }
 	class TexturePool* GetTexturePool() { return m_texturePool; }
@@ -64,6 +65,7 @@ private:
 };
 
 #define GAME_INSTANCE GameMain::GetInstance()
+#define GAME_CONFIG GameMain::GetInstance().GetGameSettings()
 #define RENDERER GameMain::GetInstance().GetRenderer()
 #define DEBUGGER GameMain::GetInstance().GetDebugger()
 #define MESH_POOL GameMain::GetInstance().GetMeshPool()

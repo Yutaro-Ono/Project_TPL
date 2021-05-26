@@ -81,6 +81,17 @@ protected:
 
 
 
+
+//----------------------------------------------------------------------------------+
+// @file        ActorDebugObject.h
+// @brief       アクター用デバッグオブジェクトクラス
+// @note        
+// @author      小野 湧太郎 (Yutaro Ono, @2021)
+//
+// @changelog
+// 2021/ 5/25   新規作成
+//----------------------------------------------------------------------------------+
+
 class ActorDebugObject : public DebugObjectBase
 {
 
@@ -97,7 +108,5 @@ private:
 
 
 	class Actor* m_owner;
-
-	bool m_isShowDebug;
 
 };

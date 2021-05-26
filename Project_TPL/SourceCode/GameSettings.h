@@ -41,6 +41,8 @@ public:
 
 	bool Load(const std::string& _iniPath);
 
+	const int& GetScreenSizeW() { return m_displayWidth; }
+	const int& GetScreenSizeH() { return m_displayHeight; }
 
 private:
 

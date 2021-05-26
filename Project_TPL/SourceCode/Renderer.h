@@ -7,6 +7,7 @@
 //
 // @changelog
 // 2021/ 3/22   新規作成
+// 2021/ 5/26   各種バッファを登録 (Gバッファ・ライト・MSAA)
 //----------------------------------------------------------------------------------+
 #pragma once
 // インクルードファイル
@@ -43,6 +44,9 @@ public:
 
 private:
 
+	void CreateGBuffer();
+	void CreateLightBuffer();
+	void CreateMSAA();
 
 	void SetUniformBuffer();
 
@@ -53,7 +57,6 @@ private:
 
 	class ShaderManager* m_shaderManager;            // シェーダーマネージャークラス
 	class DrawableObjectManager* m_drawableObject;       // 描画可能オブジェクト管理クラス
-	class BasicTriangle* m_triangle;                 // デバッグ用三角形
 
 	// 描画用の行列関連
 	glm::mat4 m_viewMat;                             // ビュー行列
@@ -63,4 +66,26 @@ private:
 	unsigned int m_uboMatrices;                      // ビュー・プロジェクション行列用UBO
 	unsigned int m_uboCamera;                        // カメラ情報
 
+	// Gバッファ
+	unsigned int m_gBuffer;
+	// Gバッファ要素
+	unsigned int m_gPos;
+	unsigned int m_gNormal;
+	unsigned int m_gAlbedoSpec;
+	unsigned int m_gEmissive;
+	unsigned int m_gAttachments[4];
+	unsigned int m_gRBO;
+
+	// ライトバッファ
+	unsigned int m_lightBuffer;
+	// ライトバッファ要素
+	unsigned int m_lightHDR;
+	unsigned int m_lightHighBright;
+	unsigned int m_lightRBO;
+	unsigned int m_lightAttachments[2];
+
+	// MSAAバッファ
+	unsigned int m_msaaBuffer;
+	unsigned int m_msaaColor;
+	unsigned int m_msaaRBO;
 };

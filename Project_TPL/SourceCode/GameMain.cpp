@@ -13,6 +13,7 @@
 #include "MeshPool.h"
 #include "ActorPool.h"
 #include "TestSphere.h"
+#include "DirectionalLight.h"
 
 #include <iostream>
 
@@ -89,6 +90,8 @@ bool GameMain::Initialize()
 	TestSphere* sphere2 = new TestSphere();
 	sphere2->SetPosition(glm::vec3(4.0f, -5.0f, 1.0f));
 	sphere2->SetScale(glm::vec3(0.1f));
+
+	DirectionalLight* dirL = new DirectionalLight();
 
 	return true;
 }
