@@ -16,6 +16,9 @@
 #include "../imgui/imgui_impl_opengl3.h"
 #include <vector>
 #include "Renderer.h"
+#include "Tag.h"
+
+
 
 class Debugger
 {
@@ -33,8 +36,8 @@ public:
 
 	void RenderImGui();
 
-	void AddDebugObject(class DebugObjectBase* _debugObj);
-	void DeleteDebugObject(class DebugObjectBase* _debugObj);
+	void AddDebugObject(class DebugObjectBase* _debugObj, OBJECT_TAG _tag);
+	void DeleteDebugObject(class DebugObjectBase* _debugObj, OBJECT_TAG _tag);
 
 
 	GLFWwindow* GetDebugWindow() { return m_debugWindow; }
@@ -48,6 +51,7 @@ private:
 	int m_windowH;                 // デバッグ用ウィンドウ縦サイズ
 	int m_windowW;                 // デバッグ用ウィンドウ横サイズ
 
-	class DebugObjectPool* m_debugObjectPool;
+	class DebugObjectPool* m_debugObjects;
+	class DebugObjectPool* m_actorDebugObjects;
 
 };

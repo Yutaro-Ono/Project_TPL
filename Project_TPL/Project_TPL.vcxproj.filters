@@ -218,6 +218,9 @@
     <ClCompile Include="SourceCode\DirectionalLight.cpp">
       <Filter>Source\Lighting</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\Tag.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -333,6 +336,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\DirectionalLight.h">
       <Filter>Source\Lighting</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Tag.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,8 @@
 
 
 TestSphere::TestSphere()
-	:m_debugObj(nullptr)
+	:Actor(OBJECT_TAG::DEBUG_SPHERE)
+	,m_debugObj(nullptr)
 {
 	MeshComponent* mc = new MeshComponent(this, "Data/Meshes/Sphere/Sphere.obj");
 	//MeshComponent* mc = new MeshComponent(this, "Data/Meshes/Barricade/barricade.gpmesh");

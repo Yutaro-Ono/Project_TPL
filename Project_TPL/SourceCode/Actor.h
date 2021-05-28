@@ -12,8 +12,10 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
+#include "Tag.h"
 #include "Component.h"
 #include "DebugObjectBase.h"
+
 
 namespace ActorEnum
 {
@@ -30,7 +32,7 @@ class Actor
 
 public:
 
-	Actor();
+	Actor(OBJECT_TAG _tag);
 	virtual ~Actor();
 
 	void Update(float _deltaTime);
@@ -70,10 +72,11 @@ protected:
 
 	std::vector<class Component*> m_components;
 
+	OBJECT_TAG m_tag;                         // アクタータグ
 	int m_ID;                          // アクター識別ID
 	static int m_globalActorNo;        // ゲーム全体におけるアクター番号
 
-
+	
 	class ActorDebugObject* m_debugObj;
 
 	friend class ActorDebugObject;

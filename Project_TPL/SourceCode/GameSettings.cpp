@@ -49,7 +49,7 @@ bool GameSettings::Load(const std::string& _iniPath)
 	loadSuccess = LoadIntValue(pt, "Display", "FullScreen", m_displayFullScreen);
 	loadSuccess = LoadIntValue(pt, "Graphics", "EnableDefferedRendering", m_graphicsEnableDeffered);
 	loadSuccess = LoadIntValue(pt, "Graphics", "EnableEnvironmentMap", m_graphicsEnableEnvMap);
-
+	
 	return loadSuccess;;
 }
 

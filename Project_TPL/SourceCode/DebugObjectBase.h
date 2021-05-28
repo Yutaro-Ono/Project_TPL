@@ -28,6 +28,5 @@ public:
 
 protected:
 
-	bool m_isShowDebug;
 
 };

@@ -35,7 +35,6 @@ public:
 	bool RunLoop();
 
 	// Getter
-	class GameSettings* GetGameSettings() { return m_settings; }
 	class Renderer* GetRenderer() { return m_renderer; }
 	class Debugger* GetDebugger() { return m_debugger; }
 	class TexturePool* GetTexturePool() { return m_texturePool; }
@@ -51,7 +50,6 @@ private:
 
 
 	// メンバ クラス
-	class GameSettings* m_settings;        // ゲーム設定
 	class Renderer* m_renderer;            // レンダラー
 	class Debugger* m_debugger;            // デバッガ―
 	class SceneBase* m_scene;              // ゲームシーン
@@ -65,7 +63,7 @@ private:
 };
 
 #define GAME_INSTANCE GameMain::GetInstance()
-#define GAME_CONFIG GameMain::GetInstance().GetGameSettings()
+#define GAME_CONFIG GameSettings::GetInstance()
 #define RENDERER GameMain::GetInstance().GetRenderer()
 #define DEBUGGER GameMain::GetInstance().GetDebugger()
 #define MESH_POOL GameMain::GetInstance().GetMeshPool()

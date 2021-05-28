@@ -21,6 +21,14 @@
 #include "../imgui/imgui_impl_opengl3.h"
 #include <vector>
 
+// 描画メソッド
+enum class RENDER_METHOD
+{
+	FORWARD,
+	DEFFERED
+};
+
+
 class Renderer
 {
 public:
@@ -38,6 +46,7 @@ public:
 
 	class DrawableObjectManager* GetDrawableObjectManager() { return m_drawableObject; }
 
+	void SetRenderMethod(RENDER_METHOD _method) { m_renderMethod = _method; }
 
 	const glm::mat4 GetViewMatrix() { return m_viewMat; }
 	const glm::mat4 GetProjectionMatrix() { return m_projMat; }
@@ -54,6 +63,8 @@ private:
 
 
 	GLFWwindow* m_window;                            // メインウィンドウ
+
+	RENDER_METHOD m_renderMethod;                    // 描画方法
 
 	class ShaderManager* m_shaderManager;            // シェーダーマネージャークラス
 	class DrawableObjectManager* m_drawableObject;       // 描画可能オブジェクト管理クラス

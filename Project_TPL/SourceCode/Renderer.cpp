@@ -24,6 +24,7 @@
 /// </summary>
 Renderer::Renderer()
 	:m_window(NULL)
+	,m_renderMethod(RENDER_METHOD::FORWARD)
 	,m_shaderManager(nullptr)
 	,m_drawableObject(nullptr)
 	,m_uboMatrices(0)
@@ -129,9 +130,16 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	//---------------------------------------+
     // 描画バッファ生成
     //---------------------------------------+
-	//CreateGBuffer();
-	//CreateLightBuffer();
-	//CreateMSAA();
+	CreateGBuffer();
+	CreateLightBuffer();
+	CreateMSAA();
+
+	// 描画方法の設定
+	if (GAME_CONFIG.GetEnableDeffered())
+	{
+		m_renderMethod = RENDER_METHOD::DEFFERED;
+	}
+
 
 	// シェーダーマネージャー
 	m_shaderManager = new ShaderManager();
@@ -143,6 +151,9 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 
 	// 描画可能オブジェクト管理クラス
 	m_drawableObject = new DrawableObjectManager();
+
+
+
 
 	return true;
 }
@@ -181,10 +192,31 @@ void Renderer::Draw()
 	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
 
-	// メッシュの描画
-	glEnable(GL_DEPTH_TEST);
-	m_shaderManager->EnableShaderProgram(GLSLshader::BASIC_MESH);
-	m_drawableObject->Draw(m_shaderManager);
+	//------------------------------------------------+
+	// ForwardShading
+	//------------------------------------------------+
+	if (m_renderMethod == RENDER_METHOD::FORWARD)
+	{
+		// メッシュの描画
+		glEnable(GL_DEPTH_TEST);
+		m_shaderManager->EnableShaderProgram(GLSLshader::BASIC_MESH);
+		m_drawableObject->Draw(m_shaderManager);
+	}
+
+
+	//------------------------------------------------+
+	// DefferedShading
+	//------------------------------------------------+
+	if (m_renderMethod == RENDER_METHOD::DEFFERED)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);
+
+
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+
 
 
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
@@ -206,28 +238,28 @@ void Renderer::CreateGBuffer()
 	// 座標情報バッファ (浮動小数点バッファ / 0番目)
 	glGenTextures(1, &m_gPos);
 	glBindTexture(GL_TEXTURE_2D, m_gPos);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_gPos, 0);
 	// 法線情報バッファ (浮動小数点バッファ / 1番目)
 	glGenTextures(1, &m_gNormal);
 	glBindTexture(GL_TEXTURE_2D, m_gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_gNormal, 0);
 	// アルベド&スペキュラ情報バッファ (8bitカラーバッファ / 2番目)
 	glGenTextures(1, &m_gAlbedoSpec);
 	glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_gAlbedoSpec, 0);
 	// 高輝度バッファ (エミッシブバッファ / 3番目)
 	glGenTextures(1, &m_gEmissive);
 	glBindTexture(GL_TEXTURE_2D, m_gEmissive);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, m_gEmissive, 0);
@@ -242,7 +274,7 @@ void Renderer::CreateGBuffer()
 	// レンダーバッファの生成・登録
 	glGenRenderbuffers(1, &m_gRBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_gRBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH());
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH());
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_gRBO);
 
 	// フレームバッファの整合性チェック
@@ -266,14 +298,14 @@ void Renderer::CreateLightBuffer()
 	// HDRバッファ
 	glGenTextures(1, &m_lightHDR);
 	glBindTexture(GL_TEXTURE_2D, m_lightHDR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_lightHDR, 0);
 	// 高輝度バッファの作成
 	glGenTextures(1, &m_lightHighBright);
 	glBindTexture(GL_TEXTURE_2D, m_lightHighBright);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -287,7 +319,7 @@ void Renderer::CreateLightBuffer()
 	// レンダーバッファを作成する
 	glGenRenderbuffers(1, &m_lightRBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_lightRBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH());
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH());
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_lightRBO);
 
 	// フレームバッファの整合性をチェック
@@ -310,13 +342,13 @@ void Renderer::CreateMSAA()
 	// マルチサンプル用カラーバッファを生成
 	glGenTextures(1, &m_msaaColor);
 	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, m_msaaColor);
-	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH(), GL_TRUE);
+	glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, 4, GL_RGB, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), GL_TRUE);
 	glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, m_msaaColor, 0);
 	// MSAA用レンダーバッファの生成 (深度・ステンシルとして登録)
 	glGenRenderbuffers(1, &m_msaaRBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_msaaRBO);
-	glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, GAME_CONFIG->GetScreenSizeW(), GAME_CONFIG->GetScreenSizeH());
+	glRenderbufferStorageMultisample(GL_RENDERBUFFER, 4, GL_DEPTH24_STENCIL8, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH());
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_msaaRBO);
 

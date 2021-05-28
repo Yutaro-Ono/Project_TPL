@@ -10,7 +10,6 @@
 #include "DebugObjectBase.h"
 
 DebugObjectBase::DebugObjectBase()
-	:m_isShowDebug(false)
 {
 }
 

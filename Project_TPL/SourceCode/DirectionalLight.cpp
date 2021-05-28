@@ -1,3 +1,12 @@
+//----------------------------------------------------------------------------------+
+// @file        DirectionalLight.cpp
+// @brief       ディレクショナルライトクラス
+// @note        
+// @author      小野 湧太郎 (Yutaro Ono, @2021)
+//
+// @changelog
+// 2021/ 5/26   新規作成
+//----------------------------------------------------------------------------------+
 #include "DirectionalLight.h"
 #include <string>
 #include "GameMain.h"
@@ -13,7 +22,7 @@ DirectionalLight::DirectionalLight()
 #ifdef _DEBUG
 
 	m_debugObj = new DirectionalLightDebug(this);
-	DEBUGGER->AddDebugObject(m_debugObj);
+	DEBUGGER->AddDebugObject(m_debugObj, OBJECT_TAG::SYSTEM);
 
 #endif
 }
@@ -44,10 +53,7 @@ void DirectionalLightDebug::Update(float _deltaTime)
 	// 区切り線
 	ImGui::Separator();
 
-	// デバッグ画面を表示するかどうか
-	ImGui::Checkbox(label.c_str(), &m_isShowDebug);
-
-	if (m_isShowDebug)
+	if (ImGui::TreeNode(label.c_str()))
 	{
 		//------------------------------------------------------------------------+
 		// 光のカラー
@@ -79,6 +85,7 @@ void DirectionalLightDebug::Update(float _deltaTime)
 		}
 		//--------------------------------------------------------------------------+
 
+		ImGui::TreePop();
 	}
 }
 

@@ -24,11 +24,14 @@ uniform struct MaterialInfo
 	sampler2D shininess;
 }u_mat;
 
+uniform vec3 u_blendColor;
+
 
 void main()
 {
 	// result color calculation
 	vec4 resultColor = texture(u_mat.diffuseMap, fs_in.fragTexCoords);
+	resultColor = resultColor * vec4(u_blendColor, 1.0);
 
 	// pass to output color
 	out_fragColor = resultColor;

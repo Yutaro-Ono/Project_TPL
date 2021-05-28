@@ -177,6 +177,7 @@
     <ClCompile Include="SourceCode\MeshPool.cpp" />
     <ClCompile Include="SourceCode\Renderer.cpp" />
     <ClCompile Include="SourceCode\ShaderManager.cpp" />
+    <ClCompile Include="SourceCode\Tag.cpp" />
     <ClCompile Include="SourceCode\TestScene.cpp" />
     <ClCompile Include="SourceCode\TestSphere.cpp" />
     <ClCompile Include="SourceCode\Texture.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="SourceCode\Renderer.h" />
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\ShaderManager.h" />
+    <ClInclude Include="SourceCode\Tag.h" />
     <ClInclude Include="SourceCode\TestScene.h" />
     <ClInclude Include="SourceCode\TestSphere.h" />
     <ClInclude Include="SourceCode\Texture.h" />

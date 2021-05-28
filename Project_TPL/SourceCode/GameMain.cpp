@@ -21,8 +21,7 @@
 /// コンストラクタ
 /// </summary>
 GameMain::GameMain()
-	:m_settings(nullptr)
-	,m_texturePool(nullptr)
+	:m_texturePool(nullptr)
 	,m_meshPool(nullptr)
 	,m_renderer(nullptr)
 	,m_debugger(nullptr)
@@ -47,7 +46,7 @@ GameMain::~GameMain()
 bool GameMain::Initialize()
 {
 	// ゲーム設定クラスの読み込み処理
-	if (!m_settings->GetInstance().Load("Project_TPL.ini"))
+	if (!GAME_CONFIG.Load("Project_TPL.ini"))
 	{
 		std::cout << "Error::GameSettings::Load" << std::endl;
 		return false;
@@ -60,7 +59,7 @@ bool GameMain::Initialize()
 
 	// レンダラークラスの作成
 	m_renderer = new Renderer();
-	if (!m_renderer->Initialize(m_settings->GetInstance().m_displayWidth, m_settings->GetInstance().m_displayHeight, m_settings->GetInstance().m_displayFullScreen))
+	if (!m_renderer->Initialize(GAME_CONFIG.m_displayWidth, GAME_CONFIG.GetInstance().m_displayHeight, GAME_CONFIG.m_displayFullScreen))
 	{
 		std::cout << "Error::Renderer::Initialize" << std::endl;
 		return false;

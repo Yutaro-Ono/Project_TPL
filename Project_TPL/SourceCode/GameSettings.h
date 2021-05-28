@@ -44,12 +44,13 @@ public:
 	const int& GetScreenSizeW() { return m_displayWidth; }
 	const int& GetScreenSizeH() { return m_displayHeight; }
 
+	bool GetEnableDeffered() { return (bool)m_graphicsEnableDeffered; }
+
 private:
 
 	GameSettings();
 
 	bool LoadIntValue(const ptree& _pt, const std::string& _section, const std::string& _key, int& _val);
-
 
 	// ini読み込み用のプロパティツリー
 	ptree m_pt;

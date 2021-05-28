@@ -15,11 +15,13 @@
 /// </summary>
 Debugger::Debugger()
 	:m_debugWindow(NULL)
-	,m_windowH(640)
-	,m_windowW(480)
-	,m_debugObjectPool(nullptr)
+	,m_windowH(1280)
+	,m_windowW(720)
+	,m_debugObjects(nullptr)
+	,m_actorDebugObjects(nullptr)
 {
-	m_debugObjectPool = new DebugObjectPool();
+	m_debugObjects = new DebugObjectPool();
+	m_actorDebugObjects = new DebugObjectPool();
 }
 
 /// <summary>
@@ -40,7 +42,7 @@ bool Debugger::Initialize()
 	//--------------------------------------+
     // デバッグウィンドウ定義
     //--------------------------------------+
-    // ウィンドウ作成 (1920x1080)
+    // ウィンドウ作成
 	m_debugWindow = glfwCreateWindow(m_windowH, m_windowW, "Debug_TPL", NULL, NULL);
 	// ウィンドウ作成失敗時
 	if (m_debugWindow == NULL)
@@ -77,7 +79,8 @@ bool Debugger::Initialize()
 void Debugger::Delete()
 {
 	// デバッグオブジェクトのプールを解放
-	delete m_debugObjectPool;
+	delete m_debugObjects;
+	delete m_actorDebugObjects;
 
 	// imguiのクリーンアップ
 	ImGui_ImplOpenGL3_Shutdown();
@@ -101,45 +104,101 @@ void Debugger::UpdateImGui(float _deltaTime)
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
+	//-------------------------------------------------------------------------------+
+	// デバッグウィンドウ 1 (システム関連)
+	//-------------------------------------------------------------------------------+
+	// タイトルバーのカラー設定(選択時)
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.7f, 0.0f, 0.7f, 1.0f));
+	// タイトルバーのカラー設定(非選択時)
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.4f, 0.0f, 0.4f, 1.0f));
+	// ウィンドウのカラー設定
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.3f, 0.0f, 0.3f, 0.3f));
+	// ウィンドウの座標設定 (最初の一回のみ)
+	ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_Once);
+	// ウィンドウのサイズ設定
+	ImGui::SetNextWindowSize(ImVec2(600, 300), ImGuiCond_Once);
 	// ウィンドウタイトル
 	// ※日本語フォントはu8リテラルで正しく表示できる
-	ImGui::Begin("Debug Screen");
-
-	// テキスト表示
-	//ImGui::Text("index");
-
-	// テキスト表示 (自動的に改行される)
-	//ImGui::Text("index");
-
-	// 改行しないという明示。次のテキストが同じ行に表示される
-	//ImGui::SameLine();
-
-	// テキスト
-	//ImGui::Text(u8"です。");
-
-	// 区切り線
-	//ImGui::Separator();
-
-	// チェックボックス
-	//static bool check;
-	//ImGui::Checkbox(u8"チェック", &check);
-
-	// 区切り線
-	//ImGui::Separator();
-
-	// カラーピッカー
-	//static float color;
-	//ImGui::ColorPicker4(u8"カラー", &color);
-
+	ImGui::Begin(u8"デバッグ画面 (システム)");
 	//フレームレートを表示
 	ImGui::Text("Application average %.3f ms/frame", 1000.0f / ImGui::GetIO().Framerate);
 	ImGui::Text("FrameRate >> %.1f FPS", ImGui::GetIO().Framerate);
-
-	// デバッグオブジェクトプールの更新処理
-	m_debugObjectPool->UpdateObjects(_deltaTime);
-
-
+	// デバッグオブジェクト更新処理
+	m_debugObjects->UpdateObjects(_deltaTime);
+	// システムウィンドウ終了
 	ImGui::End();
+	// ウィンドウのカラー設定を消去
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+
+	//-------------------------------------------------------------------------------+
+	// デバッグウィンドウ 2 (アクター関連)
+	//-------------------------------------------------------------------------------+
+	// タイトルバーのカラー設定(選択時)
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.2f, 0.7f, 1.0f));
+	// タイトルバーのカラー設定(非選択時)
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.1f, 0.4f, 1.0f));
+	// ウィンドウのカラー設定
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.08f, 0.2f, 0.3f));
+	// ウィンドウの座標設定 (最初の一回のみ)
+	ImGui::SetNextWindowPos(ImVec2(20, 300), ImGuiCond_Once);
+	// ウィンドウのサイズ設定
+	ImGui::SetNextWindowSize(ImVec2(600, 300), ImGuiCond_Once);
+	// ウィンドウタイトル
+	ImGui::Begin(u8"デバッグ画面 (アクター)");
+	// デバッグオブジェクト更新処理
+	m_actorDebugObjects->UpdateObjects(_deltaTime);
+	// アクターウィンドウ終了
+	ImGui::End();
+	// ウィンドウのカラー設定を消去
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+
+	//-------------------------------------------------------------------------------+
+	// デバッグウィンドウ 3 (ゲーム設定)
+	//-------------------------------------------------------------------------------+
+	// タイトルバーのカラー設定(選択時)
+	ImGui::PushStyleColor(ImGuiCol_TitleBgActive, ImVec4(0.0f, 0.7f, 0.2f, 1.0f));
+	// タイトルバーのカラー設定(非選択時)
+	ImGui::PushStyleColor(ImGuiCol_TitleBg, ImVec4(0.0f, 0.4f, 0.1f, 1.0f));
+	// ウィンドウのカラー設定
+	ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.2f, 0.08f, 0.3f));
+	// ウィンドウの座標設定 (最初の一回のみ)
+	ImGui::SetNextWindowPos(ImVec2(620, 20), ImGuiCond_Once);
+	// ウィンドウのサイズ設定
+	ImGui::SetNextWindowSize(ImVec2(300, 300), ImGuiCond_Once);
+	// メニュータブを備えたウィンドウにする
+	ImGui::Begin(u8"デバッグ画面 (環境設定)", nullptr, ImGuiWindowFlags_MenuBar);
+	// メニュー階層処理
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::MenuItem("Save"))
+			{
+
+			}
+			if (ImGui::MenuItem("Load"))
+			{
+
+			}
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
+	// 更新処理
+
+	// アクターウィンドウ終了
+	ImGui::End();
+	// ウィンドウのカラー設定を消去
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+	ImGui::PopStyleColor();
+
 
 	// 描画処理
 	RenderImGui();
@@ -172,15 +231,32 @@ void Debugger::RenderImGui()
 }
 
 
-void Debugger::AddDebugObject(DebugObjectBase* _debugObj)
+void Debugger::AddDebugObject(DebugObjectBase* _debugObj, OBJECT_TAG _tag)
 {
-	m_debugObjectPool->AddObject(_debugObj);
+
+	if (_tag == OBJECT_TAG::SYSTEM)
+	{
+		m_debugObjects->AddObject(_debugObj);
+	}
+	else
+	{
+		m_actorDebugObjects->AddObject(_debugObj);
+	}
+
+	
 }
 
 
-void Debugger::DeleteDebugObject(DebugObjectBase* _debugObj)
+void Debugger::DeleteDebugObject(DebugObjectBase* _debugObj, OBJECT_TAG _tag)
 {
-	m_debugObjectPool->DeleteObject(_debugObj);
+	if (_tag == OBJECT_TAG::SYSTEM)
+	{
+		m_debugObjects->DeleteObject(_debugObj);
+	}
+	else
+	{
+		m_actorDebugObjects->DeleteObject(_debugObj);
+	}
 }
 
 

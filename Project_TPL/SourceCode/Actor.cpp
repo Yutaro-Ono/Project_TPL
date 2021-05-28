@@ -14,7 +14,7 @@
 
 int Actor::m_globalActorNo = 0;
 
-Actor::Actor()
+Actor::Actor(OBJECT_TAG _tag)
 	:m_state(ActorEnum::ACTOR_STATE::ACTIVE)
 	,m_worldTrans(glm::mat4(1.0f))
 	,m_position(glm::vec3(1.0f))
@@ -39,7 +39,7 @@ Actor::Actor()
 #ifdef _DEBUG
 
 	m_debugObj = new ActorDebugObject(this);
-	DEBUGGER->AddDebugObject(m_debugObj);
+	DEBUGGER->AddDebugObject(m_debugObj, _tag);
 
 #endif
 }
@@ -202,18 +202,14 @@ ActorDebugObject::~ActorDebugObject()
 /// <param name="_deltaTime"> デルタタイム </param>
 void ActorDebugObject::Update(float _deltaTime)
 {
-
+	
 	// ラベルとID
 	std::string id = std::to_string(m_owner->m_ID);
-	std::string label = "Actor ID : " + id;
-
+	std::string label = (char)m_owner->m_tag + " ID : " + id;
 	// 区切り線
 	ImGui::Separator();
 
-	// デバッグ画面を表示するかどうか
-	ImGui::Checkbox(label.c_str(), &m_isShowDebug);
-
-	if (m_isShowDebug)
+	if (ImGui::TreeNode(label.c_str()))
 	{
 		//------------------------------------------------------------------------+
 		// 座標
@@ -279,6 +275,7 @@ void ActorDebugObject::Update(float _deltaTime)
 		}
 		//----------------------------------------------------------------------------+
 
+		ImGui::TreePop();
 	}
 
 }
