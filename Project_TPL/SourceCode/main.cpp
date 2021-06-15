@@ -15,11 +15,13 @@
 //-------------------------------------------------------------+
 // インクルードファイル
 #include "GameMain.h"
+#include "TestScene.h"
 
 int main()
 {
-
+	// 初期化・初期シーンのセット
 	bool loop = GAME_INSTANCE.Initialize();
+	GAME_INSTANCE.SetScene(new TestScene());
 
 	// メインループ
 	while (loop)

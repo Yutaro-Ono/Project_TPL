@@ -33,23 +33,36 @@ public:
 	void Delete();
 
 	void UpdateImGui(float _deltaTime);
-
 	void RenderImGui();
 
 	void AddDebugObject(class DebugObjectBase* _debugObj, OBJECT_TAG _tag);
 	void DeleteDebugObject(class DebugObjectBase* _debugObj, OBJECT_TAG _tag);
 
+	// バッファ情報の取得
+	const unsigned int& GetDebugColorBuffer() const { return m_debugCB; }
+	const unsigned int& GetDebugFrameBuffer() const { return m_debugFB; }
+	// バッファ縦横サイズ取得
+	const int& GetDebugBufferWidth() const { return m_debugWidth; }
+	const int& GetDebugBufferHeight() const { return m_debugHeight; }
 
 	GLFWwindow* GetDebugWindow() { return m_debugWindow; }
 
 
 private:
 
-	
-	GLFWwindow* m_debugWindow;     // デバッグ用ウィンドウ
+	void CreateDebugBuffers();
 
-	int m_windowH;                 // デバッグ用ウィンドウ縦サイズ
-	int m_windowW;                 // デバッグ用ウィンドウ横サイズ
+	
+	GLFWwindow* m_debugWindow;            // デバッグ用ウィンドウ
+
+	class GLSLprogram* m_debugShader;     // デバッグ用シェーダー
+	unsigned int m_debugCB;               // デバッグ用カラーバッファ
+	unsigned int m_debugRB;               // デバッグ用レンダーバッファ
+	unsigned int m_debugFB;               // デバッグ用フレームバッファ
+	int m_debugWidth, m_debugHeight;
+
+	int m_windowH;                        // デバッグ用ウィンドウ縦サイズ
+	int m_windowW;                        // デバッグ用ウィンドウ横サイズ
 
 	class DebugObjectPool* m_debugObjects;
 	class DebugObjectPool* m_actorDebugObjects;

@@ -114,6 +114,24 @@
     <Filter Include="Source\Lighting">
       <UniqueIdentifier>{e462256d-e780-478f-b9bd-36001f344c27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\ShaderSource\GBuffer">
+      <UniqueIdentifier>{72157c19-33de-4b54-96c6-c6dbe98a0e96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ShaderSource\GBuffer\Basic">
+      <UniqueIdentifier>{5f2322b1-1e5c-42da-8663-1cc51e280650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ShaderSource\ToneMap">
+      <UniqueIdentifier>{a7e91188-2afd-4826-929f-d1884ba94ba3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actor\Camera">
+      <UniqueIdentifier>{839ae2c1-1164-4485-b9e9-e3bd77840b01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Bloom">
+      <UniqueIdentifier>{9dbb8cd6-3c0f-453d-8e7b-85d289ed2d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Actor\Barricade">
+      <UniqueIdentifier>{5af94cbd-5466-41ba-aca7-f5108359e347}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -220,6 +238,21 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Tag.cpp">
       <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\ActorDebugObject.cpp">
+      <Filter>Source\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\RendererDebugObject.cpp">
+      <Filter>Source\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\CameraActor.cpp">
+      <Filter>Source\Actor\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\RenderBloom.cpp">
+      <Filter>Source\Renderer\Bloom</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\BarricadeActor.cpp">
+      <Filter>Source\Actor\Barricade</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -340,6 +373,21 @@
     <ClInclude Include="SourceCode\Tag.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="SourceCode\ActorDebugObject.h">
+      <Filter>Source\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\RendererDebugObject.h">
+      <Filter>Source\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\CameraActor.h">
+      <Filter>Source\Actor\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\RenderBloom.h">
+      <Filter>Source\Renderer\Bloom</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\BarricadeActor.h">
+      <Filter>Source\Actor\Barricade</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\BasicShader.vert">
@@ -362,6 +410,18 @@
     </None>
     <None Include="Shaders\BasicMesh.frag">
       <Filter>Source\ShaderSource\Basic\BasicMesh</Filter>
+    </None>
+    <None Include="Shaders\GBuffer_Basic.frag">
+      <Filter>Source\ShaderSource\GBuffer\Basic</Filter>
+    </None>
+    <None Include="Shaders\GBuffer_Basic.vert">
+      <Filter>Source\ShaderSource\GBuffer\Basic</Filter>
+    </None>
+    <None Include="Shaders\OutScreen.frag">
+      <Filter>Source\ShaderSource\ToneMap</Filter>
+    </None>
+    <None Include="Shaders\OutScreen.vert">
+      <Filter>Source\ShaderSource\ToneMap</Filter>
     </None>
   </ItemGroup>
 </Project>

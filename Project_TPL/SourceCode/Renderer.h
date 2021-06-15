@@ -20,6 +20,7 @@
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
 #include <vector>
+#include "RendererDebugObject.h"
 
 // 描画メソッド
 enum class RENDER_METHOD
@@ -37,6 +38,7 @@ public:
 	~Renderer();
 
 	bool Initialize(int _width, int _height, bool _fullScreen);
+	void CreateRendererDebugObject();
 	void Delete();
 
 	void Draw();
@@ -50,6 +52,8 @@ public:
 
 	const glm::mat4 GetViewMatrix() { return m_viewMat; }
 	const glm::mat4 GetProjectionMatrix() { return m_projMat; }
+
+	void SetViewMatrix(const glm::mat4& _viewMat) { m_viewMat = _viewMat; }
 
 private:
 
@@ -67,7 +71,9 @@ private:
 	RENDER_METHOD m_renderMethod;                    // 描画方法
 
 	class ShaderManager* m_shaderManager;            // シェーダーマネージャークラス
-	class DrawableObjectManager* m_drawableObject;       // 描画可能オブジェクト管理クラス
+	class DrawableObjectManager* m_drawableObject;   // 描画可能オブジェクト管理クラス
+
+	bool m_enableBloom;                              // ブルーム処理するかしないか
 
 	// 描画用の行列関連
 	glm::mat4 m_viewMat;                             // ビュー行列
@@ -76,6 +82,9 @@ private:
 	// uniformバッファ
 	unsigned int m_uboMatrices;                      // ビュー・プロジェクション行列用UBO
 	unsigned int m_uboCamera;                        // カメラ情報
+
+	// vertexArrayクラス
+	class VertexArray* m_quadVA;                     // 四角形 (スクリーンに使用)
 
 	// Gバッファ
 	unsigned int m_gBuffer;
@@ -99,4 +108,9 @@ private:
 	unsigned int m_msaaBuffer;
 	unsigned int m_msaaColor;
 	unsigned int m_msaaRBO;
+
+
+	// デバッグ用クラス
+	class RendererDebugObject* m_debugObj;
+	friend class RendererDebugObject;
 };

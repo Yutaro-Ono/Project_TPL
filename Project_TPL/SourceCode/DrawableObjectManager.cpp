@@ -8,7 +8,6 @@
 // 2021/ 5/14   新規作成
 //----------------------------------------------------------------------------------+
 #include "DrawableObjectManager.h"
-#include "ShaderManager.h"
 #include "MeshComponent.h"
 
 
@@ -54,10 +53,10 @@ void DrawableObjectManager::DeleteMeshComp(MeshComponent* _meshComp)
 /// メッシュコンポ―ネントの描画処理
 /// </summary>
 /// <param name="_shaderManager"> 描画に用いるシェーダークラス </param>
-void DrawableObjectManager::Draw(ShaderManager* _shaderManager)
+void DrawableObjectManager::Draw(ShaderManager* _shaderManager, GLSLshader::SHADER_TYPE _shaderType)
 {
 	for (auto mc : m_meshComponents)
 	{
-		mc->Draw(_shaderManager->GetShader(GLSLshader::BASIC_MESH));
+		mc->Draw(_shaderManager->GetShader(_shaderType));
 	}
 }

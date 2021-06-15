@@ -11,6 +11,7 @@
 #include "GameMain.h"
 #include "Debugger.h"
 #include "ActorPool.h"
+#include "ActorDebugObject.h"
 
 int Actor::m_globalActorNo = 0;
 
@@ -177,109 +178,3 @@ void Actor::SetEulerAngle(const glm::vec3& _angle)
 	m_recomputeWorldTransform = true;
 }
 
-
-
-
-
-
-/// <summary>
-/// アクター用デバッグオブジェクト
-/// コンストラクタ
-/// </summary>
-/// <param name="_owner"> オーナー </param>
-ActorDebugObject::ActorDebugObject(Actor* _owner)
-	:m_owner(_owner)
-{
-}
-
-ActorDebugObject::~ActorDebugObject()
-{
-}
-
-/// <summary>
-/// ImGuiによるデバッグ更新処理
-/// </summary>
-/// <param name="_deltaTime"> デルタタイム </param>
-void ActorDebugObject::Update(float _deltaTime)
-{
-	
-	// ラベルとID
-	std::string id = std::to_string(m_owner->m_ID);
-	std::string label = (char)m_owner->m_tag + " ID : " + id;
-	// 区切り線
-	ImGui::Separator();
-
-	if (ImGui::TreeNode(label.c_str()))
-	{
-		//------------------------------------------------------------------------+
-		// 座標
-		ImGui::Text(u8"座標");
-		glm::vec3 pos;
-		pos.x = m_owner->m_position.x;
-		pos.y = m_owner->m_position.y;
-		pos.z = m_owner->m_position.z;
-
-		// インプット形式
-		label = "Position X (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &pos.x, 1.0f, 0.0f);
-		label = "Position Y (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &pos.y, 1.0f, 0.0f);
-		label = "Position Z (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &pos.z, 1.0f, 0.0f);
-		
-		// 更新されたら
-		if (pos.x != m_owner->m_position.x || pos.y != m_owner->m_position.y || pos.z != m_owner->m_position.z)
-		{
-			m_owner->SetPosition(pos);
-		}
-		//--------------------------------------------------------------------------+
-
-		//--------------------------------------------------------------------------+
-		// 回転
-		ImGui::Text(u8"回転");
-		glm::vec3 rot = m_owner->m_eulerAngles;
-
-		label = "Rotation X (ID : " + id + ")";
-		ImGui::SliderFloat(label.c_str(), &rot.x, -360.0f, 360.0f);
-		label = "Rotation Y (ID : " + id + ")";
-		ImGui::SliderFloat(label.c_str(), &rot.y, -360.0f, 360.0f);
-		label = "Rotation Z (ID : " + id + ")";
-		ImGui::SliderFloat(label.c_str(), &rot.z, -360.0f, 360.0f);
-
-		// 更新されたら
-		if (rot.x != m_owner->m_eulerAngles.x || rot.y != m_owner->m_eulerAngles.y || rot.z != m_owner->m_eulerAngles.z)
-		{
-			m_owner->SetEulerAngle(rot);
-		}
-		//---------------------------------------------------------------------------+
-
-		//---------------------------------------------------------------------------+
-		// スケール
-		ImGui::Text(u8"拡大率");
-		glm::vec3 scale;
-		scale.x = m_owner->m_scale.x;
-		scale.y = m_owner->m_scale.y;
-		scale.z = m_owner->m_scale.z;
-
-		label = "Scale X (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &scale.x, 0.005f, 1.0f);
-		label = "Scale Y (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &scale.y, 0.005f, 1.0f);
-		label = "Scale Z (ID : " + id + ")";
-		ImGui::InputFloat(label.c_str(), &scale.z, 0.005f, 1.0f);
-
-		// 更新されたら
-		if (scale.x != m_owner->m_scale.x || scale.y != m_owner->m_scale.y || scale.z != m_owner->m_scale.z)
-		{
-			m_owner->SetScale(scale);
-		}
-		//----------------------------------------------------------------------------+
-
-		ImGui::TreePop();
-	}
-
-}
-
-void ActorDebugObject::Render()
-{
-}

@@ -18,9 +18,13 @@ enum class OBJECT_TAG : unsigned char
 
 	SYSTEM = BEGIN,
 
+	CAMERA,
+
 	LIGHT,
 
 	PLAYER,
+
+	STATIC_OBJECT,
 
 	DEBUG_SPHERE,
 

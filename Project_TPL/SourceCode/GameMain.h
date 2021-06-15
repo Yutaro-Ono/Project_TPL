@@ -33,6 +33,7 @@ public:
 
 	bool Initialize();
 	bool RunLoop();
+	void UpdateDeltaTime();
 
 	// Getter
 	class Renderer* GetRenderer() { return m_renderer; }
@@ -40,6 +41,12 @@ public:
 	class TexturePool* GetTexturePool() { return m_texturePool; }
 	class MeshPool* GetMeshPool() { return m_meshPool; }
 	class ActorPool* GetActorPool() { return m_actorPool; }
+	float GetBulletTime() { return m_bulletTime; }
+
+
+	// Setter
+	void SetBulletTime(float _time) { m_bulletTime = _time; }
+	void SetScene(class SceneBase* _scene);
 
 private:
 
@@ -58,8 +65,11 @@ private:
 	class MeshPool* m_meshPool;            // メッシュプール
 	class ActorPool* m_actorPool;          // アクタープール
 
+	// フレーム更新に影響する変数
 	float m_deltaTime;
-
+	float m_currentFrame;
+	float m_lastFrame;
+	float m_bulletTime;
 };
 
 #define GAME_INSTANCE GameMain::GetInstance()

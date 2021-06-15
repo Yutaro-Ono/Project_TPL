@@ -150,8 +150,10 @@ bool MeshGpmesh::Load(const std::string& _filePath)
 		{
 			for (rapidjson::SizeType j = 0; j < vert.Size(); j++)
 			{
+				
 				v.f = static_cast<float>(vert[j].GetDouble());
 				vertices.emplace_back(v);
+				
 			}
 
 			// 法線マップを適用する場合
@@ -248,7 +250,6 @@ bool MeshGpmesh::Load(const std::string& _filePath)
 		//----------------------------------------------------------------------------+
 
 	}
-
 
 	// テクスチャステージの追加
 	AddTextureStage(_filePath);

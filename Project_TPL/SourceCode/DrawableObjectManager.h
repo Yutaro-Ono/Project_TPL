@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include <vector>
-
+#include "ShaderManager.h"
 
 class DrawableObjectManager
 {
@@ -24,7 +24,7 @@ public:
 	void AddMeshComp(class MeshComponent* _meshComp);
 	void DeleteMeshComp(class MeshComponent* _meshComp);
 
-	void Draw(class ShaderManager* _shaderManager);
+	void Draw(ShaderManager* _shaderManager, GLSLshader::SHADER_TYPE _shaderType);
 
 
 

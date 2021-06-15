@@ -58,6 +58,7 @@ public:
 
 	const int& GetNumIndices() { return m_numInDices; }
 
+	void CreateSimpleQuadVAO();
 
 private:
 

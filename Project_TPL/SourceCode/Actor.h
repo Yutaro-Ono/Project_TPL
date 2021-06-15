@@ -14,7 +14,6 @@
 #include <glm/gtc/quaternion.hpp>
 #include "Tag.h"
 #include "Component.h"
-#include "DebugObjectBase.h"
 
 
 namespace ActorEnum
@@ -49,8 +48,8 @@ public:
 	void SetScale(const glm::vec3& _scale);
 	void SetEulerAngle(const glm::vec3& _angle);
 
-	const glm::mat4& GetWorldTransform() { return m_worldTrans; }
-
+	const glm::mat4& GetWorldTransform() const { return m_worldTrans; }
+	const glm::vec3& GetPosition() const { return m_position; }
 
 protected:
 
@@ -70,46 +69,15 @@ protected:
 	bool m_recomputeWorldTransform;
 
 
-	std::vector<class Component*> m_components;
+	std::vector<class Component*> m_components;           // アクターが保持するコンポーネントクラス
 
-	OBJECT_TAG m_tag;                         // アクタータグ
-	int m_ID;                          // アクター識別ID
-	static int m_globalActorNo;        // ゲーム全体におけるアクター番号
+	OBJECT_TAG m_tag;                                     // アクタータグ
+	int m_ID;                                             // アクター識別ID
+	static int m_globalActorNo;                           // ゲーム全体におけるアクター番号
 
 	
-	class ActorDebugObject* m_debugObj;
+	class ActorDebugObject* m_debugObj;                   // アクター用デバッグオブジェクト
 
 	friend class ActorDebugObject;
 };
 
-
-
-
-//----------------------------------------------------------------------------------+
-// @file        ActorDebugObject.h
-// @brief       アクター用デバッグオブジェクトクラス
-// @note        
-// @author      小野 湧太郎 (Yutaro Ono, @2021)
-//
-// @changelog
-// 2021/ 5/25   新規作成
-//----------------------------------------------------------------------------------+
-
-class ActorDebugObject : public DebugObjectBase
-{
-
-public:
-
-
-	ActorDebugObject(class Actor* _owner);
-	~ActorDebugObject();
-
-	void Update(float _deltaTime) override;
-	void Render() override;
-
-private:
-
-
-	class Actor* m_owner;
-
-};

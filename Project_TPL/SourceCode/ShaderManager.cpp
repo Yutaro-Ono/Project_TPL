@@ -51,6 +51,21 @@ bool ShaderManager::CreateShaders()
 	}
 	m_shaders[GLSLshader::BASIC_MESH]->SetUniform("u_mat.albedo", 0);
 
+	m_shaders[GLSLshader::GBUFFER_BASIC_MESH] = new GLSLprogram();
+	if (!m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->LoadShaders("Shaders/GBuffer_Basic.vert", "Shaders/GBuffer_Basic.frag"))
+	{
+		return false;
+	}
+	m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->SetUniform("u_mat.albedo", 0);
+	m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->SetUniform("u_mat.specular", 1);
+
+	m_shaders[GLSLshader::OUT_SCREEN_ENTIRE] = new GLSLprogram();
+	if (!m_shaders[GLSLshader::OUT_SCREEN_ENTIRE]->LoadShaders("Shaders/OutScreen.vert", "Shaders/OutScreen.frag"))
+	{
+		return false;
+	}
+	m_shaders[GLSLshader::OUT_SCREEN_ENTIRE]->SetUniform("u_screenTexture", 0);
+
 	return true;
 }
 

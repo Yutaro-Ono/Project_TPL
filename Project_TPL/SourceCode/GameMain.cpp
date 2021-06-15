@@ -12,10 +12,10 @@
 #include "TexturePool.h"
 #include "MeshPool.h"
 #include "ActorPool.h"
-#include "TestSphere.h"
-#include "DirectionalLight.h"
 
 #include <iostream>
+
+
 
 /// <summary>
 /// コンストラクタ
@@ -23,10 +23,14 @@
 GameMain::GameMain()
 	:m_texturePool(nullptr)
 	,m_meshPool(nullptr)
+	,m_actorPool(nullptr)
 	,m_renderer(nullptr)
 	,m_debugger(nullptr)
 	,m_scene(nullptr)
 	,m_deltaTime(1.0f)
+	,m_currentFrame(glfwGetTime() / 1000.0f)
+	,m_lastFrame(glfwGetTime() / 1000.0f)
+	,m_bulletTime(1.0f)
 {
 
 }
@@ -65,7 +69,6 @@ bool GameMain::Initialize()
 		return false;
 	}
 	
-
 #ifdef _DEBUG
 
 	// デバッガ―クラスの作成
@@ -75,22 +78,12 @@ bool GameMain::Initialize()
 		std::cout << "Error::Debugger::Initialize" << std::endl;
 		return false;
 	}
+	// レンダラー用デバッグオブジェクトの生成
+	m_renderer->CreateRendererDebugObject();
 
 #endif
 
 
-
-	TestSphere* sphere = new TestSphere();
-	sphere->SetPosition(glm::vec3(10.0f, 5.0f, 10.0f));
-	sphere->SetScale(glm::vec3(0.1f));
-	TestSphere* sphere1 = new TestSphere();
-	sphere1->SetPosition(glm::vec3(-10.0f, 0.0f, 7.0f));
-	sphere1->SetScale(glm::vec3(0.1f));
-	TestSphere* sphere2 = new TestSphere();
-	sphere2->SetPosition(glm::vec3(4.0f, -5.0f, 1.0f));
-	sphere2->SetScale(glm::vec3(0.1f));
-
-	DirectionalLight* dirL = new DirectionalLight();
 
 	return true;
 }
@@ -142,16 +135,29 @@ void GameMain::ProcessInput()
 /// <returns> ループ中で問題が発生した場合falseを返す </returns>
 bool GameMain::RunLoop()
 {
-
+	//------------------------------------------------+
 	// メインループ
 	//------------------------------------------------+
-	// 入力に対する処理
-	//------------------------------------------------+
-	ProcessInput();      // 入力による処理
+	// 入力処理
+	ProcessInput();
 
+	// デルタタイム更新
+	UpdateDeltaTime();
+
+	// シーンの更新
+	SceneBase* currentScene = m_scene->Update(m_deltaTime);
+	// 現在シーンが更新されていたら
+	if (currentScene != m_scene)
+	{
+		// 前のシーンを削除
+		delete m_scene;
+		// メインシーンを更新されたシーンに切り替え・初期化
+		m_scene = currentScene;
+		m_scene->Initialize();
+	}
+
+	// アクターの更新
 	m_actorPool->UpdateObjects(m_deltaTime);
-
-
 
 #ifdef _DEBUG
 
@@ -167,6 +173,16 @@ bool GameMain::RunLoop()
 	//------------------------------------------------+
 	m_renderer->Draw();
 
+#ifdef _DEBUG
+
+	//------------------------------------------------+
+	// imgui描画処理 (Debugビルドでのみ行う)
+	//------------------------------------------------+
+	m_debugger->RenderImGui();
+
+#endif
+	
+
 	//------------------------------------------------+
 	// GLイベントの更新
 	//------------------------------------------------+
@@ -174,4 +190,55 @@ bool GameMain::RunLoop()
 
     // (GLFWが何らかの操作で閉じるまでループ)
 	return !glfwWindowShouldClose(m_renderer->GetMainWindow());
+}
+
+
+/// <summary>
+/// フレーム関係の更新処理
+/// </summary>
+void GameMain::UpdateDeltaTime()
+{
+	bool updatePermit = false;
+	
+	// 現在のフレームを取得
+	m_currentFrame = glfwGetTime() / 1000.0f;
+
+	if (m_currentFrame >= m_lastFrame + (16.0f / 1000.0f))
+	{
+		updatePermit = true;
+	}
+
+	if (updatePermit)
+	{
+		// 前フレームから現在フレームまでの経過時間を算出(秒単位)
+		m_deltaTime = ((glfwGetTime() / 1000.0f) - m_lastFrame + (16.0f / 1000.0f));
+	}
+
+	// フレームを更新
+	m_lastFrame = glfwGetTime() / 1000.0f;
+
+	// フレーム時間が経過しすぎている場合は0.05 → 20fps固定
+	if (m_deltaTime > 0.05f)
+	{
+		m_deltaTime = 0.05f;
+	}
+}
+
+/// <summary>
+/// シーンのセット
+/// </summary>
+/// <param name="_scene"> シーンベースクラス </param>
+void GameMain::SetScene(SceneBase* _scene)
+{
+	if (m_scene == nullptr)
+	{
+		m_scene = _scene;
+	}
+	else
+	{
+		delete m_scene;
+		m_scene = _scene;
+	}
+
+	m_scene->Initialize();
 }

@@ -158,8 +158,11 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="SourceCode\Actor.cpp" />
+    <ClCompile Include="SourceCode\ActorDebugObject.cpp" />
     <ClCompile Include="SourceCode\ActorPool.cpp" />
+    <ClCompile Include="SourceCode\BarricadeActor.cpp" />
     <ClCompile Include="SourceCode\BasicTriangle.cpp" />
+    <ClCompile Include="SourceCode\CameraActor.cpp" />
     <ClCompile Include="SourceCode\Component.cpp" />
     <ClCompile Include="SourceCode\Debugger.cpp" />
     <ClCompile Include="SourceCode\DebugObjectBase.cpp" />
@@ -175,7 +178,9 @@
     <ClCompile Include="SourceCode\MeshGpmesh.cpp" />
     <ClCompile Include="SourceCode\MeshObj.cpp" />
     <ClCompile Include="SourceCode\MeshPool.cpp" />
+    <ClCompile Include="SourceCode\RenderBloom.cpp" />
     <ClCompile Include="SourceCode\Renderer.cpp" />
+    <ClCompile Include="SourceCode\RendererDebugObject.cpp" />
     <ClCompile Include="SourceCode\ShaderManager.cpp" />
     <ClCompile Include="SourceCode\Tag.cpp" />
     <ClCompile Include="SourceCode\TestScene.cpp" />
@@ -195,9 +200,12 @@
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="SourceCode\Actor.h" />
+    <ClInclude Include="SourceCode\ActorDebugObject.h" />
     <ClInclude Include="SourceCode\ActorPool.h" />
+    <ClInclude Include="SourceCode\BarricadeActor.h" />
     <ClInclude Include="SourceCode\BasicSquare.h" />
     <ClInclude Include="SourceCode\BasicTriangle.h" />
+    <ClInclude Include="SourceCode\CameraActor.h" />
     <ClInclude Include="SourceCode\Component.h" />
     <ClInclude Include="SourceCode\Debugger.h" />
     <ClInclude Include="SourceCode\DebugObjectBase.h" />
@@ -214,7 +222,9 @@
     <ClInclude Include="SourceCode\MeshObj.h" />
     <ClInclude Include="SourceCode\MeshPool.h" />
     <ClInclude Include="SourceCode\ObjectPool.h" />
+    <ClInclude Include="SourceCode\RenderBloom.h" />
     <ClInclude Include="SourceCode\Renderer.h" />
+    <ClInclude Include="SourceCode\RendererDebugObject.h" />
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\ShaderManager.h" />
     <ClInclude Include="SourceCode\Tag.h" />
@@ -232,6 +242,10 @@
     <None Include="Shaders\BasicShader.frag" />
     <None Include="Shaders\BasicShader.vert" />
     <None Include="Shaders\BasicShader_SamplingTexture.frag" />
+    <None Include="Shaders\GBuffer_Basic.frag" />
+    <None Include="Shaders\GBuffer_Basic.vert" />
+    <None Include="Shaders\OutScreen.frag" />
+    <None Include="Shaders\OutScreen.vert" />
     <None Include="Shaders\SimpleShader_pos_color.frag" />
     <None Include="Shaders\SimpleShader_pos_color.vert" />
   </ItemGroup>

@@ -17,18 +17,23 @@
 #include "ShaderManager.h"
 #include "DrawableObjectManager.h"
 #include "Actor.h"
-
+#include "Debugger.h"
+#include "Tag.h"
+#include "VertexArray.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 Renderer::Renderer()
 	:m_window(NULL)
-	,m_renderMethod(RENDER_METHOD::FORWARD)
+	,m_renderMethod(RENDER_METHOD::DEFFERED)
 	,m_shaderManager(nullptr)
 	,m_drawableObject(nullptr)
 	,m_uboMatrices(0)
 	,m_uboCamera(0)
+	,m_debugObj(nullptr)
+	,m_quadVA(nullptr)
+	,m_enableBloom(false)
 {
 
 }
@@ -128,6 +133,13 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_uboCamera, 0, sizeof(glm::vec3::x) + sizeof(glm::vec3::y) + sizeof(glm::vec3::z));
 
 	//---------------------------------------+
+	// 汎用頂点配列
+	//---------------------------------------+
+	// 四角形
+	m_quadVA = new VertexArray();
+	m_quadVA->CreateSimpleQuadVAO();
+
+	//---------------------------------------+
     // 描画バッファ生成
     //---------------------------------------+
 	CreateGBuffer();
@@ -139,7 +151,6 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	{
 		m_renderMethod = RENDER_METHOD::DEFFERED;
 	}
-
 
 	// シェーダーマネージャー
 	m_shaderManager = new ShaderManager();
@@ -154,8 +165,16 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 
 
 
-
 	return true;
+}
+
+/// <summary>
+/// レンダラー用デバッグオブジェクトの生成
+/// </summary>
+void Renderer::CreateRendererDebugObject()
+{
+	m_debugObj = new RendererDebugObject(this);
+	DEBUGGER->AddDebugObject(m_debugObj, OBJECT_TAG::SYSTEM);
 }
 
 /// <summary>
@@ -165,6 +184,7 @@ void Renderer::Delete()
 {
 	delete m_shaderManager;
 	delete m_drawableObject;
+	delete m_quadVA;
 
 	// windowの破棄・GLFWのクリーンアップ
 	glfwDestroyWindow(m_window);
@@ -180,44 +200,69 @@ void Renderer::Draw()
 	glfwMakeContextCurrent(m_window);
 
 	// ビューポートの更新
-	glViewport(0, 0, 1920, 1080);
+	glViewport(0, 0, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH());
 
 	// uniformバッファのセット
 	SetUniformBuffer();
-
-
-	//------------------------------------------------+
-    // 描画処理
-    //------------------------------------------------+
-	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
 
 	//------------------------------------------------+
 	// ForwardShading
 	//------------------------------------------------+
 	if (m_renderMethod == RENDER_METHOD::FORWARD)
 	{
+
+		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
+
 		// メッシュの描画
 		glEnable(GL_DEPTH_TEST);
 		m_shaderManager->EnableShaderProgram(GLSLshader::BASIC_MESH);
-		m_drawableObject->Draw(m_shaderManager);
+		m_drawableObject->Draw(m_shaderManager, GLSLshader::BASIC_MESH);
 	}
-
 
 	//------------------------------------------------+
 	// DefferedShading
 	//------------------------------------------------+
 	if (m_renderMethod == RENDER_METHOD::DEFFERED)
 	{
+		// Gバッファをバインド
 		glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);
 
+		// カラー・バッファ情報のクリア
+		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
+		glEnable(GL_DEPTH_TEST);
 
-
+		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_MESH);
+		// ジオメトリパス
+		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// ライティングパス
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		// スクリーンに出力
+		// ブルーム処理する
+		if (m_enableBloom)
+		{
+
+		}
+		// ブルーム処理しない
+		else
+		{
+			glDisable(GL_DEPTH_TEST);
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
+			glActiveTexture(GL_TEXTURE0);
+			glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
+		}
+		// スクリーンを描画
+		m_quadVA->SetActive();
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
 	}
-
-
-
 
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
 	glfwSwapBuffers(m_window);

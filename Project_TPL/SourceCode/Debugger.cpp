@@ -17,11 +17,14 @@ Debugger::Debugger()
 	:m_debugWindow(NULL)
 	,m_windowH(1280)
 	,m_windowW(720)
+	,m_debugWidth(300)
+	,m_debugHeight(300)
 	,m_debugObjects(nullptr)
 	,m_actorDebugObjects(nullptr)
 {
 	m_debugObjects = new DebugObjectPool();
 	m_actorDebugObjects = new DebugObjectPool();
+	CreateDebugBuffers();
 }
 
 /// <summary>
@@ -149,6 +152,8 @@ void Debugger::UpdateImGui(float _deltaTime)
 	ImGui::Begin(u8"デバッグ画面 (アクター)");
 	// デバッグオブジェクト更新処理
 	m_actorDebugObjects->UpdateObjects(_deltaTime);
+	// デバッグ用テクスチャへの書き込みと描画
+	//m_debugObjects->RenderDebugBuffer();
 	// アクターウィンドウ終了
 	ImGui::End();
 	// ウィンドウのカラー設定を消去
@@ -199,11 +204,9 @@ void Debugger::UpdateImGui(float _deltaTime)
 	ImGui::PopStyleColor();
 	ImGui::PopStyleColor();
 
-
-	// 描画処理
-	RenderImGui();
-
 }
+
+
 
 /// <summary>
 /// 描画処理
@@ -211,20 +214,21 @@ void Debugger::UpdateImGui(float _deltaTime)
 /// </summary>
 void Debugger::RenderImGui()
 {
-	// ImGuiレンダリング開始
-	ImGui::Render();
-
-	// カラーバッファをクリア
-	glClear(GL_COLOR_BUFFER_BIT);
+	// アクティブなウィンドウとしてデバッグ画面を設定
+	glfwMakeContextCurrent(m_debugWindow);
 
 	// フレームバッファサイズの取得
 	glfwGetFramebufferSize(m_debugWindow, &m_windowW, &m_windowH);
 	// ビューポートの設定
 	glViewport(0, 0, m_windowW, m_windowH);
+	// カラーバッファをクリア
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	// ImGuiレンダリング開始
+	ImGui::Render();
 
 	// フレームバッファにImGuiの描画結果を書き出す
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
 	glfwSwapBuffers(m_debugWindow);
@@ -257,6 +261,40 @@ void Debugger::DeleteDebugObject(DebugObjectBase* _debugObj, OBJECT_TAG _tag)
 	{
 		m_actorDebugObjects->DeleteObject(_debugObj);
 	}
+}
+
+/// <summary>
+/// デバッグ用フレームバッファの生成処理
+/// </summary>
+/// <param name="_width"> 横幅 </param>
+/// <param name="_height"> 縦幅 </param>
+void Debugger::CreateDebugBuffers()
+{
+
+	// カラーバッファ (テクスチャ)
+	glGenTextures(1, &m_debugCB);
+	glBindTexture(GL_TEXTURE_2D, m_debugCB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_debugWidth, m_debugHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// レンダーバッファ
+	glGenRenderbuffers(1, &m_debugRB);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_debugRB);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, m_debugWidth, m_debugHeight);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+	// フレームバッファ
+	glGenFramebuffers(1, &m_debugFB);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_debugFB);
+	// テクスチャをカラーバッファとして結合
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_debugCB, 0);
+	// レンダーバッファを深度バッファとして結合
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_debugRB);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 

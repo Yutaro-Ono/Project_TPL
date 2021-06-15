@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include "SceneBase.h"
-
+#include <vector>
 
 class TestScene : public SceneBase
 {
@@ -23,10 +23,7 @@ public:
 	SceneBase* Update(float _deltaTime) override;
 
 private:
-
-
-
-
+	
 
 
 };
