@@ -1,22 +1,18 @@
 //----------------------------------------------------------------------------------+
-// @file        RenderBloom.cpp
-// @brief       ブルーム描画処理
+// @file        HUD.cpp
+// @brief       HUD(UI)のベースクラス
 // @note        
 // @author      小野 湧太郎 (Yutaro Ono, @2021)
 //
 // @changelog
-// 2021/ 6/04   新規作成
+// 2021/ 6/15   新規作成
 //----------------------------------------------------------------------------------+
-#include "RenderBloom.h"
+#include "HUD.h"
 
-RenderBloom::RenderBloom()
+HUD::HUD()
 {
 }
 
-RenderBloom::~RenderBloom()
-{
-}
-
-void RenderBloom::DownSampling(unsigned int& _brightBuffer)
+HUD::~HUD()
 {
 }

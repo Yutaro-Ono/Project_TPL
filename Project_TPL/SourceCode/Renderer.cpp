@@ -245,6 +245,18 @@ void Renderer::Draw()
 		// ブルーム処理する
 		if (m_enableBloom)
 		{
+			// 高輝度バッファをバインド
+			glBindFramebuffer(GL_FRAMEBUFFER, m_gEmissive);
+
+			// カラー・バッファ情報のクリア
+			glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
+			glEnable(GL_DEPTH_TEST);
+
+
+
+			// 高輝度バッファのバインド解除
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 		}
 		// ブルーム処理しない

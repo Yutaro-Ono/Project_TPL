@@ -172,6 +172,7 @@
     <ClCompile Include="SourceCode\GameMain.cpp" />
     <ClCompile Include="SourceCode\GameSettings.cpp" />
     <ClCompile Include="SourceCode\GLSLprogram.cpp" />
+    <ClCompile Include="SourceCode\HUD.cpp" />
     <ClCompile Include="SourceCode\main.cpp" />
     <ClCompile Include="SourceCode\Mesh.cpp" />
     <ClCompile Include="SourceCode\MeshComponent.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="SourceCode\GameMain.h" />
     <ClInclude Include="SourceCode\GameSettings.h" />
     <ClInclude Include="SourceCode\GLSLprogram.h" />
+    <ClInclude Include="SourceCode\HUD.h" />
     <ClInclude Include="SourceCode\Mesh.h" />
     <ClInclude Include="SourceCode\MeshComponent.h" />
     <ClInclude Include="SourceCode\MeshGpmesh.h" />

@@ -132,6 +132,9 @@
     <Filter Include="Source\Actor\Barricade">
       <UniqueIdentifier>{5af94cbd-5466-41ba-aca7-f5108359e347}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\HUD">
+      <UniqueIdentifier>{433c5294-ea62-4249-a33a-6ff0eabd1cde}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -253,6 +256,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\BarricadeActor.cpp">
       <Filter>Source\Actor\Barricade</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\HUD.cpp">
+      <Filter>Source\HUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -387,6 +393,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\BarricadeActor.h">
       <Filter>Source\Actor\Barricade</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\HUD.h">
+      <Filter>Source\HUD</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
