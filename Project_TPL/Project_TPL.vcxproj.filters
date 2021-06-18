@@ -135,6 +135,9 @@
     <Filter Include="Source\HUD">
       <UniqueIdentifier>{433c5294-ea62-4249-a33a-6ff0eabd1cde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\Math">
+      <UniqueIdentifier>{3da4398b-2ded-41ad-87e6-51584946a3b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -259,6 +262,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\HUD.cpp">
       <Filter>Source\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\Math.cpp">
+      <Filter>リソース ファイル\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -396,6 +402,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\HUD.h">
       <Filter>Source\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\Math.h">
+      <Filter>リソース ファイル\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

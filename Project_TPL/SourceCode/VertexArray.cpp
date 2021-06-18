@@ -31,7 +31,7 @@ VertexArray::VertexArray(const void* _verts, unsigned int _vertsNum, VERTEX_LAYO
 	glBindVertexArray(m_vao);
 
 	// 頂点データサイズの計算 (計算式についてはLayoutの定義の部分に明記)
-	unsigned vertexSize = 8 * sizeof(float);    // POS_NORMAL_
+	unsigned vertexSize = 8 * sizeof(float);    // POS_NORMAL_UV
 
 	if (_layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN)
 	{

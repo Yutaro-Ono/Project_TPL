@@ -148,6 +148,7 @@ bool MeshGpmesh::Load(const std::string& _filePath)
 		// ボーン無しモデルデータ
 		if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV || layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN)
 		{
+			// gpmeshファイルから頂点情報を確保
 			for (rapidjson::SizeType j = 0; j < vert.Size(); j++)
 			{
 				
@@ -155,6 +156,29 @@ bool MeshGpmesh::Load(const std::string& _filePath)
 				vertices.emplace_back(v);
 				
 			}
+
+			// 頂点座標とUV座標を格納
+			destPos.push_back(glm::vec3(vertices[i * 8 + 0].f, vertices[i * 8 + 1].f, vertices[i * 8 + 2].f));
+			uvPos.push_back(glm::vec2(vertices[i * 8 + 6].f, vertices[i * 8 + 7].f));
+
+			// 1ポリゴン分の情報が集まったら頂点配列に格納
+			if (destPos.size() == 3)
+			{
+				// 頂点配列へ追加
+				for (int tan = 0; tan < 3; tan++)
+				{
+					vertices[(i - (2 - tan)) * 8 + 0].f = static_cast<float>(destPos[tan].y);
+					vertices[(i - (2 - tan)) * 8 + 1].f = static_cast<float>(destPos[tan].z);
+					vertices[(i - (2 - tan)) * 8 + 2].f = static_cast<float>(destPos[tan].x);
+
+					vertices[(i - (2 - tan)) * 8 + 6].f = static_cast<float>(uvPos[tan].x);
+					vertices[(i - (2 - tan)) * 8 + 7].f = static_cast<float>(uvPos[tan].y);
+				}
+				// 保存していた頂点座標・テクスチャ座標データをクリアしておく
+				uvPos.clear();
+				destPos.clear();
+			}
+
 
 			// 法線マップを適用する場合
 			if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN)
