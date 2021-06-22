@@ -96,12 +96,12 @@ const unsigned int Texture::LoadCubeMapTextures(const std::string& _filePath) co
     // 各面のテクスチャパス
     std::string faces[] =
     {
-        _filePath + "_right.jpg",
-        _filePath + "_left.jpg",
-        _filePath + "_top.jpg",
-        _filePath + "_bottom.jpg",
-        _filePath + "_front.jpg",
-        _filePath + "_back.jpg"
+        _filePath + "_posx.jpg",
+        _filePath + "_negx.jpg",
+        _filePath + "_posy.jpg",
+        _filePath + "_negy.jpg",
+        _filePath + "_posz.jpg",
+        _filePath + "_negz.jpg"
     };
 
     int width, height, channels;

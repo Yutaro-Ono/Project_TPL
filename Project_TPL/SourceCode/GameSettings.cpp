@@ -46,10 +46,11 @@ bool GameSettings::Load(const std::string& _iniPath)
 	loadSuccess = LoadIntValue(pt, "Display", "ScreenWidth", m_displayWidth);
 	loadSuccess = LoadIntValue(pt, "Display", "ScreenHeight", m_displayHeight);
 
-	loadSuccess = LoadIntValue(pt, "Display", "FullScreen", m_displayFullScreen);
-	loadSuccess = LoadIntValue(pt, "Graphics", "EnableDefferedRendering", m_graphicsEnableDeffered);
-	loadSuccess = LoadIntValue(pt, "Graphics", "EnableEnvironmentMap", m_graphicsEnableEnvMap);
-	
+	loadSuccess = LoadBoolValue(pt, "Display", "FullScreen", m_displayFullScreen);
+	loadSuccess = LoadBoolValue(pt, "Graphics", "EnableDefferedRendering", m_graphicsEnableDeffered);
+	loadSuccess = LoadBoolValue(pt, "Graphics", "EnableEnvironmentMap", m_graphicsEnableEnvMap);
+	loadSuccess = LoadBoolValue(pt, "Graphics", "EnableEnvironmentMap", m_graphicsEnableBloom);
+
 	return loadSuccess;;
 }
 
@@ -66,5 +67,12 @@ bool GameSettings::LoadIntValue(const ptree& _pt, const std::string& _section, c
 {
 	std::string sectionKey = _section + "." + _key;
 	_val = _pt.get<int>(sectionKey);
+	return _val == -1 ? false : true;
+}
+
+bool GameSettings::LoadBoolValue(const ptree& _pt, const std::string& _section, const std::string& _key, bool& _val)
+{
+	std::string sectionKey = _section + "." + _key;
+	_val = _pt.get<bool>(sectionKey);
 	return _val == -1 ? false : true;
 }

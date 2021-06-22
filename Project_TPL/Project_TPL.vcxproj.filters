@@ -144,6 +144,9 @@
     <Filter Include="リソース ファイル\stb_image">
       <UniqueIdentifier>{016031fa-b191-4678-b457-5917bfcbbece}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\ShaderSource\GBuffer\Phong">
+      <UniqueIdentifier>{7a4ea330-bc1c-4491-b1fc-b9e83bf52de6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -458,6 +461,12 @@
     </None>
     <None Include="Shaders\GBuffer_Basic_SkyBox.vert">
       <Filter>Source\ShaderSource\GBuffer\SkyBox</Filter>
+    </None>
+    <None Include="Shaders\GBuffer_Phong.frag">
+      <Filter>Source\ShaderSource\GBuffer\Phong</Filter>
+    </None>
+    <None Include="Shaders\GBuffer_Phong.vert">
+      <Filter>Source\ShaderSource\GBuffer\Phong</Filter>
     </None>
   </ItemGroup>
 </Project>

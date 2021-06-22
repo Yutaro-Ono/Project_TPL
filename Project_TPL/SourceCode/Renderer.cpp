@@ -134,6 +134,12 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_uboCamera, 0, sizeof(glm::vec3::x) + sizeof(glm::vec3::y) + sizeof(glm::vec3::z));
+	// トリガーFBO
+	glGenBuffers(1, &m_uboTriggers);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboTriggers);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(bool), NULL, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 2, m_uboTriggers, 0, sizeof(bool));
 
 	//---------------------------------------+
 	// 汎用頂点配列
@@ -167,7 +173,7 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	m_drawableObject = new DrawableObjectManager();
 
 	// skybox
-	m_skyBox = new CubeMap("Data/Textures/SkyBox/Night/");
+	m_skyBox = new CubeMap("Data/Textures/SkyBox/NightCity/");
 
 	return true;
 }
@@ -447,6 +453,12 @@ void Renderer::SetUniformBuffer()
 
 	// カメラUBO
 	//glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
+
+	// トリガーFBO
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboTriggers);
+	bool bloom = GAME_CONFIG.GetEnableBloom();
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(bool), &bloom);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 }
 

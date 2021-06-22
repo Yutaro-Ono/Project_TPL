@@ -44,7 +44,9 @@ public:
 	const int& GetScreenSizeW() { return m_displayWidth; }
 	const int& GetScreenSizeH() { return m_displayHeight; }
 
-	bool GetEnableDeffered() { return (bool)m_graphicsEnableDeffered; }
+	bool GetEnableDeffered() { return m_graphicsEnableDeffered; }
+	bool GetEnableEnvMap() { return m_graphicsEnableEnvMap; }
+	bool GetEnableBloom() { return m_graphicsEnableBloom; }
 
 private:
 
@@ -52,18 +54,20 @@ private:
 
 	bool LoadIntValue(const ptree& _pt, const std::string& _section, const std::string& _key, int& _val);
 
+	bool LoadBoolValue(const ptree& _pt, const std::string& _section, const std::string& _key, bool& _val);
+
 	// ini読み込み用のプロパティツリー
 	ptree m_pt;
 
 	// 画面設定用の変数
 	int m_displayHeight;
 	int m_displayWidth;
-	int m_displayFullScreen;
+	bool m_displayFullScreen;
 
 	// グラフィックス設定
-	int m_graphicsEnableDeffered;
-	int m_graphicsEnableEnvMap;
-
+	bool m_graphicsEnableDeffered;
+	bool m_graphicsEnableEnvMap;
+	bool m_graphicsEnableBloom;
 
 	std::unordered_map<unsigned char, int> m_settingVal;
 

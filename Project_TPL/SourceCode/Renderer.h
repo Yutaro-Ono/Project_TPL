@@ -84,6 +84,7 @@ private:
 	// uniformバッファ
 	unsigned int m_uboMatrices;                      // ビュー・プロジェクション行列用UBO
 	unsigned int m_uboCamera;                        // カメラ情報
+	unsigned int m_uboTriggers;                      // トリガー類(ブルーム効果のオンオフ)
 
 	// vertexArrayクラス
 	class VertexArray* m_quadVA;                     // 四角形 (スクリーンに使用)

@@ -23,6 +23,7 @@ layout(std140, binding = 1) uniform CameraVariable
 	vec3 u_viewPos;
 };
 
+
 // out structure (Output to Fragment)
 out VS_OUT
 {
