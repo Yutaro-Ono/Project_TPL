@@ -59,6 +59,13 @@ bool ShaderManager::CreateShaders()
 	m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->SetUniform("u_mat.albedo", 0);
 	m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->SetUniform("u_mat.specular", 1);
 
+	m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX] = new GLSLprogram();
+	if (!m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX]->LoadShaders("Shaders/GBuffer_Basic_SkyBox.vert", "Shaders/GBuffer_Basic_SkyBox.frag"))
+	{
+		return false;
+	}
+	m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX]->SetUniform("u_cubeMap", 0);
+
 	m_shaders[GLSLshader::OUT_SCREEN_ENTIRE] = new GLSLprogram();
 	if (!m_shaders[GLSLshader::OUT_SCREEN_ENTIRE]->LoadShaders("Shaders/OutScreen.vert", "Shaders/OutScreen.frag"))
 	{

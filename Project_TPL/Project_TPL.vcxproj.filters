@@ -51,9 +51,6 @@
     <Filter Include="Source\ShaderSource\Simple">
       <UniqueIdentifier>{abcfc2f1-4b0c-4307-b758-d312b326a7f3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Texture">
-      <UniqueIdentifier>{75188af1-ae18-43c8-8039-051f44de0914}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\BasicObject">
       <UniqueIdentifier>{4efb3bee-af82-4ea5-b372-cee58532c010}</UniqueIdentifier>
     </Filter>
@@ -69,9 +66,6 @@
     <Filter Include="Source\Actor">
       <UniqueIdentifier>{1306b811-efef-4af1-9bec-1e2b0333ccf6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Mesh">
-      <UniqueIdentifier>{406cefc8-bbe0-4d3f-8434-7dfa94703690}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Pool">
       <UniqueIdentifier>{34f692c6-b224-48c7-bb65-2770ca341b03}</UniqueIdentifier>
     </Filter>
@@ -80,9 +74,6 @@
     </Filter>
     <Filter Include="Source\Pool\MeshPool">
       <UniqueIdentifier>{1ae2d1bd-a079-4ddf-9f66-6932f8f01dc3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Mesh\OBJ">
-      <UniqueIdentifier>{dd802d36-0134-478e-86dd-9804fabfc90e}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Component">
       <UniqueIdentifier>{f1e8ab69-7994-44d2-93b4-f10cfec6a5f1}</UniqueIdentifier>
@@ -104,9 +95,6 @@
     </Filter>
     <Filter Include="Source\ShaderSource\Basic\BasicMesh">
       <UniqueIdentifier>{9251573b-52af-4ffc-b1f2-cb001bae11fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Mesh\GPMESH">
-      <UniqueIdentifier>{f576bc90-4d13-4496-b29e-690f742576ad}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Pool\DebugObjectPool">
       <UniqueIdentifier>{cdbd8675-679f-4f2c-8a8a-59c48c1a2678}</UniqueIdentifier>
@@ -137,6 +125,24 @@
     </Filter>
     <Filter Include="リソース ファイル\Math">
       <UniqueIdentifier>{3da4398b-2ded-41ad-87e6-51584946a3b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\CubeMap">
+      <UniqueIdentifier>{f6fc5d0a-0217-4669-a464-e73fe29e8511}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Texture">
+      <UniqueIdentifier>{75188af1-ae18-43c8-8039-051f44de0914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Mesh">
+      <UniqueIdentifier>{406cefc8-bbe0-4d3f-8434-7dfa94703690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Mesh\OBJ">
+      <UniqueIdentifier>{dd802d36-0134-478e-86dd-9804fabfc90e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Mesh\GPMESH">
+      <UniqueIdentifier>{f576bc90-4d13-4496-b29e-690f742576ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\ShaderSource\GBuffer\SkyBox">
+      <UniqueIdentifier>{0efc11f0-1393-43e1-896f-c3abedbd37e9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -192,7 +198,7 @@
       <Filter>Source\Shader\ShaderManager</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Texture.cpp">
-      <Filter>Source\Texture</Filter>
+      <Filter>Source\Renderer\Texture</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\BasicTriangle.cpp">
       <Filter>Source\BasicObject\Triangle</Filter>
@@ -207,10 +213,10 @@
       <Filter>Source\Pool\MeshPool</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Mesh.cpp">
-      <Filter>Source\Mesh</Filter>
+      <Filter>Source\Renderer\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\MeshObj.cpp">
-      <Filter>Source\Mesh\OBJ</Filter>
+      <Filter>Source\Renderer\Mesh\OBJ</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Component.cpp">
       <Filter>Source\Component</Filter>
@@ -231,7 +237,7 @@
       <Filter>Source\Actor\TestActor\Sphere</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\MeshGpmesh.cpp">
-      <Filter>Source\Mesh\GPMESH</Filter>
+      <Filter>Source\Renderer\Mesh\GPMESH</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\DebugObjectPool.cpp">
       <Filter>Source\Pool\DebugObjectPool</Filter>
@@ -265,6 +271,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\Math.cpp">
       <Filter>リソース ファイル\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\CubeMap.cpp">
+      <Filter>Source\Renderer\CubeMap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,7 +332,7 @@
       <Filter>Source\Shader\ShaderManager</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Texture.h">
-      <Filter>Source\Texture</Filter>
+      <Filter>Source\Renderer\Texture</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\BasicTriangle.h">
       <Filter>Source\BasicObject\Triangle</Filter>
@@ -341,7 +350,7 @@
       <Filter>Source\DebugSystem</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Mesh.h">
-      <Filter>Source\Mesh</Filter>
+      <Filter>Source\Renderer\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\ObjectPool.h">
       <Filter>Source\Pool</Filter>
@@ -353,7 +362,7 @@
       <Filter>Source\Pool\MeshPool</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\MeshObj.h">
-      <Filter>Source\Mesh\OBJ</Filter>
+      <Filter>Source\Renderer\Mesh\OBJ</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Component.h">
       <Filter>Source\Component</Filter>
@@ -374,7 +383,7 @@
       <Filter>Source\Actor\TestActor\Sphere</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\MeshGpmesh.h">
-      <Filter>Source\Mesh\GPMESH</Filter>
+      <Filter>Source\Renderer\Mesh\GPMESH</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\DebugObjectPool.h">
       <Filter>Source\Pool\DebugObjectPool</Filter>
@@ -405,6 +414,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\Math.h">
       <Filter>リソース ファイル\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\CubeMap.h">
+      <Filter>Source\Renderer\CubeMap</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -440,6 +452,12 @@
     </None>
     <None Include="Shaders\OutScreen.vert">
       <Filter>Source\ShaderSource\ToneMap</Filter>
+    </None>
+    <None Include="Shaders\GBuffer_Basic_SkyBox.frag">
+      <Filter>Source\ShaderSource\GBuffer\SkyBox</Filter>
+    </None>
+    <None Include="Shaders\GBuffer_Basic_SkyBox.vert">
+      <Filter>Source\ShaderSource\GBuffer\SkyBox</Filter>
     </None>
   </ItemGroup>
 </Project>

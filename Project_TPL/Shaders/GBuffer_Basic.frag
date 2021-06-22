@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------------------+
-// @file        GBuffer_Basic.vert
+// @file        GBuffer_Basic.frag
 // @brief       output to GBuffer (basic fragment)
 // @note        
 // @author      Yutaro Ono, @2021
@@ -9,8 +9,6 @@
 layout(location = 0) out vec3 out_gPosition;
 layout(location = 1) out vec3 out_gNormal;
 layout(location = 2) out vec4 out_gAlbedoSpec;
-
-out vec4 out_fragColor;
 
 // input structure from vertex shader
 in VS_OUT

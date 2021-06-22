@@ -164,6 +164,7 @@
     <ClCompile Include="SourceCode\BasicTriangle.cpp" />
     <ClCompile Include="SourceCode\CameraActor.cpp" />
     <ClCompile Include="SourceCode\Component.cpp" />
+    <ClCompile Include="SourceCode\CubeMap.cpp" />
     <ClCompile Include="SourceCode\Debugger.cpp" />
     <ClCompile Include="SourceCode\DebugObjectBase.cpp" />
     <ClCompile Include="SourceCode\DebugObjectPool.cpp" />
@@ -209,6 +210,7 @@
     <ClInclude Include="SourceCode\BasicTriangle.h" />
     <ClInclude Include="SourceCode\CameraActor.h" />
     <ClInclude Include="SourceCode\Component.h" />
+    <ClInclude Include="SourceCode\CubeMap.h" />
     <ClInclude Include="SourceCode\Debugger.h" />
     <ClInclude Include="SourceCode\DebugObjectBase.h" />
     <ClInclude Include="SourceCode\DebugObjectPool.h" />
@@ -248,6 +250,8 @@
     <None Include="Shaders\BasicShader_SamplingTexture.frag" />
     <None Include="Shaders\GBuffer_Basic.frag" />
     <None Include="Shaders\GBuffer_Basic.vert" />
+    <None Include="Shaders\GBuffer_Basic_SkyBox.frag" />
+    <None Include="Shaders\GBuffer_Basic_SkyBox.vert" />
     <None Include="Shaders\OutScreen.frag" />
     <None Include="Shaders\OutScreen.vert" />
     <None Include="Shaders\SimpleShader_pos_color.frag" />

@@ -59,6 +59,7 @@ public:
 	const int& GetNumIndices() { return m_numInDices; }
 
 	void CreateSimpleQuadVAO();
+	void CreateCubeMapVertices();
 
 private:
 
