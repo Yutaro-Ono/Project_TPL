@@ -56,20 +56,30 @@ VertexArray::VertexArray(const void* _verts, unsigned int _vertsNum, VERTEX_LAYO
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBuffer);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, _numInDices * sizeof(unsigned int), _inDices, GL_STATIC_DRAW);
 
+	// アトリビュートセット 共通
+	// float 3個分　→　位置 x,y,z　位置属性をセット
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, (void*)0);
+	// 次のfloat 3個分 → 法線 nx, ny, nz　法線属性をセット
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertexSize,
+		(void*)(3 * sizeof(float)));
 	// 頂点属性ごとに処理を派生
 	if (_layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV)
 	{
-		// float 3個分　→　位置 x,y,z　位置属性をセット
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertexSize, 0);
-		// 次のfloat 3個分 → 法線 nx, ny, nz　法線属性をセット
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertexSize,
-			reinterpret_cast<void*>(sizeof(float) * 3));
 		// 次のfloat 2個分 u, v  テクスチャ座標属性をセット
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize,
-			reinterpret_cast<void*>(sizeof(float) * 6));
+			(void*)(6 * sizeof(float)));
+	}
+	if (_layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN)
+	{
+		// 2 : テクスチャ座標
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertexSize, (void*)(6 * sizeof(float)));
+		// 3 : 接ベクトル (タンジェント)
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vertexSize, (void*)(8 * sizeof(float)));
 	}
 }
 

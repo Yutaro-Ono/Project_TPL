@@ -72,11 +72,24 @@ bool MeshGpmesh::Load(const std::string& _filePath)
 
 	//----------------------------------------------------------------------------------------------------+
 	// 頂点レイアウトと1頂点の情報量をセット
+	// 基本 : 3 (位置xyz) + 3(法線xyz) ＋ 2(UV) の計 8個分（32byte)
 	VERTEX_LAYOUT::TYPE layout = VERTEX_LAYOUT::TYPE::POS_NORMAL_UV;
 	size_t vertexSize = 8;
-	if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN || layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV_TAN)
+	// タンジェント情報を持つモデル
+	if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN)
 	{
 		vertexSize = 11;     // vx, vy, vz, nx, ny, nz, u, v, tx, ty, tz
+	}
+	// スキンメッシュ(タンジェントなし)
+	// 3 (位置xyz) + 3(法線xyz) + 2(Boneと重み）＋　2(UV)  の計　10個分（40byte) 　
+	if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV)
+	{
+		vertexSize = 10;
+	}
+	// スキンメッシュ(タンジェントあり)
+	if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV_TAN)
+	{
+		vertexSize = 13;
 	}
 	//----------------------------------------------------------------------------------------------------+
 
@@ -157,28 +170,6 @@ bool MeshGpmesh::Load(const std::string& _filePath)
 				
 			}
 
-			// 頂点座標とUV座標を格納
-			destPos.push_back(glm::vec3(vertices[i * 8 + 0].f, vertices[i * 8 + 1].f, vertices[i * 8 + 2].f));
-			uvPos.push_back(glm::vec2(vertices[i * 8 + 6].f, vertices[i * 8 + 7].f));
-
-			// 1ポリゴン分の情報が集まったら頂点配列に格納
-			if (destPos.size() == 3)
-			{
-				// 頂点配列へ追加
-				for (int tan = 0; tan < 3; tan++)
-				{
-					vertices[(i - (2 - tan)) * 8 + 0].f = static_cast<float>(destPos[tan].y);
-					vertices[(i - (2 - tan)) * 8 + 1].f = static_cast<float>(destPos[tan].z);
-					vertices[(i - (2 - tan)) * 8 + 2].f = static_cast<float>(destPos[tan].x);
-
-					vertices[(i - (2 - tan)) * 8 + 6].f = static_cast<float>(uvPos[tan].x);
-					vertices[(i - (2 - tan)) * 8 + 7].f = static_cast<float>(uvPos[tan].y);
-				}
-				// 保存していた頂点座標・テクスチャ座標データをクリアしておく
-				uvPos.clear();
-				destPos.clear();
-			}
-
 
 			// 法線マップを適用する場合
 			if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_UV_TAN)
@@ -212,7 +203,7 @@ bool MeshGpmesh::Load(const std::string& _filePath)
 			}
 		}
 		// ボーン入りモデルデータ
-		if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV || layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV_TAN)
+		else if (layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV || layout == VERTEX_LAYOUT::TYPE::POS_NORMAL_SKIN_UV_TAN)
 		{
 			// 頂点座標と法線を追加 vx, vy, vz, nx, ny, nz
 			for (rapidjson::SizeType j = 0; j < 6; j++)
@@ -279,7 +270,8 @@ bool MeshGpmesh::Load(const std::string& _filePath)
 	AddTextureStage(_filePath);
 
 	// 頂点配列クラスの生成
-	m_vertexArray = new VertexArray(vertices.data(), static_cast<unsigned>(vertices.size()) / vertexSize, layout, indices.data(), static_cast<unsigned>(indices.size()));
+	m_vertexArray = new VertexArray(vertices.data(), static_cast<unsigned>(vertices.size()) / vertexSize, 
+		                            layout, indices.data(), static_cast<unsigned>(indices.size()));
 
 	return true;
 }

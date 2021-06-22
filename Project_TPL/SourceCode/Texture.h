@@ -26,7 +26,7 @@ public:
 
 	unsigned int GetTextureID() { return m_textureID; }
 
-	
+	void SetMipmap(unsigned int _textureID);
 
 
 private:
