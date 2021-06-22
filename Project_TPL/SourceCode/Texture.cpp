@@ -10,7 +10,6 @@
 // 2021/ 6/22   ミップマップの生成関数を追加
 //----------------------------------------------------------------------------------+
 #include "Texture.h"
-
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include "GameMain.h"
@@ -44,8 +43,9 @@ bool Texture::LoadTexture(const std::string& _filePath)
 
     // 画像ファイルのロード
     stbi_set_flip_vertically_on_load(true);
-    unsigned char* data = stbi_load(_filePath.c_str(), &m_width, &m_height, &m_channels, 0);
-    if (data)
+
+    unsigned char* data = stbi_load(_filePath.c_str(), &m_width, &m_height, &m_channels, STBI_rgb_alpha);
+    if (data != NULL)
     {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     }
@@ -76,6 +76,72 @@ bool Texture::LoadTexture(const std::string& _filePath)
     SetMipmap(m_textureID);
 
     return true;
+}
+
+/// <summary>
+/// キューブマップ用テクスチャのロード
+/// ※6面
+/// </summary>
+/// <param name="_filePath"></param>
+/// <returns></returns>
+const unsigned int Texture::LoadCubeMapTextures(const std::string& _filePath) const
+{
+
+    unsigned int cubeMap;
+
+    // キューブマップとして登録
+    glGenTextures(1, &cubeMap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
+
+    // 各面のテクスチャパス
+    std::string faces[] =
+    {
+        _filePath + "_right.jpg",
+        _filePath + "_left.jpg",
+        _filePath + "_top.jpg",
+        _filePath + "_bottom.jpg",
+        _filePath + "_front.jpg",
+        _filePath + "_back.jpg"
+    };
+
+    int width, height, channels;
+
+    for (unsigned int i = 0; i < 6; ++i)
+    {
+
+        // 1面のテクスチャをロード
+        stbi_set_flip_vertically_on_load(true);
+        //unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &channels, 0);
+        float *data = stbi_loadf(faces[i].c_str(), &width, &height, &channels, 0);
+
+        if (data != NULL)
+        {
+
+            //glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+        }
+        else
+        {
+            std::cout << "Failed::Load CubeMap Face Texture::" << faces[i] << std::endl;
+            return false;
+        }
+
+        // 解放
+        stbi_image_free(data);
+
+    }
+
+    // テクスチャパラメータ設定
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // バインド解除
+    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+    return cubeMap;
 }
 
 /// <summary>

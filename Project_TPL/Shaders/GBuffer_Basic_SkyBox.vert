@@ -25,16 +25,16 @@ layout(std140, binding = 1) uniform CameraVariable
 out VS_OUT
 {
 	vec3 fragLocalPos;
-	vec2 fragTexCoords;
 }vs_out;
+
+uniform mat4 u_removeTransView;
 
 void main()
 {
 
 	vs_out.fragLocalPos = a_vertexPos;
 	
-	mat4 rotView = mat4(mat3(u_view));  // remove translation from the viewMat
-	vec4 clipPos = u_projection * rotView * vec4(vs_out.fragLocalPos, 1.0f);
+	vec4 clipPos = u_projection * u_removeTransView * vec4(a_vertexPos, 1.0f);
 
 	gl_Position = clipPos.xyww;
 	

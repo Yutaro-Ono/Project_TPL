@@ -73,6 +73,8 @@ private:
 	class ShaderManager* m_shaderManager;            // シェーダーマネージャークラス
 	class DrawableObjectManager* m_drawableObject;   // 描画可能オブジェクト管理クラス
 
+	class CubeMap* m_skyBox;                         // skybox
+
 	bool m_enableBloom;                              // ブルーム処理するかしないか
 
 	// 描画用の行列関連

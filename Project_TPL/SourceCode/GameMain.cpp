@@ -68,7 +68,7 @@ bool GameMain::Initialize()
 		std::cout << "Error::Renderer::Initialize" << std::endl;
 		return false;
 	}
-	
+
 #ifdef _DEBUG
 
 	// デバッガ―クラスの作成
@@ -82,8 +82,6 @@ bool GameMain::Initialize()
 	m_renderer->CreateRendererDebugObject();
 
 #endif
-
-
 
 	return true;
 }

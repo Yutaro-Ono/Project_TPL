@@ -18,10 +18,8 @@ class CubeMap
 
 public:
 
-	CubeMap();
+	CubeMap(const std::string& _filePath);
 	~CubeMap();
-
-	bool LoadCubeMapTextures(const std::string& _filePath);
 
 	void Draw(class GLSLprogram* _shader);
 

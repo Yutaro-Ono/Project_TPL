@@ -27,9 +27,6 @@
     <Filter Include="Source\Scene\TestScene">
       <UniqueIdentifier>{812f09e8-c832-4b16-aec5-17e393026e36}</UniqueIdentifier>
     </Filter>
-    <Filter Include="リソース ファイル\std_image">
-      <UniqueIdentifier>{016031fa-b191-4678-b457-5917bfcbbece}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\ShaderSource">
       <UniqueIdentifier>{bb00bfff-2627-4568-88be-7615ef92ca0e}</UniqueIdentifier>
     </Filter>
@@ -143,6 +140,9 @@
     </Filter>
     <Filter Include="Source\ShaderSource\GBuffer\SkyBox">
       <UniqueIdentifier>{0efc11f0-1393-43e1-896f-c3abedbd37e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="リソース ファイル\stb_image">
+      <UniqueIdentifier>{016031fa-b191-4678-b457-5917bfcbbece}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -317,7 +317,7 @@
       <Filter>Source\Scene\TestScene</Filter>
     </ClInclude>
     <ClInclude Include="std\stb_image.h">
-      <Filter>リソース ファイル\std_image</Filter>
+      <Filter>リソース ファイル\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\GLSLprogram.h">
       <Filter>Source\Shader</Filter>

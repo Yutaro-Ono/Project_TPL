@@ -20,6 +20,7 @@
 #include "Debugger.h"
 #include "Tag.h"
 #include "VertexArray.h"
+#include "CubeMap.h"
 
 /// <summary>
 /// コンストラクタ
@@ -29,6 +30,7 @@ Renderer::Renderer()
 	,m_renderMethod(RENDER_METHOD::DEFFERED)
 	,m_shaderManager(nullptr)
 	,m_drawableObject(nullptr)
+	,m_skyBox(nullptr)
 	,m_uboMatrices(0)
 	,m_uboCamera(0)
 	,m_debugObj(nullptr)
@@ -102,6 +104,7 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 		return false;
 	}
 
+
 	//---------------------------------------+
 	// ビューポートの設定
 	//---------------------------------------+
@@ -163,7 +166,8 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	// 描画可能オブジェクト管理クラス
 	m_drawableObject = new DrawableObjectManager();
 
-
+	// skybox
+	m_skyBox = new CubeMap("Data/Textures/SkyBox/Night/");
 
 	return true;
 }
@@ -185,6 +189,8 @@ void Renderer::Delete()
 	delete m_shaderManager;
 	delete m_drawableObject;
 	delete m_quadVA;
+
+	delete m_skyBox;
 
 	// windowの破棄・GLFWのクリーンアップ
 	glfwDestroyWindow(m_window);
@@ -233,8 +239,17 @@ void Renderer::Draw()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
 		glEnable(GL_DEPTH_TEST);
 
+		//-------------------------------------------------------------------------
+		// 0.ジオメトリパス
+		//-------------------------------------------------------------------------
+		// SkyBox
+		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_SKYBOX);
+		glm::mat4 remView = glm::mat4(glm::mat3(m_viewMat));
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX)->SetUniform("u_removeTransView", remView);
+		m_skyBox->Draw(m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX));
+
+		// Mesh
 		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_MESH);
-		// ジオメトリパス
 		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
