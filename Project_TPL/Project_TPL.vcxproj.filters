@@ -27,26 +27,14 @@
     <Filter Include="Source\Scene\TestScene">
       <UniqueIdentifier>{812f09e8-c832-4b16-aec5-17e393026e36}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\ShaderSource">
-      <UniqueIdentifier>{bb00bfff-2627-4568-88be-7615ef92ca0e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\VertexArray">
       <UniqueIdentifier>{03bc2672-2235-4eac-98f0-547a2c9d7e14}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\ShaderSource\Basic">
-      <UniqueIdentifier>{40ea75f8-bb82-4396-a84e-d0f722f6330c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\ShaderSource\Basic\TextureSample">
-      <UniqueIdentifier>{e9710761-58e6-4d94-aa98-49841ffedb11}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Shader">
       <UniqueIdentifier>{f82beb12-9e69-4c6f-b267-a71432b3bd10}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Shader\ShaderManager">
       <UniqueIdentifier>{9080b65f-d11b-42e0-ae40-29163c417cfe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\ShaderSource\Simple">
-      <UniqueIdentifier>{abcfc2f1-4b0c-4307-b758-d312b326a7f3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\BasicObject">
       <UniqueIdentifier>{4efb3bee-af82-4ea5-b372-cee58532c010}</UniqueIdentifier>
@@ -90,23 +78,11 @@
     <Filter Include="Source\Actor\TestActor\Sphere">
       <UniqueIdentifier>{3fbb8a09-2ac5-4a18-a1df-749ad6bb5625}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\ShaderSource\Basic\BasicMesh">
-      <UniqueIdentifier>{9251573b-52af-4ffc-b1f2-cb001bae11fe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Pool\DebugObjectPool">
       <UniqueIdentifier>{cdbd8675-679f-4f2c-8a8a-59c48c1a2678}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Lighting">
       <UniqueIdentifier>{e462256d-e780-478f-b9bd-36001f344c27}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\ShaderSource\GBuffer">
-      <UniqueIdentifier>{72157c19-33de-4b54-96c6-c6dbe98a0e96}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\ShaderSource\GBuffer\Basic">
-      <UniqueIdentifier>{5f2322b1-1e5c-42da-8663-1cc51e280650}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\ShaderSource\ToneMap">
-      <UniqueIdentifier>{a7e91188-2afd-4826-929f-d1884ba94ba3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Actor\Camera">
       <UniqueIdentifier>{839ae2c1-1164-4485-b9e9-e3bd77840b01}</UniqueIdentifier>
@@ -138,14 +114,50 @@
     <Filter Include="Source\Renderer\Mesh\GPMESH">
       <UniqueIdentifier>{f576bc90-4d13-4496-b29e-690f742576ad}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\ShaderSource\GBuffer\SkyBox">
-      <UniqueIdentifier>{0efc11f0-1393-43e1-896f-c3abedbd37e9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="リソース ファイル\stb_image">
       <UniqueIdentifier>{016031fa-b191-4678-b457-5917bfcbbece}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\ShaderSource\GBuffer\Phong">
+    <Filter Include="Source\Shader\ShaderSource">
+      <UniqueIdentifier>{bb00bfff-2627-4568-88be-7615ef92ca0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Basic">
+      <UniqueIdentifier>{40ea75f8-bb82-4396-a84e-d0f722f6330c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Basic\TextureSample">
+      <UniqueIdentifier>{e9710761-58e6-4d94-aa98-49841ffedb11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Basic\BasicMesh">
+      <UniqueIdentifier>{9251573b-52af-4ffc-b1f2-cb001bae11fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Simple">
+      <UniqueIdentifier>{abcfc2f1-4b0c-4307-b758-d312b326a7f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\GBuffer">
+      <UniqueIdentifier>{72157c19-33de-4b54-96c6-c6dbe98a0e96}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\GBuffer\Basic">
+      <UniqueIdentifier>{5f2322b1-1e5c-42da-8663-1cc51e280650}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\GBuffer\SkyBox">
+      <UniqueIdentifier>{0efc11f0-1393-43e1-896f-c3abedbd37e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\GBuffer\Phong">
       <UniqueIdentifier>{7a4ea330-bc1c-4491-b1fc-b9e83bf52de6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\ToneMap">
+      <UniqueIdentifier>{a7e91188-2afd-4826-929f-d1884ba94ba3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Option">
+      <UniqueIdentifier>{d286827c-ce13-41ef-857c-1381d27790bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Option\NormalVisualize">
+      <UniqueIdentifier>{9b18ed19-a682-43ec-9b8a-2e3eabe4f7ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Option\NormalVisualize\Basic">
+      <UniqueIdentifier>{4a5378f6-c74e-4920-8b9e-9f80c703bee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Option\NormalVisualize\GBuffer">
+      <UniqueIdentifier>{2553902f-745d-402a-b254-0a0e315b7461}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -424,49 +436,67 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\BasicShader.vert">
-      <Filter>Source\ShaderSource\Basic</Filter>
+      <Filter>Source\Shader\ShaderSource\Basic</Filter>
     </None>
     <None Include="Shaders\BasicShader_SamplingTexture.frag">
-      <Filter>Source\ShaderSource\Basic\TextureSample</Filter>
+      <Filter>Source\Shader\ShaderSource\Basic\TextureSample</Filter>
     </None>
     <None Include="Shaders\SimpleShader_pos_color.frag">
-      <Filter>Source\ShaderSource\Simple</Filter>
+      <Filter>Source\Shader\ShaderSource\Simple</Filter>
     </None>
     <None Include="Shaders\SimpleShader_pos_color.vert">
-      <Filter>Source\ShaderSource\Simple</Filter>
+      <Filter>Source\Shader\ShaderSource\Simple</Filter>
     </None>
     <None Include="Shaders\BasicShader.frag">
-      <Filter>Source\ShaderSource\Basic</Filter>
+      <Filter>Source\Shader\ShaderSource\Basic</Filter>
     </None>
     <None Include="Shaders\BasicMesh.vert">
-      <Filter>Source\ShaderSource\Basic\BasicMesh</Filter>
+      <Filter>Source\Shader\ShaderSource\Basic\BasicMesh</Filter>
     </None>
     <None Include="Shaders\BasicMesh.frag">
-      <Filter>Source\ShaderSource\Basic\BasicMesh</Filter>
+      <Filter>Source\Shader\ShaderSource\Basic\BasicMesh</Filter>
     </None>
     <None Include="Shaders\GBuffer_Basic.frag">
-      <Filter>Source\ShaderSource\GBuffer\Basic</Filter>
+      <Filter>Source\Shader\ShaderSource\GBuffer\Basic</Filter>
     </None>
     <None Include="Shaders\GBuffer_Basic.vert">
-      <Filter>Source\ShaderSource\GBuffer\Basic</Filter>
+      <Filter>Source\Shader\ShaderSource\GBuffer\Basic</Filter>
     </None>
     <None Include="Shaders\OutScreen.frag">
-      <Filter>Source\ShaderSource\ToneMap</Filter>
+      <Filter>Source\Shader\ShaderSource\ToneMap</Filter>
     </None>
     <None Include="Shaders\OutScreen.vert">
-      <Filter>Source\ShaderSource\ToneMap</Filter>
+      <Filter>Source\Shader\ShaderSource\ToneMap</Filter>
     </None>
     <None Include="Shaders\GBuffer_Basic_SkyBox.frag">
-      <Filter>Source\ShaderSource\GBuffer\SkyBox</Filter>
+      <Filter>Source\Shader\ShaderSource\GBuffer\SkyBox</Filter>
     </None>
     <None Include="Shaders\GBuffer_Basic_SkyBox.vert">
-      <Filter>Source\ShaderSource\GBuffer\SkyBox</Filter>
+      <Filter>Source\Shader\ShaderSource\GBuffer\SkyBox</Filter>
     </None>
     <None Include="Shaders\GBuffer_Phong.frag">
-      <Filter>Source\ShaderSource\GBuffer\Phong</Filter>
+      <Filter>Source\Shader\ShaderSource\GBuffer\Phong</Filter>
     </None>
     <None Include="Shaders\GBuffer_Phong.vert">
-      <Filter>Source\ShaderSource\GBuffer\Phong</Filter>
+      <Filter>Source\Shader\ShaderSource\GBuffer\Phong</Filter>
+    </None>
+    <None Include="Shaders\option\Normal_Visualization.vert">
+      <Filter>Source\Shader\ShaderSource\Option\NormalVisualize\Basic</Filter>
+    </None>
+    <None Include="Shaders\option\Normal_Visualization.frag">
+      <Filter>Source\Shader\ShaderSource\Option\NormalVisualize\Basic</Filter>
+    </None>
+    <None Include="Shaders\option\Normal_Visualization.geom">
+      <Filter>Source\Shader\ShaderSource\Option\NormalVisualize\Basic</Filter>
+    </None>
+    <None Include="Shaders\option\Normal_Visualization_GBuffer.frag">
+      <Filter>Source\Shader\ShaderSource\Option\NormalVisualize\GBuffer</Filter>
+    </None>
+    <None Include="Shaders\option\Normal_Visualization_GBuffer.geom">
+      <Filter>Source\Shader\ShaderSource\Option\NormalVisualize\GBuffer</Filter>
+    </None>
+    <None Include="Shaders\option\Normal_Visualization_GBuffer.vert">
+      <Filter>Source\Shader\ShaderSource\Option\NormalVisualize\GBuffer</Filter>
     </None>
   </ItemGroup>
 </Project>

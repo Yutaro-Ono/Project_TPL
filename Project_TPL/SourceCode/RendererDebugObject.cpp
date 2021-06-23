@@ -33,8 +33,8 @@ void RendererDebugObject::Render()
 	// デバッグバッファの書き込み・描画
 	glBindFramebuffer(GL_FRAMEBUFFER, DEBUGGER->GetDebugFrameBuffer());
 
-
-
+	// 法線の視覚化の有効化
+	ImGui::Checkbox("VisualizeNormal", &m_renderer->m_visualizeNormal);
 
 	if (ImGui::TreeNode("GBuffer : POSITION"))
 	{

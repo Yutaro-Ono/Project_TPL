@@ -83,6 +83,9 @@ bool GameMain::Initialize()
 
 #endif
 
+	// レンダラークラスのロード処理 ※デバッガーを生成した後
+	m_renderer->Load();
+
 	return true;
 }
 

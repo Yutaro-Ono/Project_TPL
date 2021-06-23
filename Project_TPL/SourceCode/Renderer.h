@@ -38,6 +38,7 @@ public:
 	~Renderer();
 
 	bool Initialize(int _width, int _height, bool _fullScreen);
+	bool Load();
 	void CreateRendererDebugObject();
 	void Delete();
 
@@ -52,6 +53,8 @@ public:
 
 	const glm::mat4 GetViewMatrix() { return m_viewMat; }
 	const glm::mat4 GetProjectionMatrix() { return m_projMat; }
+
+	class DirectionalLight* GetDirectionalLight() { return m_dirLight; }
 
 	void SetViewMatrix(const glm::mat4& _viewMat) { m_viewMat = _viewMat; }
 
@@ -73,9 +76,11 @@ private:
 	class ShaderManager* m_shaderManager;            // シェーダーマネージャークラス
 	class DrawableObjectManager* m_drawableObject;   // 描画可能オブジェクト管理クラス
 
+	class DirectionalLight* m_dirLight;              // アクティブなディレクショナルライト
 	class CubeMap* m_skyBox;                         // skybox
 
 	bool m_enableBloom;                              // ブルーム処理するかしないか
+	bool m_visualizeNormal;                          // 法線を視覚化するかしないか
 
 	// 描画用の行列関連
 	glm::mat4 m_viewMat;                             // ビュー行列
@@ -85,6 +90,7 @@ private:
 	unsigned int m_uboMatrices;                      // ビュー・プロジェクション行列用UBO
 	unsigned int m_uboCamera;                        // カメラ情報
 	unsigned int m_uboTriggers;                      // トリガー類(ブルーム効果のオンオフ)
+	unsigned int m_uboDirLights;                     // ディレクショナルライトUBO
 
 	// vertexArrayクラス
 	class VertexArray* m_quadVA;                     // 四角形 (スクリーンに使用)

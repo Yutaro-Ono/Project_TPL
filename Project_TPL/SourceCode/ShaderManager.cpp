@@ -59,6 +59,14 @@ bool ShaderManager::CreateShaders()
 	m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->SetUniform("u_mat.albedo", 0);
 	m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->SetUniform("u_mat.specular", 1);
 
+	m_shaders[GLSLshader::GBUFFER_PHONG] = new GLSLprogram();
+	if (!m_shaders[GLSLshader::GBUFFER_PHONG]->LoadShaders("Shaders/GBuffer_Phong.vert", "Shaders/GBuffer_Phong.frag"))
+	{
+		return false;
+	}
+	m_shaders[GLSLshader::GBUFFER_PHONG]->SetUniform("u_mat.albedo", 0);
+	m_shaders[GLSLshader::GBUFFER_PHONG]->SetUniform("u_mat.specular", 1);
+
 	m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX] = new GLSLprogram();
 	if (!m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX]->LoadShaders("Shaders/GBuffer_Basic_SkyBox.vert", "Shaders/GBuffer_Basic_SkyBox.frag"))
 	{
@@ -72,6 +80,18 @@ bool ShaderManager::CreateShaders()
 		return false;
 	}
 	m_shaders[GLSLshader::OUT_SCREEN_ENTIRE]->SetUniform("u_screenTexture", 0);
+
+	m_shaders[GLSLshader::OPTION_NORMAL_VISUALIZE] = new GLSLprogram();
+	if (!m_shaders[GLSLshader::OPTION_NORMAL_VISUALIZE]->LoadShaders("Shaders/option/Normal_Visualization.vert", "Shaders/option/Normal_Visualization.frag", "Shaders/option/Normal_Visualization.geom"))
+	{
+		return false;
+	}
+
+	m_shaders[GLSLshader::OPTION_NORMAL_VISUALIZE_GBUFFER] = new GLSLprogram();
+	if (!m_shaders[GLSLshader::OPTION_NORMAL_VISUALIZE_GBUFFER]->LoadShaders("Shaders/option/Normal_Visualization_GBuffer.vert", "Shaders/option/Normal_Visualization_GBuffer.frag", "Shaders/option/Normal_Visualization_GBuffer.geom"))
+	{
+		return false;
+	}
 
 	return true;
 }

@@ -21,6 +21,7 @@
 #include "Tag.h"
 #include "VertexArray.h"
 #include "CubeMap.h"
+#include "DirectionalLight.h"
 
 /// <summary>
 /// コンストラクタ
@@ -33,9 +34,12 @@ Renderer::Renderer()
 	,m_skyBox(nullptr)
 	,m_uboMatrices(0)
 	,m_uboCamera(0)
+	,m_uboTriggers(0)
+	,m_uboDirLights(0)
 	,m_debugObj(nullptr)
 	,m_quadVA(nullptr)
-	,m_enableBloom(false)
+	,m_enableBloom(GAME_CONFIG.GetEnableBloom())
+	,m_visualizeNormal(false)
 {
 
 }
@@ -104,7 +108,6 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 		return false;
 	}
 
-
 	//---------------------------------------+
 	// ビューポートの設定
 	//---------------------------------------+
@@ -114,10 +117,17 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	glfwSetFramebufferSizeCallback(m_window, FrameBuffer_Size_Callback);
 
 	//---------------------------------------+
-	// 行列の初期化
-	//---------------------------------------+
+    // 行列の初期化
+    //---------------------------------------+
 	m_viewMat = glm::lookAt(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, 1.0, 0.0));
 	m_projMat = glm::perspective(glm::radians(75.0f), (float)_width / (float)_height, 0.1f, 10000.0f);
+
+
+	return true;
+}
+
+bool Renderer::Load()
+{
 
 	//---------------------------------------+
 	// uniformバッファ生成
@@ -128,18 +138,24 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_uboMatrices, 0, 2 * sizeof(glm::mat4));
-	// カメラ情報FBO
+	// カメラ情報UBO
 	glGenBuffers(1, &m_uboCamera);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_uboCamera, 0, sizeof(glm::vec3::x) + sizeof(glm::vec3::y) + sizeof(glm::vec3::z));
-	// トリガーFBO
+	// トリガーUBO
 	glGenBuffers(1, &m_uboTriggers);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboTriggers);
 	glBufferData(GL_UNIFORM_BUFFER, sizeof(bool), NULL, GL_DYNAMIC_DRAW);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	glBindBufferRange(GL_UNIFORM_BUFFER, 2, m_uboTriggers, 0, sizeof(bool));
+	// ディレクショナルライトUBO
+	glGenBuffers(1, &m_uboDirLights);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboDirLights);
+	glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::vec3) + sizeof(float), NULL, GL_DYNAMIC_DRAW);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	glBindBufferRange(GL_UNIFORM_BUFFER, 3, m_uboDirLights, 0, 4 * sizeof(glm::vec3) + sizeof(float));
 
 	//---------------------------------------+
 	// 汎用頂点配列
@@ -149,8 +165,8 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	m_quadVA->CreateSimpleQuadVAO();
 
 	//---------------------------------------+
-    // 描画バッファ生成
-    //---------------------------------------+
+	// 描画バッファ生成
+	//---------------------------------------+
 	CreateGBuffer();
 	CreateLightBuffer();
 	CreateMSAA();
@@ -174,6 +190,9 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 
 	// skybox
 	m_skyBox = new CubeMap("Data/Textures/SkyBox/NightCity/");
+
+	// ディレクショナルライト
+	m_dirLight = new DirectionalLight;
 
 	return true;
 }
@@ -230,6 +249,13 @@ void Renderer::Draw()
 		glEnable(GL_DEPTH_TEST);
 		m_shaderManager->EnableShaderProgram(GLSLshader::BASIC_MESH);
 		m_drawableObject->Draw(m_shaderManager, GLSLshader::BASIC_MESH);
+
+		// 法線の視覚化
+		if (m_visualizeNormal)
+		{
+			m_shaderManager->EnableShaderProgram(GLSLshader::OPTION_NORMAL_VISUALIZE);
+			m_drawableObject->Draw(m_shaderManager, GLSLshader::OPTION_NORMAL_VISUALIZE);
+		}
 	}
 
 	//------------------------------------------------+
@@ -254,10 +280,26 @@ void Renderer::Draw()
 		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX)->SetUniform("u_removeTransView", remView);
 		m_skyBox->Draw(m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX));
 
+
 		// Mesh
-		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_MESH);
-		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
+		glEnable(GL_DEPTH_TEST);
+		//m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_MESH);
+		//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
+
+		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
+		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
+
+		// 法線の視覚化
+		if (m_visualizeNormal)
+		{
+			glEnable(GL_DEPTH_TEST);
+			m_shaderManager->EnableShaderProgram(GLSLshader::OPTION_NORMAL_VISUALIZE_GBUFFER);
+			m_drawableObject->Draw(m_shaderManager, GLSLshader::OPTION_NORMAL_VISUALIZE_GBUFFER);
+		}
+
+		// Gバッファバインド解除
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 
 		// ライティングパス
 		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -273,8 +315,6 @@ void Renderer::Draw()
 			glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
 			glEnable(GL_DEPTH_TEST);
-
-
 
 			// 高輝度バッファのバインド解除
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -300,6 +340,7 @@ void Renderer::Draw()
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
 	glfwSwapBuffers(m_window);
 }
+
 
 /// <summary>
 /// Gバッファの各種要素の生成・登録
@@ -452,7 +493,11 @@ void Renderer::SetUniformBuffer()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// カメラUBO
-	//glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
+	glm::vec3 viewPos;
+	glm::translate(m_viewMat, viewPos);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), glm::value_ptr(viewPos));
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// トリガーFBO
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboTriggers);
@@ -460,6 +505,14 @@ void Renderer::SetUniformBuffer()
 	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(bool), &bloom);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
+	// ディレクショナルライト
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboDirLights);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), glm::value_ptr(m_dirLight->GetDirection()));
+	glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(m_dirLight->GetDiffuse()));
+	glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(m_dirLight->GetSpecular()));
+	glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(m_dirLight->GetAmbient()));
+	glBufferSubData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::vec3), sizeof(float), &m_dirLight->GetIntensity());
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 }
 
 /// <summary>

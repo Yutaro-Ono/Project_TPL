@@ -254,6 +254,12 @@
     <None Include="Shaders\GBuffer_Basic_SkyBox.vert" />
     <None Include="Shaders\GBuffer_Phong.frag" />
     <None Include="Shaders\GBuffer_Phong.vert" />
+    <None Include="Shaders\option\Normal_Visualization.frag" />
+    <None Include="Shaders\option\Normal_Visualization.geom" />
+    <None Include="Shaders\option\Normal_Visualization.vert" />
+    <None Include="Shaders\option\Normal_Visualization_GBuffer.frag" />
+    <None Include="Shaders\option\Normal_Visualization_GBuffer.geom" />
+    <None Include="Shaders\option\Normal_Visualization_GBuffer.vert" />
     <None Include="Shaders\OutScreen.frag" />
     <None Include="Shaders\OutScreen.vert" />
     <None Include="Shaders\SimpleShader_pos_color.frag" />
