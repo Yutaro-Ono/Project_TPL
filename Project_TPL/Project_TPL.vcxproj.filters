@@ -159,6 +159,18 @@
     <Filter Include="Source\Shader\ShaderSource\Option\NormalVisualize\GBuffer">
       <UniqueIdentifier>{2553902f-745d-402a-b254-0a0e315b7461}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Camera">
+      <UniqueIdentifier>{c7474ebb-2667-4e78-8142-7a88b0652996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Camera\FreeCamera">
+      <UniqueIdentifier>{4aab7772-784e-45ed-92c7-cbe2a303f721}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Input">
+      <UniqueIdentifier>{a966eef3-22fd-40a5-8070-7f7e62b20d1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Input\KeyBoard">
+      <UniqueIdentifier>{3e79c0c0-4a3a-4c29-a9b6-cae93eecf212}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -289,6 +301,9 @@
     </ClCompile>
     <ClCompile Include="SourceCode\CubeMap.cpp">
       <Filter>Source\Renderer\CubeMap</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\InputKeyBoard.cpp">
+      <Filter>Source\Input\KeyBoard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -432,6 +447,12 @@
     </ClInclude>
     <ClInclude Include="SourceCode\CubeMap.h">
       <Filter>Source\Renderer\CubeMap</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\InputKeyBoard.h">
+      <Filter>Source\Input\KeyBoard</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\FreeCamera.h">
+      <Filter>Source\Camera\FreeCamera</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
