@@ -106,6 +106,18 @@ bool ShaderManager::CreateShaders()
 	}
 	m_shaders[GLSLshader::BLOOM_TONEMAPPING]->SetUniform("u_scene", 0);
 
+	//---------------------------------------------------------------------------+
+	// ライトパス
+	//---------------------------------------------------------------------------+
+	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS] = new GLSLprogram();
+	if (!m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->LoadShaders("Shaders/GBuffer_LightPass.vert", "Shaders/GBuffer_DirectionalLight.frag"))
+	{
+		return false;
+	}
+	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->SetUniform("u_gBuffer.position", 0);
+	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->SetUniform("u_gBuffer.normal", 1);
+	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->SetUniform("u_gBuffer.albedoSpec", 2);
+	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->SetUniform("u_gBuffer.emissive", 3);
 
 	//---------------------------------------------------------------------------+
 	// その他のシェーダー (デバッグ用ビジュアライザー系)

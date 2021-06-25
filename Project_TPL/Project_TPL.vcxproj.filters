@@ -183,6 +183,12 @@
     <Filter Include="Source\Shader\ShaderSource\Bloom\ToneMap+Bloom">
       <UniqueIdentifier>{ab89f9b1-5037-4482-911e-9b98cda91de5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Shader\ShaderSource\GBuffer\Lighting">
+      <UniqueIdentifier>{6138031d-ad76-4627-802a-1290eb00c533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\GBuffer\Lighting\DirectionalLight">
+      <UniqueIdentifier>{8e885444-90ae-43d1-abc5-3a76da4eee04}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -539,6 +545,12 @@
     </None>
     <None Include="Shaders\Bloom_GaussianBlur.frag">
       <Filter>Source\Shader\ShaderSource\Bloom\GaussBlur</Filter>
+    </None>
+    <None Include="Shaders\GBuffer_LightPass.vert">
+      <Filter>Source\Shader\ShaderSource\GBuffer\Lighting</Filter>
+    </None>
+    <None Include="Shaders\GBuffer_DirectionalLight.frag">
+      <Filter>Source\Shader\ShaderSource\GBuffer\Lighting\DirectionalLight</Filter>
     </None>
   </ItemGroup>
 </Project>

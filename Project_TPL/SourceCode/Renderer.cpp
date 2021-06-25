@@ -288,12 +288,12 @@ void Renderer::Draw()
 
 		// Mesh
 		glEnable(GL_DEPTH_TEST);
-		//m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_MESH);
-		//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
+		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_MESH);
+		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
 
 		// Phongシェーディング
-		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
-		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
+		//m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
+		//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
 
 		// 法線の視覚化
 		if (m_visualizeNormal)
@@ -306,32 +306,80 @@ void Renderer::Draw()
 		// Gバッファバインド解除
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		
-
+		//----------------------------------------------------------------------------+
 		// ライティングパス
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//----------------------------------------------------------------------------+
+		glBindFramebuffer(GL_FRAMEBUFFER, m_lightBuffer);
+		// ブレンドの有効化
+		glEnablei(GL_BLEND, 0);
+		glBlendFuncSeparatei(0, GL_ONE, GL_ONE, GL_ONE, GL_ONE);     // 加算合成
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glDisable(GL_DEPTH_TEST);
+		// カリングの有効化
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+		glFrontFace(GL_CCW);
+		// GBufferをテクスチャとしてバインド
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, m_gPos);
+
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, m_gNormal);
+
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
+
+		glActiveTexture(GL_TEXTURE3);
+		glBindTexture(GL_TEXTURE_2D, m_gEmissive);
+
+		//-------------------------------------------------------------------+
+        // Point Light
+
+		//-------------------------------------------------------------------+
+		// Spot Light
+
+		
+		glDisable(GL_CULL_FACE);
+
+		//-------------------------------------------------------------------+
+		// Directional Light
+		m_shaderManager->EnableShaderProgram(GLSLshader::DIRECTIONAL_LIGHT_PASS);
+		m_quadVA->SetActive();
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		// ライトパス後はブレンドを切る
+		glDisable(GL_BLEND);
+		glDisablei(GL_BLEND, 0);
+
+		// gBufferの深度情報をライトバッファへコピーする
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_gBuffer);            // 読み取り先としてGBufferを指定
+		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_lightBuffer);        // 書き込み先にライトバッファを指定
+
+		glBlitFramebuffer(0, 0, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(),
+			              0, 0, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(),
+			              GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, m_lightBuffer);
+
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glEnable(GL_DEPTH_TEST);
 
 		// スクリーンに出力
 		// ブルーム処理する
 		if (m_enableBloom)
 		{
-			// 高輝度バッファをバインド
-			glBindFramebuffer(GL_FRAMEBUFFER, m_gEmissive);
-
 			// カラー・バッファ情報のクリア
 			glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
-			glEnable(GL_DEPTH_TEST);
+			glClear(GL_COLOR_BUFFER_BIT);                 // 画面のカラー・深度・ステンシルバッファをクリア
 
 			// 縮小バッファ計算
-			m_bloomRender->DownSampling(m_gEmissive, m_shaderManager->GetShader(GLSLshader::BLOOM_DOWNSAMPLING), m_quadVA);
+			m_bloomRender->DownSampling(m_lightHighBright, m_shaderManager->GetShader(GLSLshader::BLOOM_DOWNSAMPLING), m_quadVA);
 			// ガウスぼかし処理
-			m_bloomRender->GaussBlur(m_gEmissive, m_shaderManager->GetShader(GLSLshader::BLOOM_DOWNSAMPLING), m_quadVA);
+			m_bloomRender->GaussBlur(m_shaderManager->GetShader(GLSLshader::BLOOM_GAUSSIAN_BLUR), m_quadVA);
 			// 最終トーンマッピング & スクリーン出力
-			m_bloomRender->DrawBlendBloom(m_gEmissive, m_shaderManager->GetShader(GLSLshader::BLOOM_DOWNSAMPLING), m_quadVA);
-
-			// 高輝度バッファのバインド解除
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+			m_bloomRender->DrawBlendBloom(m_lightHDR, m_shaderManager->GetShader(GLSLshader::BLOOM_TONEMAPPING), m_quadVA);
 		}
 		// ブルーム処理しない
 		else
@@ -342,7 +390,8 @@ void Renderer::Draw()
 
 			m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
+			//glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
+			glBindTexture(GL_TEXTURE_2D, m_lightHDR);
 
 			// スクリーンを描画
 			m_quadVA->SetActive();
@@ -428,6 +477,7 @@ void Renderer::CreateGBuffer()
 void Renderer::CreateLightBuffer()
 {
 	glGenFramebuffers(1, &m_lightBuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_lightBuffer);
 
 	// HDRバッファ
 	glGenTextures(1, &m_lightHDR);

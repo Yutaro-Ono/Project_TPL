@@ -34,7 +34,7 @@ void main()
 	// bloom
 	if(u_enableBloom)
 	{
-		
+		out_gEmissive = texture(u_cubeMap, fs_in.fragLocalPos);
 	}
 
 }

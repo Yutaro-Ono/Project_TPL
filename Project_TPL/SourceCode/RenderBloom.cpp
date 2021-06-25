@@ -21,7 +21,7 @@ RenderBloom::RenderBloom()
 	:m_exposure(1.0f)
 	,m_gamma(2.2f)
 {
-
+	CreateBlurFBO();
 }
 
 RenderBloom::~RenderBloom()
@@ -87,7 +87,7 @@ void RenderBloom::DownSampling(unsigned int _brightBuffer, GLSLprogram* _downSam
 /// <param name="_brightBuffer"> 高輝度バッファ </param>
 /// <param name="_gaussShader"> ガウスぼかし用シェーダー </param>
 /// <param name="_screenVA"> スクリーン描画用頂点配列 </param>
-void RenderBloom::GaussBlur(unsigned int _brightBuffer, GLSLprogram* _gaussShader, VertexArray* _screenVA)
+void RenderBloom::GaussBlur(GLSLprogram* _gaussShader, VertexArray* _screenVA)
 {
 	const int sampleCount = 15;
 	glm::vec3 offset[sampleCount];
@@ -179,9 +179,9 @@ void RenderBloom::DrawBlendBloom(unsigned int _blendBuffer, GLSLprogram* _bloomS
 	{
 		int num = i + 1;
 		std::string str = "u_bloom" + std::to_string(num);
+		_bloomShader->SetUniform(str.c_str(), num);
 		glActiveTexture(GL_TEXTURE0 + num);
 		glBindTexture(GL_TEXTURE_2D, m_blurTextures[i * 2 + 1]);
-		_bloomShader->SetUniform(str.c_str(), num);
 	}
 
 	// スクリーンに描画
