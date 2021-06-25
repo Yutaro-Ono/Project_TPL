@@ -10,19 +10,19 @@
 #pragma once
 
 
-class FreeCamera
-{
-
-public:
-
-
-
-
-
-private:
-
-
-
-
-
-};
+//class FreeCamera
+//{
+//
+//public:
+//
+//
+//
+//
+//
+//private:
+//
+//
+//
+//
+//
+//};

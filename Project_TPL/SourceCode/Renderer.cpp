@@ -16,6 +16,7 @@
 #include "GameSettings.h"
 #include "ShaderManager.h"
 #include "DrawableObjectManager.h"
+#include "RenderBloom.h"
 #include "Actor.h"
 #include "Debugger.h"
 #include "Tag.h"
@@ -31,6 +32,7 @@ Renderer::Renderer()
 	,m_renderMethod(RENDER_METHOD::DEFFERED)
 	,m_shaderManager(nullptr)
 	,m_drawableObject(nullptr)
+	,m_bloomRender(nullptr)
 	,m_skyBox(nullptr)
 	,m_uboMatrices(0)
 	,m_uboCamera(0)
@@ -171,6 +173,9 @@ bool Renderer::Load()
 	CreateLightBuffer();
 	CreateMSAA();
 
+	// ブルーム効果クラスの生成
+	m_bloomRender = new RenderBloom;
+
 	// 描画方法の設定
 	if (GAME_CONFIG.GetEnableDeffered())
 	{
@@ -215,6 +220,7 @@ void Renderer::Delete()
 	delete m_drawableObject;
 	delete m_quadVA;
 
+	delete m_bloomRender;
 	delete m_skyBox;
 
 	// windowの破棄・GLFWのクリーンアップ
@@ -280,12 +286,12 @@ void Renderer::Draw()
 		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX)->SetUniform("u_removeTransView", remView);
 		m_skyBox->Draw(m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX));
 
-
 		// Mesh
 		glEnable(GL_DEPTH_TEST);
 		//m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_MESH);
 		//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
 
+		// Phongシェーディング
 		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
 		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
 
@@ -316,6 +322,13 @@ void Renderer::Draw()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
 			glEnable(GL_DEPTH_TEST);
 
+			// 縮小バッファ計算
+			m_bloomRender->DownSampling(m_gEmissive, m_shaderManager->GetShader(GLSLshader::BLOOM_DOWNSAMPLING), m_quadVA);
+			// ガウスぼかし処理
+			m_bloomRender->GaussBlur(m_gEmissive, m_shaderManager->GetShader(GLSLshader::BLOOM_DOWNSAMPLING), m_quadVA);
+			// 最終トーンマッピング & スクリーン出力
+			m_bloomRender->DrawBlendBloom(m_gEmissive, m_shaderManager->GetShader(GLSLshader::BLOOM_DOWNSAMPLING), m_quadVA);
+
 			// 高輝度バッファのバインド解除
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -330,10 +343,12 @@ void Renderer::Draw()
 			m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
+
+			// スクリーンを描画
+			m_quadVA->SetActive();
+			glDrawArrays(GL_TRIANGLES, 0, 6);
 		}
-		// スクリーンを描画
-		m_quadVA->SetActive();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+
 
 	}
 

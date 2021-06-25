@@ -76,6 +76,7 @@ private:
 	class ShaderManager* m_shaderManager;            // シェーダーマネージャークラス
 	class DrawableObjectManager* m_drawableObject;   // 描画可能オブジェクト管理クラス
 
+	class RenderBloom* m_bloomRender;                // ブルーム効果を付与するクラス
 	class DirectionalLight* m_dirLight;              // アクティブなディレクショナルライト
 	class CubeMap* m_skyBox;                         // skybox
 

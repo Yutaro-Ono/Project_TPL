@@ -72,6 +72,8 @@ private:
 
 	class DirectionalLight* m_owner;
 
-	bool m_colorPick;
+	bool m_diffuseColorPick;
+	bool m_specularColorPick;
+	bool m_ambientColorPick;
 
 };

@@ -25,14 +25,16 @@ layout(std140, binding = 1) uniform CameraVariable
 // out structure (Output to Fragment)
 out VS_OUT
 {
-	vec3 normal;
+	vec4 normal;
 }vs_out;
 
 uniform mat4 u_worldTransform;     // world space
 
 void main()
 {
-	mat3 normalMatrix = mat3(transpose(inverse(u_view * u_worldTransform)));
-	vs_out.normal = vec3(vec4(normalMatrix * a_normal, 0.0f));
-	gl_Position = u_view * u_worldTransform * vec4(a_vertexPos, 1.0f);
+	gl_Position = u_projection * u_view * u_worldTransform * vec4(a_vertexPos, 1.0f);
+	// calculate inverse&transpose matrix
+	mat4 normalTransform = transpose(inverse(u_view * u_worldTransform));
+	vec4 normalViewSpace = normalTransform * vec4(a_normal, 0.0f);
+	vs_out.normal = normalize(u_projection * normalViewSpace);
 }

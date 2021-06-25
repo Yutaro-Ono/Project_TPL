@@ -66,7 +66,7 @@ void RenderBloom::DownSampling(unsigned int _brightBuffer, GLSLprogram* _downSam
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, renderSource);
 		_downSampleShader->UseProgram();
-		_downSampleShader->SetUniform("u_screenTexture", 0);
+		_downSampleShader->SetUniform("u_scene", 0);
 
 		// スクリーンとして描画
 		_screenVA->SetActive();
@@ -127,12 +127,12 @@ void RenderBloom::GaussBlur(unsigned int _brightBuffer, GLSLprogram* _gaussShade
 			glBindTexture(GL_TEXTURE_2D, renderSource);
 			_gaussShader->UseProgram();
 			_gaussShader->SetUniform("u_blurSource", 0);
-			_gaussShader->SetUniform("u_param.sampleCount", sampleCount);
+			_gaussShader->SetUniform("u_gaussParam.sampleCount", sampleCount);
 
 			// シェーダーにオフセット情報を送信
 			for (int i = 0; i < sampleCount; i++)
 			{
-				std::string uStr = "u_param.offset[" + std::to_string(i) + "]";
+				std::string uStr = "u_gaussParam.offset[" + std::to_string(i) + "]";
 				_gaussShader->SetUniform(uStr.c_str(), offset[i]);
 			}
 			// スクリーンに描画

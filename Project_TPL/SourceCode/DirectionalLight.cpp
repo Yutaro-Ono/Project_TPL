@@ -41,7 +41,9 @@ DirectionalLight::~DirectionalLight()
 
 DirectionalLightDebug::DirectionalLightDebug(class DirectionalLight* _owner)
 	:m_owner(_owner)
-	,m_colorPick(false)
+	,m_diffuseColorPick(false)
+	,m_specularColorPick(false)
+	,m_ambientColorPick(false)
 {
 }
 
@@ -76,10 +78,10 @@ void DirectionalLightDebug::Update(float _deltaTime)
 		ImGui::SliderFloat(label.c_str(), &diffuse[2], 0.0f, 1.0f);
 
 		// カラーピッカーを使用するか
-		ImGui::Checkbox("Color Picker", &m_colorPick);
-		if (m_colorPick)
+		ImGui::Checkbox("DiffuseColor Picker", &m_diffuseColorPick);
+		if (m_diffuseColorPick)
 		{
-			ImGui::ColorPicker3("Directional Light Color Picker", diffuse);
+			ImGui::ColorPicker3("Diffuse Color Picker", diffuse);
 		}
 
 		// 更新されたら
@@ -96,18 +98,18 @@ void DirectionalLightDebug::Update(float _deltaTime)
 		specular[1] = m_owner->m_specular.y;
 		specular[2] = m_owner->m_specular.z;
 
-		label = "Directional Light Specular : R";
+		label = "Specular : R";
 		ImGui::SliderFloat(label.c_str(), &specular[0], 0.0f, 1.0f);
-		label = "Directional Light Specular : G";
+		label = "Specular : G";
 		ImGui::SliderFloat(label.c_str(), &specular[1], 0.0f, 1.0f);
-		label = "Directional Light Specular : B";
+		label = "Specular : B";
 		ImGui::SliderFloat(label.c_str(), &specular[2], 0.0f, 1.0f);
 
 		// カラーピッカーを使用するか
-		ImGui::Checkbox("Color Picker", &m_colorPick);
-		if (m_colorPick)
+		ImGui::Checkbox("SpecularColor Picker", &m_specularColorPick);
+		if (m_specularColorPick)
 		{
-			ImGui::ColorPicker3("Directional Light Color Picker", specular);
+			ImGui::ColorPicker3("Specular Color Picker", specular);
 		}
 
 		// 更新されたら
@@ -124,18 +126,18 @@ void DirectionalLightDebug::Update(float _deltaTime)
 		ambient[1] = m_owner->m_ambient.y;
 		ambient[2] = m_owner->m_ambient.z;
 
-		label = "Directional Light ambient : R";
+		label = "Ambient : R";
 		ImGui::SliderFloat(label.c_str(), &ambient[0], 0.0f, 1.0f);
-		label = "Directional Light ambient : G";
+		label = "Ambient : G";
 		ImGui::SliderFloat(label.c_str(), &ambient[1], 0.0f, 1.0f);
-		label = "Directional Light ambient : B";
+		label = "Ambient : B";
 		ImGui::SliderFloat(label.c_str(), &ambient[2], 0.0f, 1.0f);
 
 		// カラーピッカーを使用するか
-		ImGui::Checkbox("Color Picker", &m_colorPick);
-		if (m_colorPick)
+		ImGui::Checkbox("AmbientColor Picker", &m_ambientColorPick);
+		if (m_ambientColorPick)
 		{
-			ImGui::ColorPicker3("Directional Light Color Picker", ambient);
+			ImGui::ColorPicker3("AmbientColor Picker", ambient);
 		}
 
 		// 更新されたら

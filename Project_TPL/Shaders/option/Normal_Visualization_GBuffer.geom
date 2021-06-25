@@ -7,30 +7,21 @@
 #version 420
 // attribute
 layout (triangles) in;
-layout (line_strip, max_vertices = 6) out;
+layout (line_strip, max_vertices = 2) out;
 
 // out structure (Output to Fra, mgment)
 in VS_OUT
 {
-	vec3 normal;
+	vec4 normal;
 }geom_in[];
 
-//----------------------------------------------------+
-// uniform buffer block
-// matrices
-layout(std140, binding = 0) uniform Matrices
-{
-	mat4 u_view;
-	mat4 u_projection;
-};
-
-const float MAGNITUDE = 0.2f;
+const float SCALE_DOWN = 0.2f;
 
 void GenerateLine(int _idx)
 {
-	gl_Position = u_projection * gl_in[_idx].gl_Position;
+	gl_Position = gl_in[_idx].gl_Position;
 	EmitVertex();
-	gl_Position = u_projection * (gl_in[_idx].gl_Position + vec4(geom_in[_idx].normal, 0.0f) * MAGNITUDE);
+	gl_Position = gl_in[_idx].gl_Position + geom_in[_idx].normal * SCALE_DOWN;
 	EmitVertex();
 	EndPrimitive();
 }

@@ -171,6 +171,18 @@
     <Filter Include="Source\Input\KeyBoard">
       <UniqueIdentifier>{3e79c0c0-4a3a-4c29-a9b6-cae93eecf212}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Bloom">
+      <UniqueIdentifier>{1b7f7eac-eba5-438b-9733-ecc6fd6e7b46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Bloom\GaussBlur">
+      <UniqueIdentifier>{3c085a5b-1d36-4154-a9bb-6828dca22286}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Bloom\DownSampling">
+      <UniqueIdentifier>{22a93e6e-d5f1-474a-9dae-052981669755}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Shader\ShaderSource\Bloom\ToneMap+Bloom">
+      <UniqueIdentifier>{ab89f9b1-5037-4482-911e-9b98cda91de5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -518,6 +530,15 @@
     </None>
     <None Include="Shaders\option\Normal_Visualization_GBuffer.vert">
       <Filter>Source\Shader\ShaderSource\Option\NormalVisualize\GBuffer</Filter>
+    </None>
+    <None Include="Shaders\Bloom_ToneMapping.frag">
+      <Filter>Source\Shader\ShaderSource\Bloom\ToneMap+Bloom</Filter>
+    </None>
+    <None Include="Shaders\Bloom_DownSampling.frag">
+      <Filter>Source\Shader\ShaderSource\Bloom\DownSampling</Filter>
+    </None>
+    <None Include="Shaders\Bloom_GaussianBlur.frag">
+      <Filter>Source\Shader\ShaderSource\Bloom\GaussBlur</Filter>
     </None>
   </ItemGroup>
 </Project>

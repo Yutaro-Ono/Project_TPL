@@ -68,7 +68,7 @@ void main()
 	float NdotL = dot(N, L);
 
 	vec3 diffuse = u_diffuseColor * max(NdotL, 0.0f);
-	vec3 specular = u_specularColor * pow(max(0.0f, dot(R, V)), u_specularPower) * u_intensity;
+	vec3 specular = u_specularColor * pow(max(0.0f, dot(R, V)), u_specularPower);
 
 	// pass to output gBuffer
 	out_gPosition = fs_in.fragWorldPos;
