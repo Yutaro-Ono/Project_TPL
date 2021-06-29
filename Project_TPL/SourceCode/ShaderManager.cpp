@@ -56,16 +56,12 @@ bool ShaderManager::CreateShaders()
 	{
 		return false;
 	}
-	m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->SetUniform("u_mat.albedo", 0);
-	m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->SetUniform("u_mat.specular", 1);
 
 	m_shaders[GLSLshader::GBUFFER_PHONG] = new GLSLprogram();
 	if (!m_shaders[GLSLshader::GBUFFER_PHONG]->LoadShaders("Shaders/GBuffer_Phong.vert", "Shaders/GBuffer_Phong.frag"))
 	{
 		return false;
 	}
-	m_shaders[GLSLshader::GBUFFER_PHONG]->SetUniform("u_mat.albedo", 0);
-	m_shaders[GLSLshader::GBUFFER_PHONG]->SetUniform("u_mat.specular", 1);
 
 	m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX] = new GLSLprogram();
 	if (!m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX]->LoadShaders("Shaders/GBuffer_Basic_SkyBox.vert", "Shaders/GBuffer_Basic_SkyBox.frag"))
@@ -114,10 +110,6 @@ bool ShaderManager::CreateShaders()
 	{
 		return false;
 	}
-	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->SetUniform("u_gBuffer.position", 0);
-	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->SetUniform("u_gBuffer.normal", 1);
-	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->SetUniform("u_gBuffer.albedoSpec", 2);
-	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->SetUniform("u_gBuffer.emissive", 3);
 
 	//---------------------------------------------------------------------------+
 	// その他のシェーダー (デバッグ用ビジュアライザー系)

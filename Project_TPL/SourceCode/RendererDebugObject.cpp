@@ -33,6 +33,21 @@ void RendererDebugObject::Render()
 	// デバッグバッファの書き込み・描画
 	glBindFramebuffer(GL_FRAMEBUFFER, DEBUGGER->GetDebugFrameBuffer());
 
+	// レンダリング方法の変更
+	bool method = (int)m_renderer->m_renderMethod;
+	ImGui::Checkbox("RenderingMode : 0 = Forward, 1 = Deffered", &method);
+	if (method == 0)
+	{
+		m_renderer->SetRenderMethod(RENDER_METHOD::FORWARD);
+	}
+	else
+	{
+		m_renderer->SetRenderMethod(RENDER_METHOD::DEFFERED);
+	}
+
+	// ブルーム効果の有効・無効化
+	ImGui::Checkbox("Bloom : 0 = false, 1 = enable", &m_renderer->m_enableBloom);
+
 	// 法線の視覚化の有効化
 	ImGui::Checkbox("VisualizeNormal", &m_renderer->m_visualizeNormal);
 

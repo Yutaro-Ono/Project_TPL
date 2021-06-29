@@ -21,7 +21,9 @@ const char* PBR_MATERIAL_NAME[static_cast<int>(PBR_MATERIAL::ALL)] =
 	"_Normal",
 	"_Metallic",
 	"_Roughness",
-	"_AO"
+	"_AO",
+	"_Specular",
+	"_Emissive"
 };
 
 Mesh::Mesh()
@@ -53,7 +55,8 @@ void Mesh::AddTextureStage(const std::string& _fileName)
 	m_textureStages.emplace(PBR_MATERIAL::METALLIC, CreateTextureStage(PBR_MATERIAL::METALLIC, path));
 	m_textureStages.emplace(PBR_MATERIAL::ROUGHNESS, CreateTextureStage(PBR_MATERIAL::ROUGHNESS, path));
 	m_textureStages.emplace(PBR_MATERIAL::AO, CreateTextureStage(PBR_MATERIAL::AO, path));
-
+	m_textureStages.emplace(PBR_MATERIAL::SPECULAR, CreateTextureStage(PBR_MATERIAL::SPECULAR, path));
+	m_textureStages.emplace(PBR_MATERIAL::EMISSIVE, CreateTextureStage(PBR_MATERIAL::EMISSIVE, path));
 }
 
 /// <summary>

@@ -289,11 +289,17 @@ void Renderer::Draw()
 		// Mesh
 		glEnable(GL_DEPTH_TEST);
 		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_MESH);
-		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.albedo", 0);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.specular", 5);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.emissive", 6);
+		//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
 
 		// Phongシェーディング
-		//m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
-		//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
+		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.albedo", 0);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.specular", 5);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.emissive", 6);
+		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
 
 		// 法線の視覚化
 		if (m_visualizeNormal)
@@ -344,9 +350,13 @@ void Renderer::Draw()
 		//-------------------------------------------------------------------+
 		// Directional Light
 		m_shaderManager->EnableShaderProgram(GLSLshader::DIRECTIONAL_LIGHT_PASS);
+		m_shaderManager->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS)->SetUniform("u_gBuffer.position", 0);
+		m_shaderManager->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS)->SetUniform("u_gBuffer.normal", 1);
+		m_shaderManager->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS)->SetUniform("u_gBuffer.albedoSpec", 2);
+		m_shaderManager->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS)->SetUniform("u_gBuffer.emissive", 3);
 		m_quadVA->SetActive();
 		glDrawArrays(GL_TRIANGLES, 0, 6);
-
+		
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		// ライトパス後はブレンドを切る
 		glDisable(GL_BLEND);
@@ -390,8 +400,8 @@ void Renderer::Draw()
 
 			m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
 			glActiveTexture(GL_TEXTURE0);
-			//glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
-			glBindTexture(GL_TEXTURE_2D, m_lightHDR);
+			glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
+			//glBindTexture(GL_TEXTURE_2D, m_lightHDR);
 
 			// スクリーンを描画
 			m_quadVA->SetActive();

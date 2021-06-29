@@ -111,5 +111,8 @@ void MeshComponent::SetMaterialToUniform()
 	glBindTexture(GL_TEXTURE_2D, m_mesh->GetTextureID(PBR_MATERIAL::AO));
 
 	glActiveTexture(GL_TEXTURE5);
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, m_mesh->GetTextureID(PBR_MATERIAL::SPECULAR));
+
+	glActiveTexture(GL_TEXTURE6);
+	glBindTexture(GL_TEXTURE_2D, m_mesh->GetTextureID(PBR_MATERIAL::EMISSIVE));
 }

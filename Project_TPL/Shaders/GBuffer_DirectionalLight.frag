@@ -80,8 +80,8 @@ void main()
 	// High Bright
 	if(u_enableBloom)
 	{
-		vec3 brightColor = ambient + diffuse + texture(u_gBuffer.emissive, fs_in.fragTexCoords).rgb;
-		float brightness = dot(result, vec3(0.1326f, 0.1352f, 0.642f));
+		vec3 brightColor = result;
+		float brightness = dot(brightColor, vec3(0.1326f, 0.1352f, 0.642f));
 
 		if(brightness > u_highBrightLine)
 		{

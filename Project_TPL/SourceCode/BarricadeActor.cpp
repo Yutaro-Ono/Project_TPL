@@ -9,6 +9,8 @@ BarricadeActor::BarricadeActor()
 	//MeshComponent* mc = new MeshComponent(this, "Data/Meshes/Tank/tank.obj");
 
 	MeshComponent* mc = new MeshComponent(this, "Data/Meshes/Environments/VikingRoom/viking_room.obj");
+	//MeshComponent* mc = new MeshComponent(this, "Data/Meshes/Environments/Lamp/SM_Lamp.OBJ");
+
 }
 
 BarricadeActor::~BarricadeActor()

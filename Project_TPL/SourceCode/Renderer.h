@@ -25,7 +25,7 @@
 // •`‰æƒƒ\ƒbƒh
 enum class RENDER_METHOD
 {
-	FORWARD,
+	FORWARD = 0,
 	DEFFERED
 };
 

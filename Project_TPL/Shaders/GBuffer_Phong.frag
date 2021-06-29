@@ -50,7 +50,7 @@ struct Material
 	sampler2D metallic;
 	sampler2D roughness;
 	sampler2D AO;
-	sampler2D emissiveMap;
+	sampler2D emissive;
 };
 uniform Material u_mat;
 
@@ -79,7 +79,7 @@ void main()
 	// bloom
 	if(u_enableBloom)
 	{
-		out_gEmissive = texture(u_mat.emissiveMap, fs_in.fragTexCoords);
+		out_gEmissive = texture(u_mat.emissive, fs_in.fragTexCoords);
 	}
 
 }

@@ -24,6 +24,8 @@ enum class PBR_MATERIAL : unsigned char
 	METALLIC,
 	ROUGHNESS,
 	AO,
+	SPECULAR,
+	EMISSIVE,
 	ALL
 };
 
