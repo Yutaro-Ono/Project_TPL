@@ -13,6 +13,8 @@
 #include "GameSettings.h"
 #include "GLSLprogram.h"
 #include "VertexArray.h"
+#include "RenderBloomDebugObject.h"
+#include "Debugger.h"
 
 // 縮小バッファの段階数 (1/2, 1/4, 1/8, 1/16, 1/32の5段階)
 const unsigned int maxLevelNum = 5;
@@ -22,10 +24,22 @@ RenderBloom::RenderBloom()
 	,m_gamma(2.2f)
 {
 	CreateBlurFBO();
+
+#ifdef _DEBUG
+
+	CreateDebugObject();
+
+#endif
 }
 
 RenderBloom::~RenderBloom()
 {
+}
+
+void RenderBloom::CreateDebugObject()
+{
+	m_debugBloom = new RenderBloomDebugObject(this);
+	DEBUGGER->AddDebugObject(m_debugBloom, OBJECT_TAG::SYSTEM);
 }
 
 /// <summary>
@@ -91,7 +105,7 @@ void RenderBloom::GaussBlur(GLSLprogram* _gaussShader, VertexArray* _screenVA)
 {
 	const int sampleCount = 15;
 	glm::vec3 offset[sampleCount];
-
+	glm::vec4 offsetv4[sampleCount];
 	int reduceX = GAME_CONFIG.GetScreenSizeW();
 	int reduceY = GAME_CONFIG.GetScreenSizeH();
 	float deviation = 2.0f;
@@ -113,7 +127,17 @@ void RenderBloom::GaussBlur(GLSLprogram* _gaussShader, VertexArray* _screenVA)
 			glBindFramebuffer(GL_FRAMEBUFFER, m_blurFBOs[i * 2 + horizontal]);
 			// ビューポートの更新
 			glViewport(0, 0, reduceX, reduceY);
-			glm::vec2 dir(1.0f - (float)horizontal, (float)horizontal);
+			//glm::vec2 dir(1.0f - (float)horizontal, (float)horizontal);
+
+			glm::vec2 dir;
+			if (horizontal)
+			{
+				dir = glm::vec2(0.0f, 1.0f);
+			}
+			else
+			{
+				dir = glm::vec2(1.0f, 0.0f);
+			}
 
 			// ガウスぼかし計算
 			CalcGaussBlurParam(reduceX, reduceY, dir, deviation, offset);
@@ -132,8 +156,12 @@ void RenderBloom::GaussBlur(GLSLprogram* _gaussShader, VertexArray* _screenVA)
 			// シェーダーにオフセット情報を送信
 			for (int i = 0; i < sampleCount; i++)
 			{
+				// シェーダー側に送信するためvec4型に保管
+				offsetv4[i] = glm::vec4(offset[i], 0.0f);
+
+				// uniformにセット
 				std::string uStr = "u_gaussParam.offset[" + std::to_string(i) + "]";
-				_gaussShader->SetUniform(uStr.c_str(), offset[i]);
+				_gaussShader->SetUniform(uStr.c_str(), offsetv4[i]);
 			}
 			// スクリーンに描画
 			_screenVA->SetActive();
@@ -178,10 +206,11 @@ void RenderBloom::DrawBlendBloom(unsigned int _blendBuffer, GLSLprogram* _bloomS
 	for (unsigned int i = 0; i < maxLevelNum; i++)
 	{
 		int num = i + 1;
-		std::string str = "u_bloom" + std::to_string(num);
-		_bloomShader->SetUniform(str.c_str(), num);
 		glActiveTexture(GL_TEXTURE0 + num);
 		glBindTexture(GL_TEXTURE_2D, m_blurTextures[i * 2 + 1]);
+		std::string str = "u_bloom" + std::to_string(num);
+		_bloomShader->SetUniform(str.c_str(), num);
+
 	}
 
 	// スクリーンに描画
@@ -223,20 +252,19 @@ void RenderBloom::CreateBlurFBO()
 		for (unsigned int j = 0; j < 2; j++)
 		{
 
-			// 縮小バッファテクスチャの作成
-			glGenTextures(1, &m_blurFBOs[i * 2 + j]);
+			// 縮小バッファの作成・縮小バッファテクスチャの作成
+			glGenFramebuffers(1, &m_blurFBOs[i * 2 + j]);
+			glGenTextures(1, &m_blurTextures[i * 2 + j]);
+			glBindFramebuffer(GL_FRAMEBUFFER, m_blurFBOs[i * 2 + j]);
 			glBindTexture(GL_TEXTURE_2D, m_blurTextures[i * 2 + 1]);
+
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, w, h, 0, GL_RGBA, GL_FLOAT, NULL);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-			// 縮小バッファの作成
-			glGenFramebuffers(1, &m_blurFBOs[i * 2 + j]);
-			glBindFramebuffer(GL_FRAMEBUFFER, m_blurFBOs[i * 2 + j]);
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_blurTextures[i * 2 + j], 0);
-
 			// バインド解除
 			glBindTexture(GL_TEXTURE_2D, 0);
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);

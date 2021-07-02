@@ -133,6 +133,12 @@ bool GLSLprogram::LoadShaders(const char* _vertPath, const char* _fragPath, cons
     // カメラ関係 (座標、向き)
     uniformBlockIndex = glGetUniformBlockIndex(m_shaderProgram, "CameraVariable");
     glUniformBlockBinding(m_shaderProgram, uniformBlockIndex, 1);
+    // カメラ関係 (座標、向き)
+    uniformBlockIndex = glGetUniformBlockIndex(m_shaderProgram, "Triggers");
+    glUniformBlockBinding(m_shaderProgram, uniformBlockIndex, 2);
+    // カメラ関係 (座標、向き)
+    uniformBlockIndex = glGetUniformBlockIndex(m_shaderProgram, "DirLight");
+    glUniformBlockBinding(m_shaderProgram, uniformBlockIndex, 3);
 
     return true;
 }

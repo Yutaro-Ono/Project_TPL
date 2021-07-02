@@ -19,7 +19,7 @@ in VS_OUT
 struct GaussBlurParam
 {
 	int sampleCount;
-	vec3 offset[16];
+	vec4 offset[16];
 };
 uniform GaussBlurParam u_gaussParam;
 

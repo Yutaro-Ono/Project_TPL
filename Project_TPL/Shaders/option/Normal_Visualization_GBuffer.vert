@@ -19,7 +19,7 @@ layout(std140, binding = 0) uniform Matrices
 // camera variables
 layout(std140, binding = 1) uniform CameraVariable
 {
-	vec3 u_viewPos;
+	vec4 u_viewPos;
 };
 
 // out structure (Output to Fragment)

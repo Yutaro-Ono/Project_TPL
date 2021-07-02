@@ -42,6 +42,7 @@ private:
 
 	class DirectionalLightDebug* m_debugObj;
 	friend class DirectionalLightDebug;
+	friend class Renderer;
 
 };
 

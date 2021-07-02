@@ -19,9 +19,13 @@ public:
 	RenderBloom();
 	~RenderBloom();
 
+	void CreateDebugObject();
+
 	void DownSampling(unsigned int _brightBuffer, class GLSLprogram* _downSampleShader, class VertexArray* _screenVA);
 	void GaussBlur(class GLSLprogram* _gaussShader, class VertexArray* _screenVA);
 	void DrawBlendBloom(unsigned int _blendBuffer, class GLSLprogram* _bloomShader, class VertexArray* _screenVA);
+
+
 
 private:
 
@@ -40,4 +44,7 @@ private:
 	// ガンマコレクション
 	float m_gamma;
 
+	// デバッグクラス
+	class RenderBloomDebugObject* m_debugBloom;
+	friend class RenderBloomDebugObject;
 };

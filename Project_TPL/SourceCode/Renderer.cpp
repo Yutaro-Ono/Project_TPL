@@ -132,34 +132,6 @@ bool Renderer::Load()
 {
 
 	//---------------------------------------+
-	// uniformバッファ生成
-	//---------------------------------------+
-	// ビュー行列・プロジェクション行列UBO
-	glGenBuffers(1, &m_uboMatrices);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
-	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 0, m_uboMatrices, 0, 2 * sizeof(glm::mat4));
-	// カメラ情報UBO
-	glGenBuffers(1, &m_uboCamera);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::vec3), NULL, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 1, m_uboCamera, 0, sizeof(glm::vec3::x) + sizeof(glm::vec3::y) + sizeof(glm::vec3::z));
-	// トリガーUBO
-	glGenBuffers(1, &m_uboTriggers);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_uboTriggers);
-	glBufferData(GL_UNIFORM_BUFFER, sizeof(bool), NULL, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 2, m_uboTriggers, 0, sizeof(bool));
-	// ディレクショナルライトUBO
-	glGenBuffers(1, &m_uboDirLights);
-	glBindBuffer(GL_UNIFORM_BUFFER, m_uboDirLights);
-	glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::vec3) + sizeof(float), NULL, GL_DYNAMIC_DRAW);
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	glBindBufferRange(GL_UNIFORM_BUFFER, 3, m_uboDirLights, 0, 4 * sizeof(glm::vec3) + sizeof(float));
-
-	//---------------------------------------+
 	// 汎用頂点配列
 	//---------------------------------------+
 	// 四角形
@@ -189,6 +161,40 @@ bool Renderer::Load()
 		std::cout << "Error::ShaderManager CreateShaders()" << std::endl;
 		return false;
 	}
+
+	//---------------------------------------+
+    // uniformバッファ生成
+    //---------------------------------------+
+    // ビュー行列・プロジェクション行列UBO
+	glGenBuffers(1, &m_uboMatrices);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_uboMatrices);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	// カメラ情報UBO
+	glGenBuffers(1, &m_uboCamera);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
+	glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(float), NULL, GL_DYNAMIC_DRAW);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 1, m_uboCamera);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	// トリガーUBO
+	glGenBuffers(1, &m_uboTriggers);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboTriggers);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(int), NULL, GL_DYNAMIC_DRAW);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 2, m_uboTriggers);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
+	// ディレクショナルライトUBO(vec3→vec4として送信)
+	glGenBuffers(1, &m_uboDirLights);
+	glBindBuffer(GL_UNIFORM_BUFFER, m_uboDirLights);
+	auto byte = ((4 * sizeof(float)) * 4) + (1 * sizeof(float));
+	glBufferData(GL_UNIFORM_BUFFER, ((4 * sizeof(float)) * 4) + (1 * sizeof(float)), NULL, GL_DYNAMIC_DRAW);
+	glBindBufferBase(GL_UNIFORM_BUFFER, 3, m_uboDirLights);
+	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+	
+
 
 	// 描画可能オブジェクト管理クラス
 	m_drawableObject = new DrawableObjectManager();
@@ -292,14 +298,14 @@ void Renderer::Draw()
 		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.albedo", 0);
 		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.specular", 5);
 		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.emissive", 6);
-		//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
+		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
 
 		// Phongシェーディング
-		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.albedo", 0);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.specular", 5);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.emissive", 6);
-		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
+		//m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
+		//m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.albedo", 0);
+		//m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.specular", 5);
+		//m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.emissive", 6);
+		//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
 
 		// 法線の視覚化
 		if (m_visualizeNormal)
@@ -400,8 +406,8 @@ void Renderer::Draw()
 
 			m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
 			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
-			//glBindTexture(GL_TEXTURE_2D, m_lightHDR);
+			//glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
+			glBindTexture(GL_TEXTURE_2D, m_lightHDR);
 
 			// スクリーンを描画
 			m_quadVA->SetActive();
@@ -569,25 +575,27 @@ void Renderer::SetUniformBuffer()
 
 	// カメラUBO
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
-	glm::vec3 viewPos;
-	glm::translate(m_viewMat, viewPos);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), glm::value_ptr(viewPos));
+	glm::vec3 viewPos = glm::vec3(m_viewMat[3][0], m_viewMat[3][1], m_viewMat[3][2]);
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 4, glm::value_ptr(glm::vec4(viewPos, 0.0f)));
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// トリガーFBO
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboTriggers);
-	bool bloom = GAME_CONFIG.GetEnableBloom();
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(bool), &bloom);
+	int bloom = static_cast<int>(GAME_CONFIG.GetEnableBloom());
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(int), &bloom);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// ディレクショナルライト
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboDirLights);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::vec3), glm::value_ptr(m_dirLight->GetDirection()));
-	glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(m_dirLight->GetDiffuse()));
-	glBufferSubData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(m_dirLight->GetSpecular()));
-	glBufferSubData(GL_UNIFORM_BUFFER, 3 * sizeof(glm::vec3), sizeof(glm::vec3), glm::value_ptr(m_dirLight->GetAmbient()));
-	glBufferSubData(GL_UNIFORM_BUFFER, 4 * sizeof(glm::vec3), sizeof(float), &m_dirLight->GetIntensity());
+	// 送信時のストライド(シェーダー側ではvec4型として受け取り ※メモリ読み取りがうまくいかないため)
+	auto stride = sizeof(float) * 4;
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, stride, glm::value_ptr(glm::vec4(m_dirLight->GetDirection(), 0.0f)));
+	glBufferSubData(GL_UNIFORM_BUFFER, stride, stride, glm::value_ptr(glm::vec4(m_dirLight->GetDiffuse(), 0.0f)));
+	glBufferSubData(GL_UNIFORM_BUFFER, stride * 2, stride, glm::value_ptr(glm::vec4(m_dirLight->GetSpecular(), 0.0f)));
+	glBufferSubData(GL_UNIFORM_BUFFER, stride * 3, stride, glm::value_ptr(glm::vec4(m_dirLight->GetAmbient(), 0.0f)));
+	glBufferSubData(GL_UNIFORM_BUFFER, stride * 4, sizeof(float), &m_dirLight->GetIntensity());
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
+
 }
 
 /// <summary>

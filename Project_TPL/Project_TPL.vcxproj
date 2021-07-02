@@ -183,6 +183,7 @@
     <ClCompile Include="SourceCode\MeshObj.cpp" />
     <ClCompile Include="SourceCode\MeshPool.cpp" />
     <ClCompile Include="SourceCode\RenderBloom.cpp" />
+    <ClCompile Include="SourceCode\RenderBloomDebugObject.cpp" />
     <ClCompile Include="SourceCode\Renderer.cpp" />
     <ClCompile Include="SourceCode\RendererDebugObject.cpp" />
     <ClCompile Include="SourceCode\ShaderManager.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="SourceCode\MeshPool.h" />
     <ClInclude Include="SourceCode\ObjectPool.h" />
     <ClInclude Include="SourceCode\RenderBloom.h" />
+    <ClInclude Include="SourceCode\RenderBloomDebugObject.h" />
     <ClInclude Include="SourceCode\Renderer.h" />
     <ClInclude Include="SourceCode\RendererDebugObject.h" />
     <ClInclude Include="SourceCode\SceneBase.h" />

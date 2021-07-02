@@ -22,7 +22,7 @@ in VS_OUT
 // triggers
 layout(std140, binding = 2) uniform Triggers
 {
-	bool u_enableBloom;
+	int u_enableBloom;
 };
 
 // material structure
@@ -48,8 +48,9 @@ void main()
 	out_gAlbedoSpec.a = texture(u_mat.specular, fs_in.fragTexCoords).r;
 
 	// bloom
-	if(u_enableBloom)
+	if(u_enableBloom == 1)
 	{
 		out_gEmissive = texture(u_mat.emissive, fs_in.fragTexCoords);
 	}
+
 }

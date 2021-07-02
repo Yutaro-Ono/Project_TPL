@@ -78,7 +78,7 @@ bool GameMain::Initialize()
 		std::cout << "Error::Debugger::Initialize" << std::endl;
 		return false;
 	}
-	// レンダラー用デバッグオブジェクトの生成
+	// レンダラー関連デバッグオブジェクトの生成
 	m_renderer->CreateRendererDebugObject();
 
 #endif

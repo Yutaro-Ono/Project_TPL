@@ -15,8 +15,7 @@ TestScene::~TestScene()
 
 void TestScene::Initialize()
 {
-	// ディレクショナルライト設定
-	RENDERER->GetDirectionalLight()->SetDiffuse(glm::vec3(1.0f, 1.0f, 1.0f));
+	
 
 	TestSphere* sphere = new TestSphere();
 	sphere->SetPosition(glm::vec3(10.0f, 5.0f, 10.0f));

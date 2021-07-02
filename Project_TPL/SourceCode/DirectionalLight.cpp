@@ -14,11 +14,11 @@
 #include "Renderer.h"
 
 DirectionalLight::DirectionalLight()
-	:m_diffuse(glm::vec3(0.5f))
-	,m_specular(glm::vec3(0.2f))
-	,m_ambient(glm::vec3(0.1f))
+	:m_diffuse(glm::vec3(0.1f, 0.485f, 0.46f))
+	,m_specular(glm::vec3(0.1f, 0.35f, 0.4f))
+	,m_ambient(glm::vec3(0.31f, 0.415f, 0.46f))
 	,m_lightDirection(glm::vec3(0.0f, -1.0f, 0.0f))
-	,m_intensity(1.0f)
+	,m_intensity(0.5f)
 	,m_debugObj(nullptr)
 {
 

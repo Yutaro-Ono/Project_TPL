@@ -323,6 +323,9 @@
     <ClCompile Include="SourceCode\InputKeyBoard.cpp">
       <Filter>Source\Input\KeyBoard</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\RenderBloomDebugObject.cpp">
+      <Filter>Source\Renderer\Bloom</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -471,6 +474,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\FreeCamera.h">
       <Filter>Source\Camera\FreeCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\RenderBloomDebugObject.h">
+      <Filter>Source\Renderer\Bloom</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

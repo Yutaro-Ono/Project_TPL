@@ -25,15 +25,15 @@ layout(std140, binding = 1) uniform CameraVariable
 // triggers
 layout(std140, binding = 2) uniform Triggers
 {
-	bool u_enableBloom;
+	int u_enableBloom;
 };
 // Directional Light
 layout(std140, binding = 3) uniform DirLight
 {
-	vec3 u_direction;
-	vec3 u_diffuseColor;
-	vec3 u_specularColor;
-	vec3 u_ambientColor;
+	vec4 u_direction;
+	vec4 u_diffuseColor;
+	vec4 u_specularColor;
+	vec4 u_ambientColor;
 	float u_intensity;
 };
 
@@ -60,25 +60,25 @@ void main()
 	float gSpec = gAlbedoSpec.a;
 
 	// ambient
-	vec3 ambient = u_ambientColor * gAlbedo;
-	vec3 lightDir = normalize(-u_direction);
+	vec3 ambient = u_ambientColor.xyz * gAlbedo;
+	vec3 lightDir = normalize(u_direction.xyz);
 	float diff = max(dot(gNormal, lightDir), 0.0f);
 
 	// diffuse
-	vec3 diffuse = u_diffuseColor * u_intensity * gAlbedo * diff;
+	vec3 diffuse = u_diffuseColor.xyz * u_intensity * gAlbedo * diff;
 
 	// specular
 	vec3 viewDir = normalize(u_viewPos - gPos);
 	vec3 halfVec = normalize(lightDir + viewDir);
-	float spec = pow(max(dot(gNormal, halfVec), 0.0f), 32.0f);
-	vec3 specular = u_specularColor *u_intensity * spec * gSpec;
+	float spec = pow(max(dot(gNormal, halfVec), 0.0f), 64.0f);
+	vec3 specular = u_specularColor.xyz * u_intensity * spec * gSpec;
 
 	// output to color buffer
 	vec3 result = ambient + diffuse + specular + texture(u_gBuffer.emissive, fs_in.fragTexCoords).rgb;
 	out_colorBuffer = vec4(result, 1.0f);
 
 	// High Bright
-	if(u_enableBloom)
+	if(u_enableBloom == 1)
 	{
 		vec3 brightColor = result;
 		float brightness = dot(brightColor, vec3(0.1326f, 0.1352f, 0.642f));
