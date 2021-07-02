@@ -262,6 +262,8 @@
     <None Include="Shaders\GBuffer_Basic_SkyBox.vert" />
     <None Include="Shaders\GBuffer_DirectionalLight.frag" />
     <None Include="Shaders\GBuffer_LightPass.vert" />
+    <None Include="Shaders\GBuffer_NormalMap.frag" />
+    <None Include="Shaders\GBuffer_NormalMap.vert" />
     <None Include="Shaders\GBuffer_Phong.frag" />
     <None Include="Shaders\GBuffer_Phong.vert" />
     <None Include="Shaders\option\Normal_Visualization.frag" />

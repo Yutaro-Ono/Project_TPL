@@ -300,6 +300,16 @@ void Renderer::Draw()
 		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.emissive", 6);
 		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
 
+		// NormalMapping
+		glEnable(GL_DEPTH_TEST);
+		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_NORMALMAP);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_mat.albedo", 0);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_mat.normal", 2);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_mat.specular", 5);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_mat.emissive", 6);
+		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_lightPos", m_dirLight->GetPosition());
+		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_NORMALMAP);
+
 		// Phongシェーディング
 		//m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
 		//m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.albedo", 0);

@@ -63,6 +63,12 @@ bool ShaderManager::CreateShaders()
 		return false;
 	}
 
+	m_shaders[GLSLshader::GBUFFER_NORMALMAP] = new GLSLprogram();
+	if (!m_shaders[GLSLshader::GBUFFER_NORMALMAP]->LoadShaders("Shaders/GBuffer_NormalMap.vert", "Shaders/GBuffer_NormalMap.frag"))
+	{
+		return false;
+	}
+
 	m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX] = new GLSLprogram();
 	if (!m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX]->LoadShaders("Shaders/GBuffer_Basic_SkyBox.vert", "Shaders/GBuffer_Basic_SkyBox.frag"))
 	{

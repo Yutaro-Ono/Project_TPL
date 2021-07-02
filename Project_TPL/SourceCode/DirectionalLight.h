@@ -26,10 +26,11 @@ public:
 	void SetLightDirection(const glm::vec3& _lightDir) { m_lightDirection = _lightDir; }
 	void SetIntensity(const float& _intens) { m_intensity = _intens; }
 
-	const glm::vec3 GetDirection() const { return m_lightDirection; }
-	const glm::vec3 GetDiffuse() const { return m_diffuse; }
-	const glm::vec3 GetSpecular() const { return m_specular; }
-	const glm::vec3 GetAmbient() const { return m_ambient; }
+	const glm::vec3& GetPosition() const { return m_position; }
+	const glm::vec3& GetDirection() const { return m_lightDirection; }
+	const glm::vec3& GetDiffuse() const { return m_diffuse; }
+	const glm::vec3& GetSpecular() const { return m_specular; }
+	const glm::vec3& GetAmbient() const { return m_ambient; }
 	const float& GetIntensity() const { return m_intensity; }
 
 private:
@@ -37,6 +38,7 @@ private:
 	glm::vec3 m_diffuse;      // ディフューズ
 	glm::vec3 m_specular;     // スペキュラ
 	glm::vec3 m_ambient;           // アンビエント
+	glm::vec3 m_position;
 	glm::vec3 m_lightDirection;    // 光の方向
 	float m_intensity;             // 光の放出するエネルギー量
 
