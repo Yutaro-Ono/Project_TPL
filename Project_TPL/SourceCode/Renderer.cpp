@@ -207,7 +207,16 @@ bool Renderer::Load()
 
 	// 各種描画メソッドの生成
 	m_renderMethods[RENDER_METHOD::FORWARD] = new RenderForward(this);
+	if (!m_renderMethods[RENDER_METHOD::FORWARD]->Load())
+	{
+		return false;
+	}
+
 	m_renderMethods[RENDER_METHOD::DEFERRED] = new RenderDeferred(this);
+	if (!m_renderMethods[RENDER_METHOD::DEFERRED]->Load())
+	{
+		return false;
+	}
 
 	return true;
 }

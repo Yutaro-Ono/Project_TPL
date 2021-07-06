@@ -1,5 +1,6 @@
 #include "RenderDeferred.h"
 #include "GameMain.h"
+#include "Renderer.h"
 #include "GameSettings.h"
 #include "ShaderManager.h"
 #include "CubeMap.h"
@@ -26,7 +27,11 @@ RenderDeferred::~RenderDeferred()
 
 bool RenderDeferred::Load()
 {
-	return (CreateGBuffer() && CreateLightBuffer()) == true;
+	bool success = true;
+	success = CreateGBuffer();
+	success = CreateLightBuffer();
+
+	return success;
 }
 
 void RenderDeferred::Draw(class ShaderManager* _shaderManager, class DrawableObjectManager* _drawObjects)
@@ -57,14 +62,14 @@ void RenderDeferred::Draw(class ShaderManager* _shaderManager, class DrawableObj
 	_drawObjects->Draw(m_basicMeshShader);
 
 	// NormalMapping
-	glEnable(GL_DEPTH_TEST);
-	m_normalMapShader->UseProgram();
-	m_normalMapShader->SetUniform("u_mat.albedo", 0);
-	m_normalMapShader->SetUniform("u_mat.normal", 2);
-	m_normalMapShader->SetUniform("u_mat.specular", 5);
-	m_normalMapShader->SetUniform("u_mat.emissive", 6);
-	m_normalMapShader->SetUniform("u_lightPos", m_renderer->GetDirectionalLight()->GetPosition());
-	_drawObjects->Draw(m_normalMapShader);
+	//glEnable(GL_DEPTH_TEST);
+	//m_normalMapShader->UseProgram();
+	//m_normalMapShader->SetUniform("u_mat.albedo", 0);
+	//m_normalMapShader->SetUniform("u_mat.normal", 2);
+	//m_normalMapShader->SetUniform("u_mat.specular", 5);
+	//m_normalMapShader->SetUniform("u_mat.emissive", 6);
+	//m_normalMapShader->SetUniform("u_lightPos", m_renderer->GetDirectionalLight()->GetPosition());
+	//_drawObjects->Draw(m_normalMapShader);
 
 	// Phongシェーディング
 	//m_phongShader->UseProgram();
@@ -162,7 +167,6 @@ void RenderDeferred::Draw(class ShaderManager* _shaderManager, class DrawableObj
 
 		m_outScreenShader->UseProgram();
 		glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
 		glBindTexture(GL_TEXTURE_2D, m_lightHDR);
 
 		// スクリーンを描画

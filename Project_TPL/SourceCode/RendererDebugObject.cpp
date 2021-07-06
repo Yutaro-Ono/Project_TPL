@@ -1,5 +1,6 @@
 #include "RendererDebugObject.h"
 #include "GameMain.h"
+#include "Renderer.h"
 #include "Debugger.h"
 #include "ShaderManager.h"
 #include "VertexArray.h"
@@ -54,22 +55,22 @@ void RendererDebugObject::Render()
 	if (ImGui::TreeNode("GBuffer : POSITION"))
 	{
 
-		// •`‰æˆ— ------------------------------------------------------------+
-		glDisable(GL_DEPTH_TEST);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//// •`‰æˆ— ------------------------------------------------------------+
+		//glDisable(GL_DEPTH_TEST);
+		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		m_renderer->m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_renderer->m_gPos);
-		//----------------------------------------------------------------------+
-		m_renderer->m_quadVA->SetActive();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//m_renderer->m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, m_renderer->m_gPos);
+		////----------------------------------------------------------------------+
+		//m_renderer->m_quadVA->SetActive();
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		// ImGuiã‚É•\Ž¦
-		ImGui::Image((void*)(intptr_t)DEBUGGER->GetDebugColorBuffer(),
-			ImVec2(DEBUGGER->GetDebugBufferWidth(), DEBUGGER->GetDebugBufferHeight()),
-			ImVec2(0, 1), ImVec2(1, 0));
+		//// ImGuiã‚É•\Ž¦
+		//ImGui::Image((void*)(intptr_t)DEBUGGER->GetDebugColorBuffer(),
+		//	ImVec2(DEBUGGER->GetDebugBufferWidth(), DEBUGGER->GetDebugBufferHeight()),
+		//	ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::TreePop();
 	}
@@ -77,22 +78,22 @@ void RendererDebugObject::Render()
 	if (ImGui::TreeNode("GBuffer : NORMAL"))
 	{
 
-		// •`‰æˆ— ------------------------------------------------------------+
-		glDisable(GL_DEPTH_TEST);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//// •`‰æˆ— ------------------------------------------------------------+
+		//glDisable(GL_DEPTH_TEST);
+		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		m_renderer->m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_renderer->m_gNormal);
-		//----------------------------------------------------------------------+
-		m_renderer->m_quadVA->SetActive();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//m_renderer->m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, m_renderer->m_gNormal);
+		////----------------------------------------------------------------------+
+		//m_renderer->m_quadVA->SetActive();
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		// ImGuiã‚É•\Ž¦
-		ImGui::Image((void*)(intptr_t)DEBUGGER->GetDebugColorBuffer(),
-			ImVec2(DEBUGGER->GetDebugBufferWidth(), DEBUGGER->GetDebugBufferHeight()),
-			ImVec2(0, 1), ImVec2(1, 0));
+		//// ImGuiã‚É•\Ž¦
+		//ImGui::Image((void*)(intptr_t)DEBUGGER->GetDebugColorBuffer(),
+		//	ImVec2(DEBUGGER->GetDebugBufferWidth(), DEBUGGER->GetDebugBufferHeight()),
+		//	ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::TreePop();
 	}
@@ -100,22 +101,22 @@ void RendererDebugObject::Render()
 	if (ImGui::TreeNode("GBuffer : ALBEDO"))
 	{
 
-		// •`‰æˆ— ------------------------------------------------------------+
-		glDisable(GL_DEPTH_TEST);
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//// •`‰æˆ— ------------------------------------------------------------+
+		//glDisable(GL_DEPTH_TEST);
+		//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		m_renderer->m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_renderer->m_gAlbedoSpec);
-		//----------------------------------------------------------------------+
-		m_renderer->m_quadVA->SetActive();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		//m_renderer->m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, m_renderer->m_gAlbedoSpec);
+		////----------------------------------------------------------------------+
+		//m_renderer->m_quadVA->SetActive();
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
 
-		// ImGuiã‚É•\Ž¦
-		ImGui::Image((void*)(intptr_t)DEBUGGER->GetDebugColorBuffer(),
-			ImVec2(DEBUGGER->GetDebugBufferWidth(), DEBUGGER->GetDebugBufferHeight()),
-			ImVec2(0, 1), ImVec2(1, 0));
+		//// ImGuiã‚É•\Ž¦
+		//ImGui::Image((void*)(intptr_t)DEBUGGER->GetDebugColorBuffer(),
+		//	ImVec2(DEBUGGER->GetDebugBufferWidth(), DEBUGGER->GetDebugBufferHeight()),
+		//	ImVec2(0, 1), ImVec2(1, 0));
 
 		ImGui::TreePop();
 	}

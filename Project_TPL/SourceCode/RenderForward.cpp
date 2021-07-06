@@ -1,5 +1,6 @@
 #include "RenderForward.h"
 #include "GameMain.h"
+#include "Renderer.h"
 #include "VertexArray.h"
 #include "GameSettings.h"
 #include "ShaderManager.h"
@@ -55,7 +56,7 @@ void RenderForward::Draw(ShaderManager* _shaderManager, DrawableObjectManager* _
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_albedoSpec);
 
-		// スクリーンを描画
+		// スクリーンへ描画
 		m_renderer->GetQuadVertex()->SetActive();
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 	}
@@ -76,14 +77,14 @@ bool RenderForward::CreateColorBuffer()
 	//--------------------------------------------------------------------+
 	// カラーバッファ各要素の登録
 	//--------------------------------------------------------------------+
-	// アルベド&スペキュラ情報バッファ (8bitカラーバッファ / 2番目)
+	// アルベド&スペキュラ情報バッファ (8bitカラーバッファ / 0番目)
 	glGenTextures(1, &m_albedoSpec);
 	glBindTexture(GL_TEXTURE_2D, m_albedoSpec);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_albedoSpec, 0);
-	// 高輝度バッファ (エミッシブバッファ / 3番目)
+	// 高輝度バッファ (エミッシブバッファ / 1番目)
 	glGenTextures(1, &m_emissive);
 	glBindTexture(GL_TEXTURE_2D, m_emissive);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
@@ -105,11 +106,11 @@ bool RenderForward::CreateColorBuffer()
 	// フレームバッファの整合性チェック
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	{
-		std::cout << "ERROR::GBuffer::Create Failed" << std::endl;
+		std::cout << "ERROR::ColorBuffer *ForwardRender::Create Failed" << std::endl;
 		return false;
 	}
 
-	// Gバッファのバインドを解除
+	// バインドを解除
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	return true;

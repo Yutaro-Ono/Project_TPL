@@ -10,7 +10,6 @@
 // 2021/ 5/26   各種バッファを登録 (Gバッファ・ライト・MSAA)
 //----------------------------------------------------------------------------------+
 #pragma once
-#include "Renderer.h"
 #include <iostream>
 #include <string>
 
@@ -19,7 +18,7 @@ class RenderMethodBase
 public:
 
 	RenderMethodBase(class Renderer* _renderer);
-	virtual ~RenderMethodBase() = 0;
+	virtual ~RenderMethodBase();
 
 	virtual bool Load() = 0;
 
