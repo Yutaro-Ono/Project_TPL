@@ -187,6 +187,7 @@
     <ClCompile Include="SourceCode\RenderDeferred.cpp" />
     <ClCompile Include="SourceCode\Renderer.cpp" />
     <ClCompile Include="SourceCode\RendererDebugObject.cpp" />
+    <ClCompile Include="SourceCode\RenderForward.cpp" />
     <ClCompile Include="SourceCode\RenderMethodBase.cpp" />
     <ClCompile Include="SourceCode\ShaderManager.cpp" />
     <ClCompile Include="SourceCode\Tag.cpp" />
@@ -239,6 +240,7 @@
     <ClInclude Include="SourceCode\RenderDeferred.h" />
     <ClInclude Include="SourceCode\Renderer.h" />
     <ClInclude Include="SourceCode\RendererDebugObject.h" />
+    <ClInclude Include="SourceCode\RenderForward.h" />
     <ClInclude Include="SourceCode\RenderMethodBase.h" />
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\ShaderManager.h" />

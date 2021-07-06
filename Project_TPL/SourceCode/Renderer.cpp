@@ -23,13 +23,16 @@
 #include "VertexArray.h"
 #include "CubeMap.h"
 #include "DirectionalLight.h"
+#include "RenderMethodBase.h"
+#include "RenderForward.h"
+#include "RenderDeferred.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 Renderer::Renderer()
 	:m_window(NULL)
-	,m_renderMethod(RENDER_METHOD::DEFERRED)
+	,m_renderMethodType(RENDER_METHOD::DEFERRED)
 	,m_shaderManager(nullptr)
 	,m_drawableObject(nullptr)
 	,m_bloomRender(nullptr)
@@ -141,8 +144,6 @@ bool Renderer::Load()
 	//---------------------------------------+
 	// 描画バッファ生成
 	//---------------------------------------+
-	CreateGBuffer();
-	CreateLightBuffer();
 	CreateMSAA();
 
 	// ブルーム効果クラスの生成
@@ -151,7 +152,7 @@ bool Renderer::Load()
 	// 描画方法の設定
 	if (GAME_CONFIG.GetEnableDeferred())
 	{
-		m_renderMethod = RENDER_METHOD::DEFERRED;
+		m_renderMethodType = RENDER_METHOD::DEFERRED;
 	}
 
 	// シェーダーマネージャー
@@ -195,7 +196,6 @@ bool Renderer::Load()
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	
 
-
 	// 描画可能オブジェクト管理クラス
 	m_drawableObject = new DrawableObjectManager();
 
@@ -204,6 +204,10 @@ bool Renderer::Load()
 
 	// ディレクショナルライト
 	m_dirLight = new DirectionalLight;
+
+	// 各種描画メソッドの生成
+	m_renderMethods[RENDER_METHOD::FORWARD] = new RenderForward(this);
+	m_renderMethods[RENDER_METHOD::DEFERRED] = new RenderDeferred(this);
 
 	return true;
 }
@@ -229,6 +233,13 @@ void Renderer::Delete()
 	delete m_bloomRender;
 	delete m_skyBox;
 
+	// 描画メソッド解放処理
+	for (auto itr : m_renderMethods)
+	{
+		delete itr.second;
+	}
+	m_renderMethods.clear();
+
 	// windowの破棄・GLFWのクリーンアップ
 	glfwDestroyWindow(m_window);
 	glfwTerminate();
@@ -248,298 +259,32 @@ void Renderer::Draw()
 	// uniformバッファのセット
 	SetUniformBuffer();
 
-	//------------------------------------------------+
-	// ForwardShading
-	//------------------------------------------------+
-	if (m_renderMethod == RENDER_METHOD::FORWARD)
-	{
-
-		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
-
-		// メッシュの描画
-		glEnable(GL_DEPTH_TEST);
-		m_shaderManager->EnableShaderProgram(GLSLshader::BASIC_MESH);
-		m_drawableObject->Draw(m_shaderManager, GLSLshader::BASIC_MESH);
-
-		// 法線の視覚化
-		if (m_visualizeNormal)
-		{
-			m_shaderManager->EnableShaderProgram(GLSLshader::OPTION_NORMAL_VISUALIZE);
-			m_drawableObject->Draw(m_shaderManager, GLSLshader::OPTION_NORMAL_VISUALIZE);
-		}
-	}
-
-	//------------------------------------------------+
-	// DefferedShading
-	//------------------------------------------------+
-	if (m_renderMethod == RENDER_METHOD::DEFERRED)
-	{
-		// Gバッファをバインド
-		glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);
-
-		// カラー・バッファ情報のクリア
-		glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
-		glEnable(GL_DEPTH_TEST);
-
-		//-------------------------------------------------------------------------
-		// 0.ジオメトリパス
-		//-------------------------------------------------------------------------
-		// SkyBox
-		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_SKYBOX);
-		glm::mat4 remView = glm::mat4(glm::mat3(m_viewMat));
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX)->SetUniform("u_removeTransView", remView);
-		m_skyBox->Draw(m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX));
-
-		// Mesh
-		glEnable(GL_DEPTH_TEST);
-		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_BASIC_MESH);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.albedo", 0);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.specular", 5);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_BASIC_MESH)->SetUniform("u_mat.emissive", 6);
-		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_BASIC_MESH);
-
-		// NormalMapping
-		glEnable(GL_DEPTH_TEST);
-		m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_NORMALMAP);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_mat.albedo", 0);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_mat.normal", 2);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_mat.specular", 5);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_mat.emissive", 6);
-		m_shaderManager->GetShader(GLSLshader::GBUFFER_NORMALMAP)->SetUniform("u_lightPos", m_dirLight->GetPosition());
-		m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_NORMALMAP);
-
-		// Phongシェーディング
-		//m_shaderManager->EnableShaderProgram(GLSLshader::GBUFFER_PHONG);
-		//m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.albedo", 0);
-		//m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.specular", 5);
-		//m_shaderManager->GetShader(GLSLshader::GBUFFER_PHONG)->SetUniform("u_mat.emissive", 6);
-		//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
-
-		// 法線の視覚化
-		if (m_visualizeNormal)
-		{
-			glEnable(GL_DEPTH_TEST);
-			m_shaderManager->EnableShaderProgram(GLSLshader::OPTION_NORMAL_VISUALIZE_GBUFFER);
-			m_drawableObject->Draw(m_shaderManager, GLSLshader::OPTION_NORMAL_VISUALIZE_GBUFFER);
-		}
-
-		// Gバッファバインド解除
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		
-		//----------------------------------------------------------------------------+
-		// ライティングパス
-		//----------------------------------------------------------------------------+
-		glBindFramebuffer(GL_FRAMEBUFFER, m_lightBuffer);
-		// ブレンドの有効化
-		glEnablei(GL_BLEND, 0);
-		glBlendFuncSeparatei(0, GL_ONE, GL_ONE, GL_ONE, GL_ONE);     // 加算合成
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glDisable(GL_DEPTH_TEST);
-		// カリングの有効化
-		glEnable(GL_CULL_FACE);
-		glCullFace(GL_FRONT);
-		glFrontFace(GL_CCW);
-		// GBufferをテクスチャとしてバインド
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_gPos);
-
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, m_gNormal);
-
-		glActiveTexture(GL_TEXTURE2);
-		glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
-
-		glActiveTexture(GL_TEXTURE3);
-		glBindTexture(GL_TEXTURE_2D, m_gEmissive);
-
-		//-------------------------------------------------------------------+
-        // Point Light
-
-		//-------------------------------------------------------------------+
-		// Spot Light
-
-		
-		glDisable(GL_CULL_FACE);
-
-		//-------------------------------------------------------------------+
-		// Directional Light
-		m_shaderManager->EnableShaderProgram(GLSLshader::DIRECTIONAL_LIGHT_PASS);
-		m_shaderManager->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS)->SetUniform("u_gBuffer.position", 0);
-		m_shaderManager->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS)->SetUniform("u_gBuffer.normal", 1);
-		m_shaderManager->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS)->SetUniform("u_gBuffer.albedoSpec", 2);
-		m_shaderManager->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS)->SetUniform("u_gBuffer.emissive", 3);
-		m_quadVA->SetActive();
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		// ライトパス後はブレンドを切る
-		glDisable(GL_BLEND);
-		glDisablei(GL_BLEND, 0);
-
-		// gBufferの深度情報をライトバッファへコピーする
-		glBindFramebuffer(GL_READ_FRAMEBUFFER, m_gBuffer);            // 読み取り先としてGBufferを指定
-		glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_lightBuffer);        // 書き込み先にライトバッファを指定
-
-		glBlitFramebuffer(0, 0, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(),
-			              0, 0, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(),
-			              GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-
-		glBindFramebuffer(GL_FRAMEBUFFER, m_lightBuffer);
-
-
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glEnable(GL_DEPTH_TEST);
-
-		// スクリーンに出力
-		// ブルーム処理する
-		if (m_enableBloom)
-		{
-			// カラー・バッファ情報のクリア
-			glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
-			glClear(GL_COLOR_BUFFER_BIT);                 // 画面のカラー・深度・ステンシルバッファをクリア
-
-			// 縮小バッファ計算
-			m_bloomRender->DownSampling(m_lightHighBright, m_shaderManager->GetShader(GLSLshader::BLOOM_DOWNSAMPLING), m_quadVA);
-			// ガウスぼかし処理
-			m_bloomRender->GaussBlur(m_shaderManager->GetShader(GLSLshader::BLOOM_GAUSSIAN_BLUR), m_quadVA);
-			// 最終トーンマッピング & スクリーン出力
-			m_bloomRender->DrawBlendBloom(m_lightHDR, m_shaderManager->GetShader(GLSLshader::BLOOM_TONEMAPPING), m_quadVA);
-		}
-		// ブルーム処理しない
-		else
-		{
-			glDisable(GL_DEPTH_TEST);
-			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			m_shaderManager->EnableShaderProgram(GLSLshader::OUT_SCREEN_ENTIRE);
-			glActiveTexture(GL_TEXTURE0);
-			//glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
-			glBindTexture(GL_TEXTURE_2D, m_lightHDR);
-
-			// スクリーンを描画
-			m_quadVA->SetActive();
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-		}
-
-
-	}
+	// 現在の描画メソッドに応じた描画処理を行う
+	m_renderMethods[m_renderMethodType]->Draw(m_shaderManager, m_drawableObject);
 
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
 	glfwSwapBuffers(m_window);
 }
 
-
 /// <summary>
-/// Gバッファの各種要素の生成・登録
+/// ブルーム効果の付与＆描画
 /// </summary>
-void Renderer::CreateGBuffer()
+/// <param name="_highBrightBuffer"> 高輝度成分を保存したバッファ </param>
+/// <param name="_colorBuffer"> カラーバッファ </param>
+void Renderer::BloomPass(unsigned int _highBrightBuffer, unsigned int _colorBuffer)
 {
-	// Gバッファの生成・バインド
-	glGenFramebuffers(1, &m_gBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);
-	
-	//--------------------------------------------------------------------+
-	// Gバッファ各要素の登録
-	//--------------------------------------------------------------------+
-	// 座標情報バッファ (浮動小数点バッファ / 0番目)
-	glGenTextures(1, &m_gPos);
-	glBindTexture(GL_TEXTURE_2D, m_gPos);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_gPos, 0);
-	// 法線情報バッファ (浮動小数点バッファ / 1番目)
-	glGenTextures(1, &m_gNormal);
-	glBindTexture(GL_TEXTURE_2D, m_gNormal);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_gNormal, 0);
-	// アルベド&スペキュラ情報バッファ (8bitカラーバッファ / 2番目)
-	glGenTextures(1, &m_gAlbedoSpec);
-	glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, m_gAlbedoSpec, 0);
-	// 高輝度バッファ (エミッシブバッファ / 3番目)
-	glGenTextures(1, &m_gEmissive);
-	glBindTexture(GL_TEXTURE_2D, m_gEmissive);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, GL_TEXTURE_2D, m_gEmissive, 0);
+	// カラー・バッファ情報のクリア
+	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
+	glClear(GL_COLOR_BUFFER_BIT);                 // 画面のカラー・深度・ステンシルバッファをクリア
 
-	// 生成した各要素をGバッファの描画先としてGLに明示する
-	m_gAttachments[0] = { GL_COLOR_ATTACHMENT0 };
-	m_gAttachments[1] = { GL_COLOR_ATTACHMENT1 };
-	m_gAttachments[2] = { GL_COLOR_ATTACHMENT2 };
-	m_gAttachments[3] = { GL_COLOR_ATTACHMENT3 };
-	glDrawBuffers(4, m_gAttachments);
-
-	// レンダーバッファの生成・登録
-	glGenRenderbuffers(1, &m_gRBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_gRBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH());
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_gRBO);
-
-	// フレームバッファの整合性チェック
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		std::cout << "ERROR::GBuffer::Create Failed" << std::endl;
-	}
-
-	// Gバッファのバインドを解除
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
+	// 縮小バッファ計算
+	m_bloomRender->DownSampling(_highBrightBuffer, m_shaderManager->GetShader(GLSLshader::BLOOM_DOWNSAMPLING), m_quadVA);
+	// ガウスぼかし処理
+	m_bloomRender->GaussBlur(m_shaderManager->GetShader(GLSLshader::BLOOM_GAUSSIAN_BLUR), m_quadVA);
+	// 最終トーンマッピング & スクリーン出力
+	m_bloomRender->DrawBlendBloom(_colorBuffer, m_shaderManager->GetShader(GLSLshader::BLOOM_TONEMAPPING), m_quadVA);
 }
 
-/// <summary>
-/// ライトバッファの各種要素の登録
-/// </summary>
-void Renderer::CreateLightBuffer()
-{
-	glGenFramebuffers(1, &m_lightBuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_lightBuffer);
-
-	// HDRバッファ
-	glGenTextures(1, &m_lightHDR);
-	glBindTexture(GL_TEXTURE_2D, m_lightHDR);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_lightHDR, 0);
-	// 高輝度バッファの作成
-	glGenTextures(1, &m_lightHighBright);
-	glBindTexture(GL_TEXTURE_2D, m_lightHighBright);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(), 0, GL_RGBA, GL_FLOAT, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, m_lightHighBright, 0);
-	// アタッチメント設定
-	m_lightAttachments[0] = { GL_COLOR_ATTACHMENT0 };
-	m_lightAttachments[1] = { GL_COLOR_ATTACHMENT1 };
-	glDrawBuffers(2, m_lightAttachments);
-
-	// レンダーバッファを作成する
-	glGenRenderbuffers(1, &m_lightRBO);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_lightRBO);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH());
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_lightRBO);
-
-	// フレームバッファの整合性をチェック
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	{
-		std::cout << "ERROR::LightBuffer::Create Failed" << std::endl;
-	}
-	// フレームバッファのバインド解除
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
 
 /// <summary>
 /// マルチサンプリングアンチエイリアシング用バッファの生成

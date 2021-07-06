@@ -5,16 +5,18 @@
 #include "CubeMap.h"
 #include "VertexArray.h"
 #include "DrawableObjectManager.h"
+#include "RenderBloom.h"
 #include "DirectionalLight.h"
 
-RenderDeferred::RenderDeferred(class Renderer* _renderer, RENDER_METHOD _method)
-	:RenderMethodBase(_renderer, _method)
+RenderDeferred::RenderDeferred(class Renderer* _renderer)
+	:RenderMethodBase(_renderer)
 	,m_basicMeshShader(_renderer->GetShaderManager()->GetShader(GLSLshader::GBUFFER_BASIC_MESH))
 	,m_phongShader(_renderer->GetShaderManager()->GetShader(GLSLshader::GBUFFER_PHONG))
 	,m_normalMapShader(_renderer->GetShaderManager()->GetShader(GLSLshader::GBUFFER_NORMALMAP))
 	,m_skyBoxShader(_renderer->GetShaderManager()->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX))
 	,m_dirLightShader(_renderer->GetShaderManager()->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS))
 	,m_visualizeNormalShader(_renderer->GetShaderManager()->GetShader(GLSLshader::OPTION_NORMAL_VISUALIZE_GBUFFER))
+	,m_outScreenShader(_renderer->GetShaderManager()->GetShader(GLSLshader::OUT_SCREEN_ENTIRE))
 {
 }
 
@@ -27,7 +29,7 @@ bool RenderDeferred::Load()
 	return (CreateGBuffer() && CreateLightBuffer()) == true;
 }
 
-void RenderDeferred::Draw(class DrawableObjectManager* _drawObjects)
+void RenderDeferred::Draw(class ShaderManager* _shaderManager, class DrawableObjectManager* _drawObjects)
 {
 	// Gバッファをバインド
 	glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);
@@ -142,9 +144,31 @@ void RenderDeferred::Draw(class DrawableObjectManager* _drawObjects)
 
 	glBindFramebuffer(GL_FRAMEBUFFER, m_lightBuffer);
 
-
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glEnable(GL_DEPTH_TEST);
+
+
+	// ブルーム効果が有効でない場合
+	// Gバッファ+ライトパスの結果をそのまま画面へ出力する
+	if (m_renderer->GetIsEnableBloom())
+	{
+		m_renderer->BloomPass(m_lightHighBright, m_lightHDR);
+	}
+	else
+	{
+		glDisable(GL_DEPTH_TEST);
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		m_outScreenShader->UseProgram();
+		glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
+		glBindTexture(GL_TEXTURE_2D, m_lightHDR);
+
+		// スクリーンを描画
+		m_renderer->GetQuadVertex()->SetActive();
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+	}
 }
 
 

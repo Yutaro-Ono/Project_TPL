@@ -18,17 +18,15 @@ class RenderMethodBase
 {
 public:
 
-	RenderMethodBase(class Renderer* _renderer, RENDER_METHOD _method);
+	RenderMethodBase(class Renderer* _renderer);
 	virtual ~RenderMethodBase() = 0;
 
 	virtual bool Load() = 0;
 
-	virtual void Draw(class DrawableObjectManager* _drawObjects) = 0;
+	virtual void Draw(class ShaderManager* _shaderManager, class DrawableObjectManager* _drawObjects) = 0;
 
 protected:
 
 	class Renderer* m_renderer;
-
-	RENDER_METHOD m_method;
 
 };

@@ -19,7 +19,7 @@
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
-#include <vector>
+#include <unordered_map>
 #include "RendererDebugObject.h"
 
 // 描画メソッド
@@ -51,24 +51,26 @@ public:
 
 	class DrawableObjectManager* GetDrawableObjectManager() { return m_drawableObject; }
 
-	void SetRenderMethod(RENDER_METHOD _method) { m_renderMethod = _method; }
+	void SetRenderMethod(RENDER_METHOD _method) { m_renderMethodType = _method; }
+
+	void BloomPass(unsigned int _highBrightBuffer, unsigned int _colorBuffer);
 
 	const glm::mat4 GetViewMatrix() { return m_viewMat; }
 	const glm::mat4 GetProjectionMatrix() { return m_projMat; }
 
 	// Getter / Setter
+	class RenderBloom* GetBloom() { return m_bloomRender; }
 	class ShaderManager* GetShaderManager() { return m_shaderManager; }
 	class DirectionalLight* GetDirectionalLight() { return m_dirLight; }
 	class CubeMap* GetSkyBox() { return m_skyBox; }
 	class VertexArray* GetQuadVertex() { return m_quadVA; }
 	bool GetIsEnableVisualizeNormal() { return m_visualizeNormal; }
+	bool GetIsEnableBloom() { return m_enableBloom; }
 
 	void SetViewMatrix(const glm::mat4& _viewMat) { m_viewMat = _viewMat; }
 
 private:
 
-	void CreateGBuffer();
-	void CreateLightBuffer();
 	void CreateMSAA();
 
 	void SetUniformBuffer();
@@ -78,7 +80,7 @@ private:
 
 	GLFWwindow* m_window;                            // メインウィンドウ
 
-	RENDER_METHOD m_renderMethod;                    // 描画方法
+	RENDER_METHOD m_renderMethodType;                    // 描画方法
 
 	class ShaderManager* m_shaderManager;            // シェーダーマネージャークラス
 	class DrawableObjectManager* m_drawableObject;   // 描画可能オブジェクト管理クラス
@@ -89,6 +91,10 @@ private:
 
 	bool m_enableBloom;                              // ブルーム処理するかしないか
 	bool m_visualizeNormal;                          // 法線を視覚化するかしないか
+
+	// 各種描画メソッドクラス
+	std::unordered_map<RENDER_METHOD, class RenderMethodBase*> m_renderMethods;
+
 
 	// 描画用の行列関連
 	glm::mat4 m_viewMat;                             // ビュー行列

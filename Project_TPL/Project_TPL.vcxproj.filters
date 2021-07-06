@@ -353,6 +353,9 @@
     <ClCompile Include="SourceCode\RenderDeferred.cpp">
       <Filter>Source\Renderer\RenderMethod\DeferredRenderer</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\RenderForward.cpp">
+      <Filter>Source\Renderer\RenderMethod\ForwardRenderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -510,6 +513,9 @@
     </ClInclude>
     <ClInclude Include="SourceCode\RenderMethodBase.h">
       <Filter>Source\Renderer\RenderMethod</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\RenderForward.h">
+      <Filter>Source\Renderer\RenderMethod\ForwardRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

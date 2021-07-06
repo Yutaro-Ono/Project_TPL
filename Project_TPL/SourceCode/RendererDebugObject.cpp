@@ -34,7 +34,7 @@ void RendererDebugObject::Render()
 	glBindFramebuffer(GL_FRAMEBUFFER, DEBUGGER->GetDebugFrameBuffer());
 
 	// レンダリング方法の変更
-	bool method = (int)m_renderer->m_renderMethod;
+	bool method = (int)m_renderer->m_renderMethodType;
 	ImGui::Checkbox("RenderingMode : 0 = Forward, 1 = Deferred", &method);
 	if (method == 0)
 	{
