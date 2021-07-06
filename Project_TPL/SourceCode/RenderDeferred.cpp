@@ -49,7 +49,8 @@ void RenderDeferred::Draw(class ShaderManager* _shaderManager, class DrawableObj
 	//-------------------------------------------------------------------------
 	// SkyBox
 	m_skyBoxShader->UseProgram();
-	glm::mat4 remView = glm::mat4(glm::mat3(m_renderer->GetViewMatrix()));
+	glm::mat3 view = m_renderer->GetViewMatrix();
+	glm::mat4 remView = glm::mat4(view);
 	m_skyBoxShader->SetUniform("u_removeTransView", remView);
 	m_renderer->GetSkyBox()->Draw(m_skyBoxShader);
 
