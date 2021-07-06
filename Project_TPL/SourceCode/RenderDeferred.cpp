@@ -1,9 +1,20 @@
 #include "RenderDeferred.h"
 #include "GameMain.h"
 #include "GameSettings.h"
+#include "ShaderManager.h"
+#include "CubeMap.h"
+#include "VertexArray.h"
+#include "DrawableObjectManager.h"
+#include "DirectionalLight.h"
 
-RenderDeferred::RenderDeferred(class Renderer* _owner, RENDER_METHOD _method)
-	:RenderMethodBase(_owner, _method)
+RenderDeferred::RenderDeferred(class Renderer* _renderer, RENDER_METHOD _method)
+	:RenderMethodBase(_renderer, _method)
+	,m_basicMeshShader(_renderer->GetShaderManager()->GetShader(GLSLshader::GBUFFER_BASIC_MESH))
+	,m_phongShader(_renderer->GetShaderManager()->GetShader(GLSLshader::GBUFFER_PHONG))
+	,m_normalMapShader(_renderer->GetShaderManager()->GetShader(GLSLshader::GBUFFER_NORMALMAP))
+	,m_skyBoxShader(_renderer->GetShaderManager()->GetShader(GLSLshader::GBUFFER_BASIC_SKYBOX))
+	,m_dirLightShader(_renderer->GetShaderManager()->GetShader(GLSLshader::DIRECTIONAL_LIGHT_PASS))
+	,m_visualizeNormalShader(_renderer->GetShaderManager()->GetShader(GLSLshader::OPTION_NORMAL_VISUALIZE_GBUFFER))
 {
 }
 
@@ -14,6 +25,126 @@ RenderDeferred::~RenderDeferred()
 bool RenderDeferred::Load()
 {
 	return (CreateGBuffer() && CreateLightBuffer()) == true;
+}
+
+void RenderDeferred::Draw(class DrawableObjectManager* _drawObjects)
+{
+	// Gバッファをバインド
+	glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);
+
+	// カラー・バッファ情報のクリア
+	glClearColor(0.05f, 0.05f, 0.05f, 1.0f);      // 指定した色値で画面をクリア
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);              // 画面のカラー・深度・ステンシルバッファをクリア
+	glEnable(GL_DEPTH_TEST);
+
+	//-------------------------------------------------------------------------
+	// 0.ジオメトリパス
+	//-------------------------------------------------------------------------
+	// SkyBox
+	m_skyBoxShader->UseProgram();
+	glm::mat4 remView = glm::mat4(glm::mat3(m_renderer->GetViewMatrix()));
+	m_skyBoxShader->SetUniform("u_removeTransView", remView);
+	m_renderer->GetSkyBox()->Draw(m_skyBoxShader);
+
+	// Mesh
+	glEnable(GL_DEPTH_TEST);
+	m_basicMeshShader->UseProgram();
+	m_basicMeshShader->SetUniform("u_mat.albedo", 0);
+	m_basicMeshShader->SetUniform("u_mat.specular", 5);
+	m_basicMeshShader->SetUniform("u_mat.emissive", 6);
+	_drawObjects->Draw(m_basicMeshShader);
+
+	// NormalMapping
+	glEnable(GL_DEPTH_TEST);
+	m_normalMapShader->UseProgram();
+	m_normalMapShader->SetUniform("u_mat.albedo", 0);
+	m_normalMapShader->SetUniform("u_mat.normal", 2);
+	m_normalMapShader->SetUniform("u_mat.specular", 5);
+	m_normalMapShader->SetUniform("u_mat.emissive", 6);
+	m_normalMapShader->SetUniform("u_lightPos", m_renderer->GetDirectionalLight()->GetPosition());
+	_drawObjects->Draw(m_normalMapShader);
+
+	// Phongシェーディング
+	//m_phongShader->UseProgram();
+	//m_phongShader->SetUniform("u_mat.albedo", 0);
+	//m_phongShader->SetUniform("u_mat.specular", 5);
+	//m_phongShader->SetUniform("u_mat.emissive", 6);
+	//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
+
+	// 法線の視覚化
+	if (m_renderer->GetIsEnableVisualizeNormal())
+	{
+		glEnable(GL_DEPTH_TEST);
+		m_visualizeNormalShader->UseProgram();
+		_drawObjects->Draw(m_visualizeNormalShader);
+	}
+
+	// Gバッファバインド解除
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//----------------------------------------------------------------------------+
+	// ライティングパス
+	//----------------------------------------------------------------------------+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_lightBuffer);
+	// ブレンドの有効化
+	glEnablei(GL_BLEND, 0);
+	glBlendFuncSeparatei(0, GL_ONE, GL_ONE, GL_ONE, GL_ONE);     // 加算合成
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glDisable(GL_DEPTH_TEST);
+	// カリングの有効化
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_FRONT);
+	glFrontFace(GL_CCW);
+	// GBufferをテクスチャとしてバインド
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, m_gPos);
+
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, m_gNormal);
+
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, m_gAlbedoSpec);
+
+	glActiveTexture(GL_TEXTURE3);
+	glBindTexture(GL_TEXTURE_2D, m_gEmissive);
+
+	//-------------------------------------------------------------------+
+	// Point Light
+
+	//-------------------------------------------------------------------+
+	// Spot Light
+
+
+	glDisable(GL_CULL_FACE);
+
+	//-------------------------------------------------------------------+
+	// Directional Light
+	m_dirLightShader->UseProgram();
+	m_dirLightShader->SetUniform("u_gBuffer.position", 0);
+	m_dirLightShader->SetUniform("u_gBuffer.normal", 1);
+	m_dirLightShader->SetUniform("u_gBuffer.albedoSpec", 2);
+	m_dirLightShader->SetUniform("u_gBuffer.emissive", 3);
+	m_renderer->GetQuadVertex()->SetActive();
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	// ライトパス後はブレンドを切る
+	glDisable(GL_BLEND);
+	glDisablei(GL_BLEND, 0);
+
+	// gBufferの深度情報をライトバッファへコピーする
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_gBuffer);            // 読み取り先としてGBufferを指定
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, m_lightBuffer);        // 書き込み先にライトバッファを指定
+
+	glBlitFramebuffer(0, 0, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(),
+		0, 0, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH(),
+		GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, m_lightBuffer);
+
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glEnable(GL_DEPTH_TEST);
 }
 
 

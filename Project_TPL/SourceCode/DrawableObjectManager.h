@@ -24,7 +24,7 @@ public:
 	void AddMeshComp(class MeshComponent* _meshComp);
 	void DeleteMeshComp(class MeshComponent* _meshComp);
 
-	void Draw(ShaderManager* _shaderManager, GLSLshader::SHADER_TYPE _shaderType);
+	void Draw(class GLSLprogram* _shader);
 
 
 

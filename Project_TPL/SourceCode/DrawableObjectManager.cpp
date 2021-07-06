@@ -53,10 +53,10 @@ void DrawableObjectManager::DeleteMeshComp(MeshComponent* _meshComp)
 /// メッシュコンポ―ネントの描画処理
 /// </summary>
 /// <param name="_shaderManager"> 描画に用いるシェーダークラス </param>
-void DrawableObjectManager::Draw(ShaderManager* _shaderManager, GLSLshader::SHADER_TYPE _shaderType)
+void DrawableObjectManager::Draw(class GLSLprogram* _shader)
 {
 	for (auto mc : m_meshComponents)
 	{
-		mc->Draw(_shaderManager->GetShader(_shaderType));
+		mc->Draw(_shader);
 	}
 }

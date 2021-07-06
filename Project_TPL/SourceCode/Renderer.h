@@ -56,7 +56,12 @@ public:
 	const glm::mat4 GetViewMatrix() { return m_viewMat; }
 	const glm::mat4 GetProjectionMatrix() { return m_projMat; }
 
+	// Getter / Setter
+	class ShaderManager* GetShaderManager() { return m_shaderManager; }
 	class DirectionalLight* GetDirectionalLight() { return m_dirLight; }
+	class CubeMap* GetSkyBox() { return m_skyBox; }
+	class VertexArray* GetQuadVertex() { return m_quadVA; }
+	bool GetIsEnableVisualizeNormal() { return m_visualizeNormal; }
 
 	void SetViewMatrix(const glm::mat4& _viewMat) { m_viewMat = _viewMat; }
 
