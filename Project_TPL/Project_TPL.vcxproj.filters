@@ -87,9 +87,6 @@
     <Filter Include="Source\Actor\Camera">
       <UniqueIdentifier>{839ae2c1-1164-4485-b9e9-e3bd77840b01}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Renderer\Bloom">
-      <UniqueIdentifier>{9dbb8cd6-3c0f-453d-8e7b-85d289ed2d85}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Actor\Barricade">
       <UniqueIdentifier>{5af94cbd-5466-41ba-aca7-f5108359e347}</UniqueIdentifier>
     </Filter>
@@ -98,21 +95,6 @@
     </Filter>
     <Filter Include="リソース ファイル\Math">
       <UniqueIdentifier>{3da4398b-2ded-41ad-87e6-51584946a3b9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Renderer\CubeMap">
-      <UniqueIdentifier>{f6fc5d0a-0217-4669-a464-e73fe29e8511}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Renderer\Texture">
-      <UniqueIdentifier>{75188af1-ae18-43c8-8039-051f44de0914}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Renderer\Mesh">
-      <UniqueIdentifier>{406cefc8-bbe0-4d3f-8434-7dfa94703690}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Renderer\Mesh\OBJ">
-      <UniqueIdentifier>{dd802d36-0134-478e-86dd-9804fabfc90e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source\Renderer\Mesh\GPMESH">
-      <UniqueIdentifier>{f576bc90-4d13-4496-b29e-690f742576ad}</UniqueIdentifier>
     </Filter>
     <Filter Include="リソース ファイル\stb_image">
       <UniqueIdentifier>{016031fa-b191-4678-b457-5917bfcbbece}</UniqueIdentifier>
@@ -192,6 +174,42 @@
     <Filter Include="Source\Shader\ShaderSource\GBuffer\NormalMap">
       <UniqueIdentifier>{370c8a73-ddaa-48d8-9698-d7f867e96aa4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Shader\ShaderSource\PBR">
+      <UniqueIdentifier>{f622b528-ef96-438e-8618-83449b264eb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Mesh&amp;Texture">
+      <UniqueIdentifier>{a6845120-8ef6-42a6-9d16-534b1d3cef24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Mesh&amp;Texture\Mesh">
+      <UniqueIdentifier>{406cefc8-bbe0-4d3f-8434-7dfa94703690}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Mesh&amp;Texture\Mesh\OBJ">
+      <UniqueIdentifier>{dd802d36-0134-478e-86dd-9804fabfc90e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Mesh&amp;Texture\Mesh\GPMESH">
+      <UniqueIdentifier>{f576bc90-4d13-4496-b29e-690f742576ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Mesh&amp;Texture\Texture">
+      <UniqueIdentifier>{75188af1-ae18-43c8-8039-051f44de0914}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\RenderMethod">
+      <UniqueIdentifier>{57595a28-6c5b-45da-b49e-b371674932b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\RenderMethod\Bloom">
+      <UniqueIdentifier>{9dbb8cd6-3c0f-453d-8e7b-85d289ed2d85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\Mesh&amp;Texture\CubeMap">
+      <UniqueIdentifier>{f6fc5d0a-0217-4669-a464-e73fe29e8511}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\RenderMethod\DeferredRenderer">
+      <UniqueIdentifier>{0b11ed0d-c557-4c21-90e2-e530ffb43f28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\RenderMethod\ForwardRenderer">
+      <UniqueIdentifier>{48091ee5-93bd-45f4-b3f4-0a31887cea74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Renderer\RenderMethod\PBR">
+      <UniqueIdentifier>{516a896f-2b89-40f4-8201-2ac821f95b50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -246,7 +264,7 @@
       <Filter>Source\Shader\ShaderManager</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Texture.cpp">
-      <Filter>Source\Renderer\Texture</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\Texture</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\BasicTriangle.cpp">
       <Filter>Source\BasicObject\Triangle</Filter>
@@ -261,10 +279,10 @@
       <Filter>Source\Pool\MeshPool</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Mesh.cpp">
-      <Filter>Source\Renderer\Mesh</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\MeshObj.cpp">
-      <Filter>Source\Renderer\Mesh\OBJ</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\Mesh\OBJ</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\Component.cpp">
       <Filter>Source\Component</Filter>
@@ -285,7 +303,7 @@
       <Filter>Source\Actor\TestActor\Sphere</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\MeshGpmesh.cpp">
-      <Filter>Source\Renderer\Mesh\GPMESH</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\Mesh\GPMESH</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\DebugObjectPool.cpp">
       <Filter>Source\Pool\DebugObjectPool</Filter>
@@ -309,7 +327,7 @@
       <Filter>Source\Actor\Camera</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\RenderBloom.cpp">
-      <Filter>Source\Renderer\Bloom</Filter>
+      <Filter>Source\Renderer\RenderMethod\Bloom</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\BarricadeActor.cpp">
       <Filter>Source\Actor\Barricade</Filter>
@@ -321,13 +339,19 @@
       <Filter>リソース ファイル\Math</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\CubeMap.cpp">
-      <Filter>Source\Renderer\CubeMap</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\CubeMap</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\InputKeyBoard.cpp">
       <Filter>Source\Input\KeyBoard</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\RenderBloomDebugObject.cpp">
-      <Filter>Source\Renderer\Bloom</Filter>
+      <Filter>Source\Renderer\RenderMethod\Bloom</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\RenderMethodBase.cpp">
+      <Filter>Source\Renderer\RenderMethod</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\RenderDeferred.cpp">
+      <Filter>Source\Renderer\RenderMethod\DeferredRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -386,7 +410,7 @@
       <Filter>Source\Shader\ShaderManager</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Texture.h">
-      <Filter>Source\Renderer\Texture</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\Texture</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\BasicTriangle.h">
       <Filter>Source\BasicObject\Triangle</Filter>
@@ -404,7 +428,7 @@
       <Filter>Source\DebugSystem</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Mesh.h">
-      <Filter>Source\Renderer\Mesh</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\ObjectPool.h">
       <Filter>Source\Pool</Filter>
@@ -416,7 +440,7 @@
       <Filter>Source\Pool\MeshPool</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\MeshObj.h">
-      <Filter>Source\Renderer\Mesh\OBJ</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\Mesh\OBJ</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\Component.h">
       <Filter>Source\Component</Filter>
@@ -437,7 +461,7 @@
       <Filter>Source\Actor\TestActor\Sphere</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\MeshGpmesh.h">
-      <Filter>Source\Renderer\Mesh\GPMESH</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\Mesh\GPMESH</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\DebugObjectPool.h">
       <Filter>Source\Pool\DebugObjectPool</Filter>
@@ -458,7 +482,7 @@
       <Filter>Source\Actor\Camera</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\RenderBloom.h">
-      <Filter>Source\Renderer\Bloom</Filter>
+      <Filter>Source\Renderer\RenderMethod\Bloom</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\BarricadeActor.h">
       <Filter>Source\Actor\Barricade</Filter>
@@ -470,7 +494,7 @@
       <Filter>リソース ファイル\Math</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\CubeMap.h">
-      <Filter>Source\Renderer\CubeMap</Filter>
+      <Filter>Source\Renderer\Mesh&amp;Texture\CubeMap</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\InputKeyBoard.h">
       <Filter>Source\Input\KeyBoard</Filter>
@@ -479,7 +503,13 @@
       <Filter>Source\Camera\FreeCamera</Filter>
     </ClInclude>
     <ClInclude Include="SourceCode\RenderBloomDebugObject.h">
-      <Filter>Source\Renderer\Bloom</Filter>
+      <Filter>Source\Renderer\RenderMethod\Bloom</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\RenderDeferred.h">
+      <Filter>Source\Renderer\RenderMethod\DeferredRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\RenderMethodBase.h">
+      <Filter>Source\Renderer\RenderMethod</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -566,6 +596,12 @@
     </None>
     <None Include="Shaders\GBuffer_NormalMap.vert">
       <Filter>Source\Shader\ShaderSource\GBuffer\NormalMap</Filter>
+    </None>
+    <None Include="Shaders\PBR_Basic.frag">
+      <Filter>Source\Shader\ShaderSource\PBR</Filter>
+    </None>
+    <None Include="Shaders\PBR_Basic.vert">
+      <Filter>Source\Shader\ShaderSource\PBR</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -44,7 +44,7 @@ public:
 	const int& GetScreenSizeW() { return m_displayWidth; }
 	const int& GetScreenSizeH() { return m_displayHeight; }
 
-	bool GetEnableDeffered() { return m_graphicsEnableDeffered; }
+	bool GetEnableDeferred() { return m_graphicsEnableDeferred; }
 	bool GetEnableEnvMap() { return m_graphicsEnableEnvMap; }
 	bool GetEnableBloom() { return m_graphicsEnableBloom; }
 
@@ -65,7 +65,7 @@ private:
 	bool m_displayFullScreen;
 
 	// グラフィックス設定
-	bool m_graphicsEnableDeffered;
+	bool m_graphicsEnableDeferred;
 	bool m_graphicsEnableEnvMap;
 	bool m_graphicsEnableBloom;
 

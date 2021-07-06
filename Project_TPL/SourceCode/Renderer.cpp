@@ -29,7 +29,7 @@
 /// </summary>
 Renderer::Renderer()
 	:m_window(NULL)
-	,m_renderMethod(RENDER_METHOD::DEFFERED)
+	,m_renderMethod(RENDER_METHOD::DEFERRED)
 	,m_shaderManager(nullptr)
 	,m_drawableObject(nullptr)
 	,m_bloomRender(nullptr)
@@ -149,9 +149,9 @@ bool Renderer::Load()
 	m_bloomRender = new RenderBloom;
 
 	// 描画方法の設定
-	if (GAME_CONFIG.GetEnableDeffered())
+	if (GAME_CONFIG.GetEnableDeferred())
 	{
-		m_renderMethod = RENDER_METHOD::DEFFERED;
+		m_renderMethod = RENDER_METHOD::DEFERRED;
 	}
 
 	// シェーダーマネージャー
@@ -273,7 +273,7 @@ void Renderer::Draw()
 	//------------------------------------------------+
 	// DefferedShading
 	//------------------------------------------------+
-	if (m_renderMethod == RENDER_METHOD::DEFFERED)
+	if (m_renderMethod == RENDER_METHOD::DEFERRED)
 	{
 		// Gバッファをバインド
 		glBindFramebuffer(GL_FRAMEBUFFER, m_gBuffer);

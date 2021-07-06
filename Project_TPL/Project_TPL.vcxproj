@@ -184,8 +184,10 @@
     <ClCompile Include="SourceCode\MeshPool.cpp" />
     <ClCompile Include="SourceCode\RenderBloom.cpp" />
     <ClCompile Include="SourceCode\RenderBloomDebugObject.cpp" />
+    <ClCompile Include="SourceCode\RenderDeferred.cpp" />
     <ClCompile Include="SourceCode\Renderer.cpp" />
     <ClCompile Include="SourceCode\RendererDebugObject.cpp" />
+    <ClCompile Include="SourceCode\RenderMethodBase.cpp" />
     <ClCompile Include="SourceCode\ShaderManager.cpp" />
     <ClCompile Include="SourceCode\Tag.cpp" />
     <ClCompile Include="SourceCode\TestScene.cpp" />
@@ -234,8 +236,10 @@
     <ClInclude Include="SourceCode\ObjectPool.h" />
     <ClInclude Include="SourceCode\RenderBloom.h" />
     <ClInclude Include="SourceCode\RenderBloomDebugObject.h" />
+    <ClInclude Include="SourceCode\RenderDeferred.h" />
     <ClInclude Include="SourceCode\Renderer.h" />
     <ClInclude Include="SourceCode\RendererDebugObject.h" />
+    <ClInclude Include="SourceCode\RenderMethodBase.h" />
     <ClInclude Include="SourceCode\SceneBase.h" />
     <ClInclude Include="SourceCode\ShaderManager.h" />
     <ClInclude Include="SourceCode\Tag.h" />
@@ -274,6 +278,8 @@
     <None Include="Shaders\option\Normal_Visualization_GBuffer.vert" />
     <None Include="Shaders\OutScreen.frag" />
     <None Include="Shaders\OutScreen.vert" />
+    <None Include="Shaders\PBR_Basic.frag" />
+    <None Include="Shaders\PBR_Basic.vert" />
     <None Include="Shaders\SimpleShader_pos_color.frag" />
     <None Include="Shaders\SimpleShader_pos_color.vert" />
   </ItemGroup>

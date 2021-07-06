@@ -84,7 +84,11 @@ bool GameMain::Initialize()
 #endif
 
 	// レンダラークラスのロード処理 ※デバッガーを生成した後
-	m_renderer->Load();
+	if (!m_renderer->Load())
+	{
+		std::cout << "Error::Renderer::Load" << std::endl;
+		return false;
+	}
 
 	return true;
 }

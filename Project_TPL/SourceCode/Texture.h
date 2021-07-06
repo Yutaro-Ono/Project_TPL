@@ -24,6 +24,7 @@ public:
 
 	bool LoadTexture(const std::string& _filePath);
 	const unsigned int LoadCubeMapTextures(const std::string& _filePath) const;
+	const unsigned int LoadTextureHDR(const std::string& _filePath) const;
 
 	unsigned int GetTextureID() { return m_textureID; }
 

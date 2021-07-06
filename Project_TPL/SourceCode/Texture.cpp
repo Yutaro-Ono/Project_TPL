@@ -37,17 +37,37 @@ Texture::~Texture()
 /// <returns> ロードに失敗したらfalseを返す </returns>
 bool Texture::LoadTexture(const std::string& _filePath)
 {
-    // テクスチャバッファの生成・ID登録
-    glGenTextures(1, &m_textureID);
-    glBindTexture(GL_TEXTURE_2D, m_textureID);
-
     // 画像ファイルのロード
     stbi_set_flip_vertically_on_load(true);
 
     unsigned char* data = stbi_load(_filePath.c_str(), &m_width, &m_height, &m_channels, STBI_rgb_alpha);
     if (data != NULL)
     {
+        // テクスチャバッファの生成・ID登録
+        glGenTextures(1, &m_textureID);
+        glBindTexture(GL_TEXTURE_2D, m_textureID);
+        // イメージ読み込み
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+        // 解放
+        stbi_image_free(data);
+
+        // テクスチャラッピング
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+        // テクスチャフィルタリング
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        // バインド解除
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        // テクスチャプールに追加
+        GAME_INSTANCE.GetTexturePool()->AddKeyObject(_filePath, this);
+
+        // ミップマップの作成
+        SetMipmap(m_textureID);
     }
     else
     {
@@ -55,25 +75,7 @@ bool Texture::LoadTexture(const std::string& _filePath)
         return false;
     }
 
-    // 解放
-    stbi_image_free(data);
 
-    // テクスチャラッピング
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    // テクスチャフィルタリング
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // バインド解除
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    // テクスチャプールに追加
-    GAME_INSTANCE.GetTexturePool()->AddKeyObject(_filePath, this);
-    
-    // ミップマップの作成
-    SetMipmap(m_textureID);
 
     return true;
 }
@@ -86,12 +88,8 @@ bool Texture::LoadTexture(const std::string& _filePath)
 /// <returns></returns>
 const unsigned int Texture::LoadCubeMapTextures(const std::string& _filePath) const
 {
-
+    // キューブマップID
     unsigned int cubeMap;
-
-    // キューブマップとして登録
-    glGenTextures(1, &cubeMap);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 
     // 各面のテクスチャパス
     std::string faces[] =
@@ -111,14 +109,27 @@ const unsigned int Texture::LoadCubeMapTextures(const std::string& _filePath) co
 
         // 1面のテクスチャをロード
         stbi_set_flip_vertically_on_load(true);
-        //unsigned char* data = stbi_load(faces[i].c_str(), &width, &height, &channels, 0);
         float *data = stbi_loadf(faces[i].c_str(), &width, &height, &channels, 0);
 
         if (data != NULL)
         {
+            // キューブマップとして登録
+            glGenTextures(1, &cubeMap);
+            glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 
-            //glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+            // テクスチャパラメータ設定
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            // バインド解除
+            glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
+            // 読み込みデータの解放
+            stbi_image_free(data);
         }
         else
         {
@@ -126,22 +137,45 @@ const unsigned int Texture::LoadCubeMapTextures(const std::string& _filePath) co
             return false;
         }
 
-        // 解放
-        stbi_image_free(data);
-
     }
 
-    // テクスチャパラメータ設定
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // バインド解除
-    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-
     return cubeMap;
+}
+
+/// <summary>
+/// HDRテクスチャの読み込み
+/// </summary>
+/// <param name="_filePath"> テクスチャのパス </param>
+/// <returns> 生成したテクスチャID </returns>
+const unsigned int Texture::LoadTextureHDR(const std::string& _filePath) const
+{
+    unsigned int hdrTexture;
+    int width, height, nrComponents;
+
+    stbi_set_flip_vertically_on_load(true);
+    float* data = stbi_loadf(_filePath.c_str(), &width, &height, &nrComponents, 0);
+    
+    if (data != NULL)
+    {
+        glGenTextures(1, &hdrTexture);
+        glBindTexture(GL_TEXTURE_2D, hdrTexture);
+
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+
+        // テクスチャパラメータ設定
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+
+        stbi_image_free(data);
+    }
+    
+
+
+    return 0;
 }
 
 /// <summary>

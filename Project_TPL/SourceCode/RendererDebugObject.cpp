@@ -35,14 +35,14 @@ void RendererDebugObject::Render()
 
 	// レンダリング方法の変更
 	bool method = (int)m_renderer->m_renderMethod;
-	ImGui::Checkbox("RenderingMode : 0 = Forward, 1 = Deffered", &method);
+	ImGui::Checkbox("RenderingMode : 0 = Forward, 1 = Deferred", &method);
 	if (method == 0)
 	{
 		m_renderer->SetRenderMethod(RENDER_METHOD::FORWARD);
 	}
 	else
 	{
-		m_renderer->SetRenderMethod(RENDER_METHOD::DEFFERED);
+		m_renderer->SetRenderMethod(RENDER_METHOD::DEFERRED);
 	}
 
 	// ブルーム効果の有効・無効化

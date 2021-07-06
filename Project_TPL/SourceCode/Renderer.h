@@ -26,7 +26,9 @@
 enum class RENDER_METHOD
 {
 	FORWARD = 0,
-	DEFFERED
+	DEFERRED,
+	PBR,
+	BLOOM
 };
 
 

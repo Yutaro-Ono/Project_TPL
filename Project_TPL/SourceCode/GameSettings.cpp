@@ -15,7 +15,7 @@ GameSettings::GameSettings()
 	:m_displayHeight(-1)
 	,m_displayWidth(-1)
 	,m_displayFullScreen(-1)
-	,m_graphicsEnableDeffered(-1)
+	,m_graphicsEnableDeferred(-1)
 	,m_graphicsEnableEnvMap(-1)
 {
 
@@ -47,7 +47,7 @@ bool GameSettings::Load(const std::string& _iniPath)
 	loadSuccess = LoadIntValue(pt, "Display", "ScreenHeight", m_displayHeight);
 
 	loadSuccess = LoadBoolValue(pt, "Display", "FullScreen", m_displayFullScreen);
-	loadSuccess = LoadBoolValue(pt, "Graphics", "EnableDefferedRendering", m_graphicsEnableDeffered);
+	loadSuccess = LoadBoolValue(pt, "Graphics", "EnableDeferredRendering", m_graphicsEnableDeferred);
 	loadSuccess = LoadBoolValue(pt, "Graphics", "EnableEnvironmentMap", m_graphicsEnableEnvMap);
 	loadSuccess = LoadBoolValue(pt, "Graphics", "EnableBloom", m_graphicsEnableBloom);
 
