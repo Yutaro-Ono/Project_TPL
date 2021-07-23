@@ -109,7 +109,7 @@ const unsigned int Texture::LoadCubeMapTextures(const std::string& _filePath) co
 
         // 1面のテクスチャをロード
         stbi_set_flip_vertically_on_load(true);
-        float *data = stbi_loadf(faces[i].c_str(), &width, &height, &channels, 0);
+        unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &channels, 0);
 
         if (data != NULL)
         {
@@ -117,7 +117,7 @@ const unsigned int Texture::LoadCubeMapTextures(const std::string& _filePath) co
             glGenTextures(1, &cubeMap);
             glBindTexture(GL_TEXTURE_CUBE_MAP, cubeMap);
 
-            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, width, height, 0, GL_RGB, GL_FLOAT, data);
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             // テクスチャパラメータ設定
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);

@@ -55,12 +55,12 @@ void RenderDeferred::Draw(class ShaderManager* _shaderManager, class DrawableObj
 	m_renderer->GetSkyBox()->Draw(m_skyBoxShader);
 
 	// Mesh
-	glEnable(GL_DEPTH_TEST);
-	m_basicMeshShader->UseProgram();
-	m_basicMeshShader->SetUniform("u_mat.albedo", 0);
-	m_basicMeshShader->SetUniform("u_mat.specular", 5);
-	m_basicMeshShader->SetUniform("u_mat.emissive", 6);
-	_drawObjects->Draw(m_basicMeshShader);
+	//glEnable(GL_DEPTH_TEST);
+	//m_basicMeshShader->UseProgram();
+	//m_basicMeshShader->SetUniform("u_mat.albedo", 0);
+	//m_basicMeshShader->SetUniform("u_mat.specular", 5);
+	//m_basicMeshShader->SetUniform("u_mat.emissive", 6);
+	//_drawObjects->Draw(m_basicMeshShader);
 
 	// NormalMapping
 	//glEnable(GL_DEPTH_TEST);
@@ -73,11 +73,11 @@ void RenderDeferred::Draw(class ShaderManager* _shaderManager, class DrawableObj
 	//_drawObjects->Draw(m_normalMapShader);
 
 	// Phongシェーディング
-	//m_phongShader->UseProgram();
-	//m_phongShader->SetUniform("u_mat.albedo", 0);
-	//m_phongShader->SetUniform("u_mat.specular", 5);
-	//m_phongShader->SetUniform("u_mat.emissive", 6);
-	//m_drawableObject->Draw(m_shaderManager, GLSLshader::GBUFFER_PHONG);
+	m_phongShader->UseProgram();
+	m_phongShader->SetUniform("u_mat.albedo", 0);
+	m_phongShader->SetUniform("u_mat.specular", 5);
+	m_phongShader->SetUniform("u_mat.emissive", 6);
+	_drawObjects->Draw(m_phongShader);
 
 	// 法線の視覚化
 	if (m_renderer->GetIsEnableVisualizeNormal())
