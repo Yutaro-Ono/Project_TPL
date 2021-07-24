@@ -9,9 +9,7 @@
 // 2021/ 3/25   コンパイル・リンク処理追加
 //----------------------------------------------------------------------------------+
 #pragma once
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include "Math.h"
 #include <fstream>
 #include <sstream>
@@ -27,8 +25,8 @@ public:
 	GLSLprogram();
 	~GLSLprogram();
 
-	bool LoadShaders(const char* _vertPath, const char* _fragPath, const char* _geomPath = nullptr);
-	bool CompileShaderFromFile(const char* _shaderPath, GLenum _shaderType, unsigned int& _outShader);
+	bool LoadShaders(const std::string&_vertPath, const std::string& _fragPath, const std::string& _geomPath);
+	bool CompileShaderFromFile(const std::string& _shaderPath, GLenum _shaderType, GLuint& _outShader);
 	bool LinkShaders(const unsigned int& _vertShader, const unsigned int& _fragShader, const unsigned int& _geomShader, unsigned int& _program);
 
 	void Delete();
@@ -51,6 +49,10 @@ public:
 
 private:
 
-	GLuint m_shaderProgram;         // シェーダープログラム
+
+	unsigned int m_vertexShader;
+	unsigned int m_fragmentShader;
+	unsigned int m_geometryShader;
+	unsigned int m_shaderProgram;         // シェーダープログラム
 
 };

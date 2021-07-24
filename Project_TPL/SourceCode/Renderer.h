@@ -15,6 +15,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <SDL.h>
+#include <SDL_image.h>
 #include <Effekseer.h>
 #include <EffekseerRendererGL.h>
 #include "Math.h"
@@ -49,7 +50,7 @@ public:
 	void Draw();
 
 
-	GLFWwindow* GetMainWindow() { return m_window; }    // ウィンドウコンテキストのゲッター
+	SDL_Window* GetMainWindow() { return m_window; }    // ウィンドウのゲッター
 
 	class DrawableObjectManager* GetDrawableObjectManager() { return m_drawableObject; }
 
@@ -77,12 +78,15 @@ private:
 
 	void SetUniformBuffer();
 
-	static void FrameBuffer_Size_Callback(GLFWwindow* _window, int _width, int _height);
+	static void FrameBuffer_Size_Callback(SDL_Window* _window, int _width, int _height);
 
 
-	GLFWwindow* m_window;                            // メインウィンドウ
+	SDL_Window* m_window;                            // メインウィンドウ
+	SDL_GLContext m_context;                         // コンテキスト
+	SDL_Renderer* m_sdlRenderer;                     // SDLレンダラー
 
-	RENDER_METHOD m_renderMethodType;                    // 描画方法
+
+	RENDER_METHOD m_renderMethodType;                // 描画方法
 
 	class ShaderManager* m_shaderManager;            // シェーダーマネージャークラス
 	class DrawableObjectManager* m_drawableObject;   // 描画可能オブジェクト管理クラス
@@ -110,24 +114,6 @@ private:
 
 	// vertexArrayクラス
 	class VertexArray* m_quadVA;                     // 四角形 (スクリーンに使用)
-
-	// Gバッファ
-	unsigned int m_gBuffer;
-	// Gバッファ要素
-	unsigned int m_gPos;
-	unsigned int m_gNormal;
-	unsigned int m_gAlbedoSpec;
-	unsigned int m_gEmissive;
-	unsigned int m_gAttachments[4];
-	unsigned int m_gRBO;
-
-	// ライトバッファ
-	unsigned int m_lightBuffer;
-	// ライトバッファ要素
-	unsigned int m_lightHDR;
-	unsigned int m_lightHighBright;
-	unsigned int m_lightRBO;
-	unsigned int m_lightAttachments[2];
 
 	// MSAAバッファ
 	unsigned int m_msaaBuffer;

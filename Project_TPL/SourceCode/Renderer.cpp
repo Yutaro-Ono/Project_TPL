@@ -67,6 +67,76 @@ Renderer::~Renderer()
 bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 {
 
+	//--------------------------------------+
+    // SDLによるGL初期設定
+    //--------------------------------------+
+	// OpenGL アトリビュートのセット
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+	// GL version 4.2
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+	// 8Bit RGBA チャンネル
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	// ダブルバッファリング有効化
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	// ハードウェアアクセラレーションを強制する
+	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
+
+
+
+	//--------------------------------------+
+	// ウィンドウオブジェクト定義
+	//--------------------------------------+
+		// Windowの作成
+	m_window = SDL_CreateWindow("SDL & GL Window",
+		100, 80,
+		_width, _height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	if (!m_window)
+	{
+		printf("Windowの作成に失敗: %s", SDL_GetError());
+		return false;
+	}
+	if (_fullScreen)
+	{
+		if (SDL_SetWindowFullscreen(m_window, SDL_WINDOW_FULLSCREEN_DESKTOP))
+		{
+			printf("(%d, %d) サイズのフルスクリーン化に失敗\n", _width, _height);
+			return false;
+		}
+		glViewport(0, 0, _width, _height);
+	}
+
+	//SDLRendererの作成
+	m_sdlRenderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if (!m_sdlRenderer)
+	{
+		printf("SDLRendererの作成に失敗 : %s", SDL_GetError());
+		return false;
+	}
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+	{
+		printf("SDLImageInitPNGの初期化に失敗 : %s", SDL_GetError());
+		return false;
+	}
+
+	// OpenGLContextの作成
+	m_context = SDL_GL_CreateContext(m_window);
+
+	//--------------------------------------+
+	// GLEW初期化
+	//--------------------------------------+
+	glewExperimental = GL_TRUE;
+	if (glewInit() != GLEW_OK)
+	{
+		std::cout << "Error::GLEW Initialize" << std::endl;
+		return false;
+	}
+	// 幾つかのプラットホームでは、GLEWが無害なエラーコードを吐くのでクリアしておく
+	glGetError();
 
 	//--------------------------------------+
     // GLFW初期化
@@ -83,46 +153,12 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);                   // マイナーバージョン
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);   // コアプロファイルを使用
 
-	//--------------------------------------+
-	// GLEW初期化
-	//--------------------------------------+
-	glewExperimental = GL_TRUE;
-	if (glewInit() != GLEW_OK)
-	{
-		std::cout << "Error::GLEW Initialize" << std::endl;
-		return false;
-	}
-	// 幾つかのプラットホームでは、GLEWが無害なエラーコードを吐くのでクリアしておく
-	glGetError();
-
-	//--------------------------------------+
-	// ウィンドウオブジェクト定義
-	//--------------------------------------+
-	// フルスクリーン化
-	if (_fullScreen)
-	{
-		m_window = glfwCreateWindow(_width, _height, "Project_TPL", glfwGetPrimaryMonitor(), NULL);
-	}
-	else
-	{
-		m_window = glfwCreateWindow(_width, _height, "Project_TPL", NULL, NULL);
-	}
-	// ウィンドウ作成失敗時
-	if (m_window == NULL)
-	{
-		std::cout << "Failed : Create Renderer Window" << std::endl;
-		return false;
-	}
-	// 作成したウィンドウを現在のスレッドのメインコンテキストとして設定
-	glfwMakeContextCurrent(m_window);
 
 	//---------------------------------------+
 	// ビューポートの設定
 	//---------------------------------------+
 	// ビューポート (0x0の座標から1920x1080までを描画範囲として設定)
 	glViewport(0, 0, _width, _height);
-	// ウィンドウサイズ変更が行われた際に、コールバック関数 (今回は画面サイズの最適化関数)を呼び出すことを、GLFWに指示
-	glfwSetFramebufferSizeCallback(m_window, FrameBuffer_Size_Callback);
 	// カリングの設定
 	glFrontFace(GL_CCW);
 	glEnable(GL_CULL_FACE);
@@ -258,9 +294,12 @@ void Renderer::Delete()
 	}
 	m_renderMethods.clear();
 
-	// windowの破棄・GLFWのクリーンアップ
-	glfwDestroyWindow(m_window);
+	// GLFWのクリーンアップ
 	glfwTerminate();
+
+	// SDLのクリーンアップ
+	SDL_GL_DeleteContext(m_context);
+	SDL_DestroyWindow(m_window);
 }
 
 /// <summary>
@@ -268,9 +307,7 @@ void Renderer::Delete()
 /// </summary>
 void Renderer::Draw()
 {
-	// 描画するウィンドウをセット
-	glfwMakeContextCurrent(m_window);
-
+	
 	// ビューポートの更新
 	glViewport(0, 0, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH());
 
@@ -280,8 +317,8 @@ void Renderer::Draw()
 	// 現在の描画メソッドに応じた描画処理を行う
 	m_renderMethods[m_renderMethodType]->Draw(m_shaderManager, m_drawableObject);
 
-	// 新しいカラーバッファを古いバッファと交換し、画面に表示
-	glfwSwapBuffers(m_window);
+	// 画面のスワップ
+	SDL_GL_SwapWindow(m_window);
 }
 
 /// <summary>
@@ -378,7 +415,7 @@ void Renderer::SetUniformBuffer()
 /// <param name="in_window"> ウィンドウオブジェクトのポインタ </param>
 /// <param name="in_windth"> 画面の横幅 </param>
 /// <param name="in_height"> 画面の縦幅 </param>
-void Renderer::FrameBuffer_Size_Callback(GLFWwindow* _window, int _width, int _height)
+void Renderer::FrameBuffer_Size_Callback(SDL_Window* _window, int _width, int _height)
 {
 	// ビューポートのリサイズ
 	glViewport(0, 0, _width, _height);

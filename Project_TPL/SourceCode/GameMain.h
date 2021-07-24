@@ -55,6 +55,7 @@ private:
 	void Delete();
 	void ProcessInput();
 
+	bool m_isRunning;                      // ゲームループを続けるか
 
 	// メンバ クラス
 	class Renderer* m_renderer;            // レンダラー

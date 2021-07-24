@@ -216,6 +216,9 @@
     <Filter Include="Source\Audio\SE">
       <UniqueIdentifier>{b1f68c6b-4c54-430c-9e8a-2a45882f1c53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="リソース ファイル\glad">
+      <UniqueIdentifier>{d82e7910-e561-4f67-9c11-51a238e9b1a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -370,6 +373,9 @@
     </ClCompile>
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
       <Filter>リソース ファイル\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="glad\glad.c">
+      <Filter>リソース ファイル\glad</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

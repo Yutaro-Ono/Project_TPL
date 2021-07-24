@@ -24,7 +24,8 @@
 /// コンストラクタ
 /// </summary>
 GameMain::GameMain()
-	:m_texturePool(nullptr)
+	:m_isRunning(true)
+	,m_texturePool(nullptr)
 	,m_meshPool(nullptr)
 	,m_actorPool(nullptr)
 	,m_renderer(nullptr)
@@ -152,19 +153,88 @@ void GameMain::Delete()
 /// </summary>
 void GameMain::ProcessInput()
 {
-	// ESCAPEが押されたら
-    // ウィンドウ終了フラグをONする
-	if (glfwGetKey(m_renderer->GetMainWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	// 終了イベントのキャッチ
+	SDL_Event event;
+	while (SDL_PollEvent(&event))
 	{
-		glfwSetWindowShouldClose(m_renderer->GetMainWindow(), true);
+
+		switch (event.type)
+		{
+		case SDL_QUIT:
+			m_isRunning = false;
+			break;
+
+		default:
+			//CONTROLLER_INSTANCE.ReceiveEvent(event);
+			break;
+		}
 	}
+
+	// キーボード入力更新
+	//INPUT_INSTANCE.Update();
+
+	// コントローラ入力更新
+	//CONTROLLER_INSTANCE.Update();
+
+	// マウス入力更新
+	//MOUSE_INSTANCE.Update();
+
+	// ESCが押されたら終了
+	//if (INPUT_INSTANCE.IsKeyPullUp(SDL_SCANCODE_ESCAPE))
+	//{
+	//	m_isRunning = false;
+	//}
+
+	// アクターデバッグ
+	//if (INPUT_INSTANCE.IsKeyPullUp(SDL_SCANCODE_F12))
+	//{
+	//	ShowActor();
+	//}
+
+	// レンダリングリソース表示
+	//if (INPUT_INSTANCE.IsKeyPullUp(SDL_SCANCODE_F11))
+	//{
+	//	GetRenderer()->ShowResource();
+	//}
+
+	// ポーズモード移行／解除
+	//if (INPUT_INSTANCE.IsKeyPullUp(SDL_SCANCODE_BACKSPACE) || CONTROLLER_INSTANCE.IsReleased(SDL_CONTROLLER_BUTTON_START))
+	//{
+	//	//ポーズモード切替
+	//	m_isPauseMode = !m_isPauseMode;
+	//	Actor::State changeState;
+	//	if (m_isPauseMode)
+	//	{
+	//		changeState = Actor::STATE_PAUSED;        // ポーズ
+	//		m_pause->SetModeON();                     // ポーズ画面をオン
+	//	}
+	//	else
+	//	{
+	//		m_pause->SetModeOFF();                    // ポーズ画面をオフ
+	//		changeState = Actor::STATE_ACTIVE;        // アクティブ
+	//	}
+
+	//	//全てのステートを変更する
+	//	for (auto itr : m_actors)
+	//	{
+	//		if (itr->GetState() != Actor::STATE_DEAD)
+	//		{
+	//			itr->SetState(changeState);
+	//		}
+	//	}
+	//}
 
 #ifdef _DEBUG
 
+	//------------------------------------------------+
+	// イベントの更新
+	//------------------------------------------------+
+	glfwPollEvents();          // キーボード・マウスのトリガーを確認
 	// デバッグ画面
 	if (glfwGetKey(m_debugger->GetDebugWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(m_debugger->GetDebugWindow(), true);
+		m_isRunning = false;
 	}
 
 #endif
@@ -224,13 +294,9 @@ bool GameMain::RunLoop()
 #endif
 	
 
-	//------------------------------------------------+
-	// GLイベントの更新
-	//------------------------------------------------+
-	glfwPollEvents();          // キーボード・マウスのトリガーを確認
 
-    // (GLFWが何らかの操作で閉じるまでループ)
-	return !glfwWindowShouldClose(m_renderer->GetMainWindow());
+	return m_isRunning;
+	
 }
 
 

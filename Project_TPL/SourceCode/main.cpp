@@ -19,10 +19,15 @@
 
 int main()
 {
-	// 初期化・初期シーンのセット
-	bool loop = GAME_INSTANCE.Initialize();
-	GAME_INSTANCE.SetScene(new TestScene());
 
+	// 初期化・初期シーンのセット
+	if (GAME_INSTANCE.Initialize())
+	{
+		return 0;
+	}
+
+	bool loop = true;
+	GAME_INSTANCE.SetScene(new TestScene());
 	// メインループ
 	while (loop)
 	{

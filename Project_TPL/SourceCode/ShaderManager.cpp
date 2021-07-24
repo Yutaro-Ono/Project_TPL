@@ -31,13 +31,13 @@ ShaderManager::~ShaderManager()
 bool ShaderManager::CreateShaders()
 {
 	m_shaders[GLSLshader::SIMPLE_POS_COLOR] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::SIMPLE_POS_COLOR]->LoadShaders("Shaders/SimpleShader_pos_color.vert", "Shaders/SimpleShader_pos_color.frag"))
+	if (!m_shaders[GLSLshader::SIMPLE_POS_COLOR]->LoadShaders("Shaders/SimpleShader_pos_color.vert", "Shaders/SimpleShader_pos_color.frag", ""))
 	{
 		return false;
 	}
 
 	m_shaders[GLSLshader::SIMPLE_POS_TEXTURE] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::SIMPLE_POS_TEXTURE]->LoadShaders("Shaders/BasicShader.vert", "Shaders/BasicShader_SamplingTexture.frag"))
+	if (!m_shaders[GLSLshader::SIMPLE_POS_TEXTURE]->LoadShaders("Shaders/BasicShader.vert", "Shaders/BasicShader_SamplingTexture.frag", ""))
 	{
 		return false;
 	}
@@ -45,39 +45,39 @@ bool ShaderManager::CreateShaders()
 
 
 	m_shaders[GLSLshader::BASIC_MESH] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::BASIC_MESH]->LoadShaders("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag"))
+	if (!m_shaders[GLSLshader::BASIC_MESH]->LoadShaders("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag", ""))
 	{
 		return false;
 	}
 	m_shaders[GLSLshader::BASIC_MESH]->SetUniform("u_mat.albedo", 0);
 
 	m_shaders[GLSLshader::GBUFFER_BASIC_MESH] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->LoadShaders("Shaders/GBuffer_Basic.vert", "Shaders/GBuffer_Basic.frag"))
+	if (!m_shaders[GLSLshader::GBUFFER_BASIC_MESH]->LoadShaders("Shaders/GBuffer_Basic.vert", "Shaders/GBuffer_Basic.frag", ""))
 	{
 		return false;
 	}
 
 	m_shaders[GLSLshader::GBUFFER_PHONG] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::GBUFFER_PHONG]->LoadShaders("Shaders/GBuffer_Phong.vert", "Shaders/GBuffer_Phong.frag"))
+	if (!m_shaders[GLSLshader::GBUFFER_PHONG]->LoadShaders("Shaders/GBuffer_Phong.vert", "Shaders/GBuffer_Phong.frag", ""))
 	{
 		return false;
 	}
 
 	m_shaders[GLSLshader::GBUFFER_NORMALMAP] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::GBUFFER_NORMALMAP]->LoadShaders("Shaders/GBuffer_NormalMap.vert", "Shaders/GBuffer_NormalMap.frag"))
+	if (!m_shaders[GLSLshader::GBUFFER_NORMALMAP]->LoadShaders("Shaders/GBuffer_NormalMap.vert", "Shaders/GBuffer_NormalMap.frag", ""))
 	{
 		return false;
 	}
 
 	m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX]->LoadShaders("Shaders/GBuffer_Basic_SkyBox.vert", "Shaders/GBuffer_Basic_SkyBox.frag"))
+	if (!m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX]->LoadShaders("Shaders/GBuffer_Basic_SkyBox.vert", "Shaders/GBuffer_Basic_SkyBox.frag", ""))
 	{
 		return false;
 	}
 	m_shaders[GLSLshader::GBUFFER_BASIC_SKYBOX]->SetUniform("u_cubeMap", 0);
 
 	m_shaders[GLSLshader::OUT_SCREEN_ENTIRE] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::OUT_SCREEN_ENTIRE]->LoadShaders("Shaders/OutScreen.vert", "Shaders/OutScreen.frag"))
+	if (!m_shaders[GLSLshader::OUT_SCREEN_ENTIRE]->LoadShaders("Shaders/OutScreen.vert", "Shaders/OutScreen.frag", ""))
 	{
 		return false;
 	}
@@ -88,21 +88,21 @@ bool ShaderManager::CreateShaders()
 	// Bloom用シェーダー
 	//-------------------------------------------------------------------------+
 	m_shaders[GLSLshader::BLOOM_DOWNSAMPLING] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::BLOOM_DOWNSAMPLING]->LoadShaders("Shaders/OutScreen.vert", "Shaders/Bloom_DownSampling.frag"))
+	if (!m_shaders[GLSLshader::BLOOM_DOWNSAMPLING]->LoadShaders("Shaders/OutScreen.vert", "Shaders/Bloom_DownSampling.frag", ""))
 	{
 		return false;
 	}
 	m_shaders[GLSLshader::BLOOM_DOWNSAMPLING]->SetUniform("u_scene", 0);
 
 	m_shaders[GLSLshader::BLOOM_GAUSSIAN_BLUR] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::BLOOM_GAUSSIAN_BLUR]->LoadShaders("Shaders/OutScreen.vert", "Shaders/Bloom_GaussianBlur.frag"))
+	if (!m_shaders[GLSLshader::BLOOM_GAUSSIAN_BLUR]->LoadShaders("Shaders/OutScreen.vert", "Shaders/Bloom_GaussianBlur.frag", ""))
 	{
 		return false;
 	}
 	m_shaders[GLSLshader::BLOOM_GAUSSIAN_BLUR]->SetUniform("u_blurSource", 0);
 
 	m_shaders[GLSLshader::BLOOM_TONEMAPPING] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::BLOOM_TONEMAPPING]->LoadShaders("Shaders/OutScreen.vert", "Shaders/Bloom_ToneMapping.frag"))
+	if (!m_shaders[GLSLshader::BLOOM_TONEMAPPING]->LoadShaders("Shaders/OutScreen.vert", "Shaders/Bloom_ToneMapping.frag", ""))
 	{
 		return false;
 	}
@@ -112,7 +112,7 @@ bool ShaderManager::CreateShaders()
 	// ライトパス
 	//---------------------------------------------------------------------------+
 	m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS] = new GLSLprogram();
-	if (!m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->LoadShaders("Shaders/GBuffer_LightPass.vert", "Shaders/GBuffer_DirectionalLight.frag"))
+	if (!m_shaders[GLSLshader::DIRECTIONAL_LIGHT_PASS]->LoadShaders("Shaders/GBuffer_LightPass.vert", "Shaders/GBuffer_DirectionalLight.frag", ""))
 	{
 		return false;
 	}

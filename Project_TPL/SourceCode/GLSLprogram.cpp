@@ -6,9 +6,11 @@
 //----------------------------------------------------------------------------------+
 #include "GLSLprogram.h"
 
-
 GLSLprogram::GLSLprogram()
-    :m_shaderProgram(0)
+    :m_vertexShader(0)
+    ,m_fragmentShader(0)
+    ,m_geometryShader(0)
+    ,m_shaderProgram(0)
 {
 }
 
@@ -25,103 +27,28 @@ GLSLprogram::~GLSLprogram()
 /// <param name="_fragPath"> フラグメントシェーダーのファイルパス </param>
 /// <param name="_geomPath"> ジオメトリシェーダーのファイルパス </param>
 /// <returns> ロード処理に成功したか(true)・失敗したか(false) </returns>
-bool GLSLprogram::LoadShaders(const char* _vertPath, const char* _fragPath, const char* _geomPath)
+bool GLSLprogram::LoadShaders(const std::string& _vertPath, const std::string& _fragPath, const std::string& _geomPath)
 {
 
-    // ファイルパスからシェーダーソースコードを取得する
-    std::string vertCode;
-    std::string fragCode;
-    std::string geomCode;
-
-    std::ifstream vShaderFile;
-    std::ifstream fShaderFile;
-    std::ifstream gShaderFile;
-
-    // ifstreamオブジェクトが例外をスローできるか確認
-    vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-    gShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
-
-    try
-    {
-        // シェーダーファイルを開く
-        vShaderFile.open(_vertPath);
-        fShaderFile.open(_fragPath);
-
-        // ファイル内のバッファを読み取り、streamに格納
-        std::stringstream vShaderStream, fShaderStream;
-        vShaderStream << vShaderFile.rdbuf();
-        fShaderStream << fShaderFile.rdbuf();
-
-        // ファイルのハンドルを閉じる
-        vShaderFile.close();
-        fShaderFile.close();
-
-        // streamの内容をstringに変換
-        vertCode = vShaderStream.str();
-        fragCode = fShaderStream.str();
-
-        // ジオメトリシェーダーが指定されていた場合
-        if (_geomPath != nullptr)
-        {
-            gShaderFile.open(_geomPath);
-            std::stringstream gShaderStream;
-            gShaderStream << gShaderFile.rdbuf();
-            gShaderFile.close();
-            geomCode = gShaderStream.str();
-        }
-
-    }
-    catch (std::ifstream::failure& e)
-    {
-        std::cout << "Error::Shader::File Read Failed" << std::endl;
-        return false;
-    }
-
-    // 文字列に保管
-    const char* vShaderCode = vertCode.c_str();
-    const char* fShaderCode = fragCode.c_str();
-
     // シェーダーのコンパイル
-    unsigned int vertex, fragment;
-
-    // 頂点シェーダー
-    vertex = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex, 1, &vShaderCode, NULL);
-    glCompileShader(vertex);
-    
-    // フラグメントシェーダー
-    fragment = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment, 1, &fShaderCode, NULL);
-    glCompileShader(fragment);
-
-    // 正常にコンパイルできたかチェック
-    if (!CompileShaderFromFile(_vertPath, GL_VERTEX_SHADER, vertex) ||
-        !CompileShaderFromFile(_fragPath, GL_FRAGMENT_SHADER, fragment))
+    if (!CompileShaderFromFile(_vertPath, GL_VERTEX_SHADER, m_vertexShader) ||
+        !CompileShaderFromFile(_fragPath, GL_FRAGMENT_SHADER, m_fragmentShader))
     {
         return false;
     }
 
     // ジオメトリシェーダー
-    unsigned int geometry = 0;
-    if (_geomPath != nullptr)
+    if (_geomPath.size() != 0)
     {
-
-        const char* gShaderCode = geomCode.c_str();
-        geometry = glCreateShader(GL_GEOMETRY_SHADER);
-        glShaderSource(geometry, 1, &gShaderCode, NULL);
-        glCompileShader(geometry);
-
-        // 正常にコンパイルできたかチェック
-        if (!CompileShaderFromFile(_geomPath, GL_GEOMETRY_SHADER, geometry))
+        // シェーダーのコンパイル
+        if (!CompileShaderFromFile(_geomPath, GL_GEOMETRY_SHADER, m_geometryShader))
         {
             return false;
         }
     }
 
     // シェーダープログラムへのリンク
-    if (!LinkShaders(vertex, fragment, geometry, m_shaderProgram))
+    if (!LinkShaders(m_vertexShader, m_fragmentShader, m_geometryShader, m_shaderProgram))
     {
         return false;
     }
@@ -159,9 +86,8 @@ void GLSLprogram::Delete()
 /// <param name="_shaderType"> シェーダーの種類 (頂点、フラグメントetc...) </param>
 /// <param name="_outShader"> コンパイルしたシェーダーを格納する変数 </param>
 /// <returns> コンパイル成功したらtrueを返す </returns>
-bool GLSLprogram::CompileShaderFromFile(const char* _shaderPath, GLenum _shaderType, unsigned int& _outShader)
+bool GLSLprogram::CompileShaderFromFile(const std::string& _shaderPath, GLenum _shaderType, GLuint& _outShader)
 {
-
 
     // シェーダーファイルをオープン
     std::ifstream shaderFile(_shaderPath);
@@ -172,8 +98,7 @@ bool GLSLprogram::CompileShaderFromFile(const char* _shaderPath, GLenum _shaderT
         std::stringstream transText;
         transText << shaderFile.rdbuf();
 
-        std::string contents = transText.str();
-        
+        std::string contents = transText.str(); 
         const char* contentsChar = contents.c_str();
 
         // 引数に応じたタイプのシェーダーIDを作成・保管
