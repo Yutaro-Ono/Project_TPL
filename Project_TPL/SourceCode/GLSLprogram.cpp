@@ -90,7 +90,7 @@ bool GLSLprogram::LoadShaders(const char* _vertPath, const char* _fragPath, cons
     vertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex, 1, &vShaderCode, NULL);
     glCompileShader(vertex);
-
+    
     // フラグメントシェーダー
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment, 1, &fShaderCode, NULL);
@@ -335,7 +335,7 @@ void GLSLprogram::SetUniform(const char* _name, bool _val)
     }
 }
 
-void GLSLprogram::SetUniform(const char* _name, const glm::vec2& _vec)
+void GLSLprogram::SetUniform(const char* _name, const Vector2& _vec)
 {
     int loc = glGetUniformLocation(m_shaderProgram, _name);
 
@@ -345,7 +345,7 @@ void GLSLprogram::SetUniform(const char* _name, const glm::vec2& _vec)
     }
 }
 
-void GLSLprogram::SetUniform(const char* _name, const glm::vec3& _vec)
+void GLSLprogram::SetUniform(const char* _name, const Vector3& _vec)
 {
     int loc = glGetUniformLocation(m_shaderProgram, _name);
 
@@ -355,32 +355,23 @@ void GLSLprogram::SetUniform(const char* _name, const glm::vec3& _vec)
     }
 }
 
-void GLSLprogram::SetUniform(const char* _name, const glm::vec4& _vec)
+
+void GLSLprogram::SetUniform(const char* _name, const Matrix3& _mat)
 {
     int loc = glGetUniformLocation(m_shaderProgram, _name);
 
     if (loc >= 0)
     {
-        glUniform4f(loc, _vec.x, _vec.y, _vec.z, _vec.w);
+        glUniformMatrix3fv(loc, 1, GL_FALSE, _mat.GetAsFloatPtr());
     }
 }
 
-void GLSLprogram::SetUniform(const char* _name, const glm::mat3& _mat)
+void GLSLprogram::SetUniform(const char* _name, const Matrix4& _mat)
 {
     int loc = glGetUniformLocation(m_shaderProgram, _name);
 
     if (loc >= 0)
     {
-        glUniformMatrix3fv(loc, 1, GL_FALSE, &_mat[0][0]);
-    }
-}
-
-void GLSLprogram::SetUniform(const char* _name, const glm::mat4& _mat)
-{
-    int loc = glGetUniformLocation(m_shaderProgram, _name);
-
-    if (loc >= 0)
-    {
-        glUniformMatrix4fv(loc, 1, GL_FALSE, &_mat[0][0]);
+        glUniformMatrix4fv(loc, 1, GL_FALSE, _mat.GetAsFloatPtr());
     }
 }

@@ -1,6 +1,7 @@
 #include "ActorDebugObject.h"
 #include "GameMain.h"
 #include "Debugger.h"
+#include "Actor.h"
 
 /// <summary>
 /// アクター用デバッグオブジェクト
@@ -32,7 +33,7 @@ void ActorDebugObject::Update(float _deltaTime)
 		//------------------------------------------------------------------------+
 		// 座標
 		ImGui::Text(u8"座標");
-		glm::vec3 pos;
+		Vector3 pos;
 		pos.x = m_owner->m_position.x;
 		pos.y = m_owner->m_position.y;
 		pos.z = m_owner->m_position.z;
@@ -56,8 +57,8 @@ void ActorDebugObject::Update(float _deltaTime)
 		//--------------------------------------------------------------------------+
 		// 回転
 		ImGui::Text(u8"回転");
-		glm::vec3 rot = m_owner->m_eulerAngles;
-
+		Quaternion rot = m_owner->m_rotation;
+		
 		label = "Rotation X (" + m_actorLabel + ")";
 		ImGui::SliderFloat(label.c_str(), &rot.x, -360.0f, 360.0f);
 		label = "Rotation Y (" + m_actorLabel + ")";
@@ -66,16 +67,16 @@ void ActorDebugObject::Update(float _deltaTime)
 		ImGui::SliderFloat(label.c_str(), &rot.z, -360.0f, 360.0f);
 
 		// 更新されたら
-		if (rot.x != m_owner->m_eulerAngles.x || rot.y != m_owner->m_eulerAngles.y || rot.z != m_owner->m_eulerAngles.z)
+		if (rot.x != m_owner->m_rotation.x || rot.y != m_owner->m_rotation.y || rot.z != m_owner->m_rotation.z)
 		{
-			m_owner->SetEulerAngle(rot);
+			m_owner->SetRotation(rot);
 		}
 		//---------------------------------------------------------------------------+
 
 		//---------------------------------------------------------------------------+
 		// スケール
 		ImGui::Text(u8"拡大率");
-		glm::vec3 scale;
+		Vector3 scale;
 		scale.x = m_owner->m_scale.x;
 		scale.y = m_owner->m_scale.y;
 		scale.z = m_owner->m_scale.z;

@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include "Mesh.h"
-#include <rapidjson/document.h>
+#include <document.h>
 
 
 class MeshGpmesh : public Mesh

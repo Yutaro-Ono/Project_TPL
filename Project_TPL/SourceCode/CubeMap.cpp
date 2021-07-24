@@ -9,7 +9,7 @@
 // 2021/ 6/22   V‹Kì¬
 //----------------------------------------------------------------------------------+
 #include "CubeMap.h"
-#include <GL/gl3w.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "VertexArray.h"

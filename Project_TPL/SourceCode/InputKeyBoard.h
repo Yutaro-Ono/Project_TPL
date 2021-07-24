@@ -1,16 +1,16 @@
 //----------------------------------------------------------------------------------+
 // @file        InputKeyBoard.h
 // @brief       キーボード入力
-// @note        
+// @note        シングルトン
 // @author      小野 湧太郎 (Yutaro Ono, @2021)
 //
 // @changelog
 // 2021/ 6/23   新規作成
 //----------------------------------------------------------------------------------+
 #pragma once
-#include <GL/gl3w.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
+#include <SDL.h>
 
 
 class InputKeyBoard
@@ -28,20 +28,30 @@ public:
 	};
 
 
-	InputKeyBoard();
-	~InputKeyBoard();
+
+	// シングルトンパターン
+	static InputKeyBoard& InputInstance()
+	{
+		static InputKeyBoard InputInstance;
+		return InputInstance;
+	}
+
+
+	~InputKeyBoard() {};
 
 	void Update();
 
-	char GetInput(UINT _GLFW_KEYCODE);
+	char GetInput(Uint8 SDL_SCANCODE_key);             // 指定したキーの入力状態の取得
 
-	bool IsKeyPressed(UINT _GLFW_KEYCODE);
-	bool IsKeyPullUp(UINT _GLFW_KEYCODE);
-	bool IsKeyPushDown(UINT _GLFW_KEYCODE);
-	bool IsKeyOff(UINT _GLFW_KEYCODE);
+	bool IsKeyPressed(Uint8 SDL_SCANCODE_key);         // 指定したキーは押され続けている状態かを取得
+	bool IsKeyPullUp(Uint8 SDL_SCANCODE_key);          // 指定したキーのボタンが離されたか？
+	bool IsKeyPushDown(Uint8 SDL_SCANCODE_key);        // 指定したキーは押され続けているか
+	bool IsKeyOff(Uint8 SDL_SCANCODE_key);             // あるキーは押されていないか
 
 
 private:
+
+	InputKeyBoard();
 
 	char m_key[256];
 	char m_keyState[2][256];
@@ -50,3 +60,5 @@ private:
 	int m_prevKey;
 
 };
+
+#define INPUT_KEYBOARD_INSTANCE InputKeyBoard::InputInstance()

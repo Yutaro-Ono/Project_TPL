@@ -8,7 +8,7 @@
 // 2021/ 4/16   êVãKçÏê¨
 //----------------------------------------------------------------------------------+
 #pragma once
-#include <GL/gl3w.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 namespace VERTEX_LAYOUT

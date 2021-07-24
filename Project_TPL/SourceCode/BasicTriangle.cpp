@@ -10,7 +10,7 @@
 // 2021/ 4/23   テクスチャ座標追加
 //----------------------------------------------------------------------------------+
 #include "BasicTriangle.h"
-#include <GL/gl3w.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "VertexArray.h"
 #include "GLSLprogram.h"
@@ -27,17 +27,17 @@ BasicTriangle::BasicTriangle()
 {
 
 	// スケール(x, y, z)
-	m_scale = glm::vec3(1.0);
+	m_scale = Vector3(1.0f, 1.0f, 1.0f);
 
 	// 弧度
 	m_radian = 1.0f;
 
 	// ワールド変換行列
-	m_worldTrans = glm::mat4(1.0);
+	m_worldTrans = Matrix4::Identity;
 
 
 	// カラー
-	m_color = glm::vec3(0.0, 1.0, 0.0);
+	m_color = Vector3(0.0, 1.0, 0.0);
 
 	// 頂点配列の定義 (座標、カラー、UV)
 	float vertices[] =
@@ -96,9 +96,8 @@ BasicTriangle::~BasicTriangle()
 void BasicTriangle::Draw(GLSLprogram* _shader)
 {
 
-	// 行列計算 (回転→拡大率)
-	// m_worldTrans = glm::rotate(m_worldTrans, glm::radians(m_radian), glm::vec3(0.0, 0.0, 1.0));
-	m_worldTrans = glm::scale(m_worldTrans, m_scale);
+	// 行列計算 (拡大率)
+	m_worldTrans = Matrix4::CreateScale(m_scale);
 
 	// uniformへのセット
 	_shader->SetUniform("u_worldTransform", m_worldTrans);

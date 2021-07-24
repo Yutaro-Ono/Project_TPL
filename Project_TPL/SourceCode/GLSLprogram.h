@@ -9,11 +9,10 @@
 // 2021/ 3/25   コンパイル・リンク処理追加
 //----------------------------------------------------------------------------------+
 #pragma once
-#include <GL/gl3w.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
+#include <GL/glew.h>
+#include "Math.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>
@@ -44,11 +43,10 @@ public:
 	void SetUniform(const char* _name, int _val);
 	void SetUniform(const char* _name, float _val);
 	void SetUniform(const char* _name, bool _val);
-	void SetUniform(const char* _name, const glm::vec2& _vec);
-	void SetUniform(const char* _name, const glm::vec3& _vec);
-	void SetUniform(const char* _name, const glm::vec4& _vec);
-	void SetUniform(const char* _name, const glm::mat3& _mat);
-	void SetUniform(const char* _name, const glm::mat4& _mat);
+	void SetUniform(const char* _name, const Vector2& _vec);
+	void SetUniform(const char* _name, const Vector3& _vec);
+	void SetUniform(const char* _name, const Matrix3& _mat);
+	void SetUniform(const char* _name, const Matrix4& _mat);
 
 
 private:

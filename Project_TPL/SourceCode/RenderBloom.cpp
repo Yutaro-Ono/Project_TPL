@@ -104,8 +104,7 @@ void RenderBloom::DownSampling(unsigned int _brightBuffer, GLSLprogram* _downSam
 void RenderBloom::GaussBlur(GLSLprogram* _gaussShader, VertexArray* _screenVA)
 {
 	const int sampleCount = 15;
-	glm::vec3 offset[sampleCount];
-	glm::vec4 offsetv4[sampleCount];
+	Vector3 offset[sampleCount];
 	int reduceX = GAME_CONFIG.GetScreenSizeW();
 	int reduceY = GAME_CONFIG.GetScreenSizeH();
 	float deviation = 2.0f;
@@ -129,14 +128,14 @@ void RenderBloom::GaussBlur(GLSLprogram* _gaussShader, VertexArray* _screenVA)
 			glViewport(0, 0, reduceX, reduceY);
 			//glm::vec2 dir(1.0f - (float)horizontal, (float)horizontal);
 
-			glm::vec2 dir;
+			Vector2 dir;
 			if (horizontal)
 			{
-				dir = glm::vec2(0.0f, 1.0f);
+				dir = Vector2(0.0f, 1.0f);
 			}
 			else
 			{
-				dir = glm::vec2(1.0f, 0.0f);
+				dir = Vector2(1.0f, 0.0f);
 			}
 
 			// ガウスぼかし計算
@@ -156,12 +155,9 @@ void RenderBloom::GaussBlur(GLSLprogram* _gaussShader, VertexArray* _screenVA)
 			// シェーダーにオフセット情報を送信
 			for (int i = 0; i < sampleCount; i++)
 			{
-				// シェーダー側に送信するためvec4型に保管
-				offsetv4[i] = glm::vec4(offset[i], 0.0f);
-
 				// uniformにセット
 				std::string uStr = "u_gaussParam.offset[" + std::to_string(i) + "]";
-				_gaussShader->SetUniform(uStr.c_str(), offsetv4[i]);
+				_gaussShader->SetUniform(uStr.c_str(), offset[i]);
 			}
 			// スクリーンに描画
 			_screenVA->SetActive();
@@ -220,6 +216,54 @@ void RenderBloom::DrawBlendBloom(unsigned int _blendBuffer, GLSLprogram* _bloomS
 }
 
 /// <summary>
+/// ガウスぼかし計算
+/// </summary>
+/// <param name="_w"></param>
+/// <param name="_h"></param>
+/// <param name="_dir"></param>
+/// <param name="_deviation"></param>
+/// <param name="_offset"></param>
+void RenderBloom::CalcGaussBlurParam(int _w, int _h, Vector2 _dir, float _deviation, Vector3* _offset)
+{
+	float tu = 1.0f / float(_w);
+	float tv = 1.0f / float(_h);
+	_offset[0].x = 0.0f;
+	_offset[0].y = 0.0f;
+	_offset[0].z = GaussianDistribution(Vector2(0.0f, 0.0f), _deviation);
+	float totalWeight = _offset[0].z;
+
+	for (auto i = 0; i < 8; ++i)
+	{
+		int nextPos = (i - 1) * 2 + 1;
+		_offset[i].x = _dir.x * tu * nextPos;
+		_offset[i].y = _dir.y * tv * nextPos;
+		_offset[i].z = GaussianDistribution(_dir * float(nextPos), _deviation);
+		totalWeight += _offset[i].z * 2.0f;
+	}
+	for (auto i = 0; i < 8; ++i)
+	{
+		_offset[i].z /= totalWeight;
+	}
+	for (auto i = 8; i < 15; ++i)
+	{
+		_offset[i].x = -_offset[i - 7].x;
+		_offset[i].y = -_offset[i - 7].y;
+		_offset[i].z = _offset[i - 7].z;
+	}
+}
+
+/// <summary>
+/// ガウスぼかしの重みの計算
+/// </summary>
+/// <param name="_pos"> 座標 </param>
+/// <param name="_rho"> 偏差 </param>
+/// <returns></returns>
+float RenderBloom::GaussianDistribution(const Vector2& _pos, float _rho)
+{
+	return exp(-(_pos.x * _pos.x + _pos.y * _pos.y) / (2.0f * _rho * _rho));
+}
+
+/// <summary>
 /// ダウンサンプリング・ぼかし用のフレームバッファを作成する　(川瀬式ブルームフィルタを採用)
 /// ガウスぼかしにて縦横2枚ずつ使用するので、段階ごとに2枚ずつ作成 (計5段階 x 2)
 /// </summary>
@@ -270,52 +314,4 @@ void RenderBloom::CreateBlurFBO()
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		}
 	}
-}
-
-/// <summary>
-/// ガウスぼかし計算
-/// </summary>
-/// <param name="_w"></param>
-/// <param name="_h"></param>
-/// <param name="_dir"></param>
-/// <param name="_deviation"></param>
-/// <param name="_offset"></param>
-void RenderBloom::CalcGaussBlurParam(int _w, int _h, const glm::vec2& _dir, float _deviation, glm::vec3* _offset)
-{
-	float tu = 1.0f / float(_w);
-	float tv = 1.0f / float(_h);
-	_offset[0].x = 0.0f;
-	_offset[0].y = 0.0f;
-	_offset[0].z = GaussianDistribution(glm::vec2(0.0f, 0.0f), _deviation);
-	float totalWeight = _offset[0].z;
-
-	for (auto i = 0; i < 8; ++i)
-	{
-		int nextPos = (i - 1) * 2 + 1;
-		_offset[i].x = _dir.x * tu * nextPos;
-		_offset[i].y = _dir.y * tv * nextPos;
-		_offset[i].z = GaussianDistribution(_dir * float(nextPos), _deviation);
-		totalWeight += _offset[i].z * 2.0f;
-	}
-	for (auto i = 0; i < 8; ++i)
-	{
-		_offset[i].z /= totalWeight;
-	}
-	for (auto i = 8; i < 15; ++i)
-	{
-		_offset[i].x = -_offset[i - 7].x;
-		_offset[i].y = -_offset[i - 7].y;
-		_offset[i].z = _offset[i - 7].z;
-	}
-}
-
-/// <summary>
-/// ガウスぼかしの重みの計算
-/// </summary>
-/// <param name="_pos"> 座標 </param>
-/// <param name="_rho"> 偏差 </param>
-/// <returns></returns>
-const float& RenderBloom::GaussianDistribution(const glm::vec2& _pos, float _rho) const
-{
-	return exp(-(_pos.x * _pos.x + _pos.y * _pos.y) / (2.0f * _rho * _rho));
 }

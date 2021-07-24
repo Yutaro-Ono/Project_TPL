@@ -14,8 +14,11 @@
 #include "ActorPool.h"
 
 #include <iostream>
-
-
+#include <typeinfo>
+#include <SDL.h>
+#include <SDL_types.h>
+#include <SDL_mixer.h>
+#include <SDL_image.h>
 
 /// <summary>
 /// コンストラクタ
@@ -55,6 +58,39 @@ bool GameMain::Initialize()
 		std::cout << "Error::GameSettings::Load" << std::endl;
 		return false;
 	}
+
+	// SDL初期化
+	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) != 0)
+	{
+		printf("SDL初期化失敗: %s\n", SDL_GetError());
+		return false;
+	}
+	// サウンドの初期化
+	if (!Mix_Init(MIX_INIT_MP3 | MIX_INIT_OGG))
+	{
+		return false;
+	}
+	printf("SDLMixer初期化完了\n");
+	// SDLMixer API初期化　44100:音源の周波数 2:ステレオ 4096:内部バッファサイズ
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) < 0)
+	{
+		Mix_CloseAudio();
+		Mix_Quit();
+		return false;
+	}
+	int decordNum = Mix_GetNumMusicDecoders();
+	for (int i = 0; i < decordNum; ++i)
+	{
+		printf("MusicDecorder %d : %s\n", i, Mix_GetMusicDecoder(i));
+	}
+	int chunkNum = Mix_GetNumChunkDecoders();
+	for (int i = 0; i < chunkNum; ++i)
+	{
+		printf("SoundDecorder %d : %s\n", i, Mix_GetChunkDecoder(i));
+	}
+	printf("SDLMixerAPI初期化完了\n");
+
+
 
 	// 各種オブジェクトプールの生成
 	m_texturePool = new TexturePool();

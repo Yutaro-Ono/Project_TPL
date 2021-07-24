@@ -9,9 +9,7 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include <string>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "Math.h"
 
 class BasicTriangle
 {
@@ -25,7 +23,7 @@ public:
 
 	unsigned int GetTriangleVAO() { return m_vao; }     // 三角形用頂点配列オブジェクトのゲッター
 
-	void SetTriangleColor(const glm::vec3& _color) { m_color = _color; }
+	void SetTriangleColor(const Vector3& _color) { m_color = _color; }
 
 
 private:
@@ -37,13 +35,13 @@ private:
 	class Texture* m_diffuseMap;
 
 	// ワールド変換行列
-	glm::mat4 m_worldTrans;
+	Matrix4 m_worldTrans;
 	// 拡大率、回転値
-	glm::vec3 m_scale;
+	Vector3 m_scale;
 	float m_radian;
 
 	// カラー情報
-	glm::vec3 m_color;
+	Vector3 m_color;
 
 	static const std::string TEXTURE_KEY;
 

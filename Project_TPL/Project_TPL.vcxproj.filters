@@ -8,9 +8,6 @@
     <Filter Include="リソース ファイル\imgui">
       <UniqueIdentifier>{96842e2d-789a-4ff3-9927-e123e254a5d1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="リソース ファイル\gl3w">
-      <UniqueIdentifier>{dc05ddb4-2e1a-4051-8402-da0abadc18af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
@@ -210,6 +207,15 @@
     <Filter Include="Source\Renderer\RenderMethod\PBR">
       <UniqueIdentifier>{516a896f-2b89-40f4-8201-2ac821f95b50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Audio">
+      <UniqueIdentifier>{c9c735ea-be1d-44a8-bcbb-ff17c620b582}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Audio\BGM">
+      <UniqueIdentifier>{24ce8b2a-a571-4ba6-8c19-afab09b14b56}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Audio\SE">
+      <UniqueIdentifier>{b1f68c6b-4c54-430c-9e8a-2a45882f1c53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SourceCode\main.cpp">
@@ -227,17 +233,11 @@
     <ClCompile Include="imgui\imgui_impl_glfw.cpp">
       <Filter>リソース ファイル\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
-      <Filter>リソース ファイル\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui_tables.cpp">
       <Filter>リソース ファイル\imgui</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>リソース ファイル\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="gl3w\gl3w.c">
-      <Filter>リソース ファイル\gl3w</Filter>
     </ClCompile>
     <ClCompile Include="SourceCode\GameMain.cpp">
       <Filter>Source</Filter>
@@ -356,6 +356,21 @@
     <ClCompile Include="SourceCode\RenderForward.cpp">
       <Filter>Source\Renderer\RenderMethod\ForwardRenderer</Filter>
     </ClCompile>
+    <ClCompile Include="SourceCode\AudioManager.cpp">
+      <Filter>Source\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\AudioBGM.cpp">
+      <Filter>Source\Audio\BGM</Filter>
+    </ClCompile>
+    <ClCompile Include="SourceCode\AudioSE.cpp">
+      <Filter>Source\Audio\SE</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_sdl.cpp">
+      <Filter>リソース ファイル\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
+      <Filter>リソース ファイル\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\imconfig.h">
@@ -365,9 +380,6 @@
       <Filter>リソース ファイル\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_impl_glfw.h">
-      <Filter>リソース ファイル\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_opengl3.h">
       <Filter>リソース ファイル\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_internal.h">
@@ -516,6 +528,21 @@
     </ClInclude>
     <ClInclude Include="SourceCode\RenderForward.h">
       <Filter>Source\Renderer\RenderMethod\ForwardRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AudioManager.h">
+      <Filter>Source\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AudioBGM.h">
+      <Filter>Source\Audio\BGM</Filter>
+    </ClInclude>
+    <ClInclude Include="SourceCode\AudioSE.h">
+      <Filter>Source\Audio\SE</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_sdl.h">
+      <Filter>リソース ファイル\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3.h">
+      <Filter>リソース ファイル\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

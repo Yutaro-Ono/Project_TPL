@@ -12,7 +12,7 @@
 #pragma once
 // インクルードファイル
 // ※gl3w→glfwの順番に記述
-#include <GL/gl3w.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 

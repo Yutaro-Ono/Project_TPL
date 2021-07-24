@@ -14,11 +14,11 @@
 #include "Renderer.h"
 
 DirectionalLight::DirectionalLight()
-	:m_diffuse(glm::vec3(0.1f, 0.485f, 0.46f))
-	,m_specular(glm::vec3(0.1f, 0.35f, 0.4f))
-	,m_ambient(glm::vec3(0.31f, 0.415f, 0.46f))
+	:m_diffuse(Vector3(0.1f, 0.485f, 0.46f))
+	,m_specular(Vector3(0.1f, 0.35f, 0.4f))
+	,m_ambient(Vector3(0.31f, 0.415f, 0.46f))
 	,m_position(0.0f, 5000.0f, 1000.0f)
-	,m_lightDirection(glm::normalize(glm::vec3(0.0f, 0.0f, 0.0f) - m_position))
+	,m_lightDirection(Vector3(0.0f, 0.0f, 0.0f) - m_position)
 	,m_intensity(0.5f)
 	,m_debugObj(nullptr)
 {
@@ -88,7 +88,7 @@ void DirectionalLightDebug::Update(float _deltaTime)
 		// 更新されたら
 		if (diffuse[0] != m_owner->m_diffuse.x || diffuse[1] != m_owner->m_diffuse.y || diffuse[2] != m_owner->m_diffuse.z)
 		{
-			m_owner->SetDiffuse(glm::vec3(diffuse[0], diffuse[1], diffuse[2]));
+			m_owner->SetDiffuse(Vector3(diffuse[0], diffuse[1], diffuse[2]));
 		}
 		//--------------------------------------------------------------------------+
 		// Specular
@@ -116,7 +116,7 @@ void DirectionalLightDebug::Update(float _deltaTime)
 		// 更新されたら
 		if (specular[0] != m_owner->m_specular.x || specular[1] != m_owner->m_specular.y || specular[2] != m_owner->m_specular.z)
 		{
-			m_owner->SetSpecular(glm::vec3(specular[0], specular[1], specular[2]));
+			m_owner->SetSpecular(Vector3(specular[0], specular[1], specular[2]));
 		}
 		//--------------------------------------------------------------------------+
 		// ambient
@@ -144,7 +144,7 @@ void DirectionalLightDebug::Update(float _deltaTime)
 		// 更新されたら
 		if (ambient[0] != m_owner->m_ambient.x || ambient[1] != m_owner->m_ambient.y || ambient[2] != m_owner->m_ambient.z)
 		{
-			m_owner->SetAmbient(glm::vec3(ambient[0], ambient[1], ambient[2]));
+			m_owner->SetAmbient(Vector3(ambient[0], ambient[1], ambient[2]));
 		}
 		//--------------------------------------------------------------------------+
 

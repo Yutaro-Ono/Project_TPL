@@ -17,13 +17,9 @@ int Actor::m_globalActorNo = 0;
 
 Actor::Actor(OBJECT_TAG _tag)
 	:m_state(ActorEnum::ACTOR_STATE::ACTIVE)
-	,m_worldTrans(glm::mat4(1.0f))
-	,m_position(glm::vec3(1.0f))
-	,m_scale(glm::vec3(1.0f))
-	,m_eulerAngles(glm::vec3(0.0f, 0.0f, 90.0f))
-	,m_rotationX(glm::quat(glm::vec3(0.0f)))
-	,m_rotationY(glm::quat(glm::vec3(0.0f)))
-	,m_rotationZ(glm::quat(glm::vec3(0.0f)))
+	,m_position(Vector3::Zero)
+	,m_scale(Vector3(1.0f, 1.0f, 1.0f))
+	,m_rotation(Quaternion::Identity)
 	,m_recomputeWorldTransform(true)
 	,m_ID(m_globalActorNo)
 	,m_debugObj(nullptr)
@@ -60,7 +56,20 @@ Actor::~Actor()
 
 void Actor::Update(float _deltaTime)
 {
-	ComputeWorldTransform();
+	// アクターがアクティブなら
+	if (m_state == ActorEnum::ACTOR_STATE::ACTIVE)
+	{
+		// ワールド変換行列を計算
+		ComputeWorldTransform();
+
+		// コンポーネントの更新処理
+		UpdateComponents(_deltaTime);
+		// アクター固有の更新処理
+		UpdateActor(_deltaTime);
+
+		// ワールド変換行列の再計算
+		ComputeWorldTransform();
+	}
 }
 
 /// <summary>
@@ -88,22 +97,12 @@ void Actor::ComputeWorldTransform()
 	// ワールド変換行列の再計算が必要な場合のみ実行
 	if (m_recomputeWorldTransform)
 	{
-		// 変換行列
-		glm::mat4 trans(1.0f);
+		// スケーリング→回転→平行移動となるように変換行列を作成
+		m_worldTrans = Matrix4::CreateScale(m_scale);
+		m_worldTrans *= Matrix4::CreateFromQuaternion(m_rotation);
+		m_worldTrans *= Matrix4::CreateTranslation(m_position);
 
-		// 平行移動
-		trans = glm::translate(trans, m_position);
-		// 回転
-		glm::vec3 radian = glm::radians(m_eulerAngles);
-		trans = glm::rotate(trans, radian.x, glm::vec3(1.0, 0.0, 0.0));
-		trans = glm::rotate(trans, radian.y, glm::vec3(0.0, 1.0, 0.0));
-		trans = glm::rotate(trans, radian.z, glm::vec3(0.0, 0.0, 1.0));
-		// スケーリング
-		trans = glm::scale(trans, m_scale);
-
-		m_worldTrans = trans;
-
-		// アクターの全コンポーネントも更新
+		// アクターが持っている全コンポーネントの変換を行う
 		for (auto comp : m_components)
 		{
 			comp->OnUpdateTransform();
@@ -155,7 +154,7 @@ void Actor::RemoveComponent(Component* _comp)
 /// ワールド変換行列の再計算のフラグを立てる
 /// </summary>
 /// <param name="_pos"></param>
-void Actor::SetPosition(const glm::vec3& _pos)
+void Actor::SetPosition(const Vector3& _pos)
 {
 	m_position = _pos;
 	m_recomputeWorldTransform = true;
@@ -166,15 +165,40 @@ void Actor::SetPosition(const glm::vec3& _pos)
 /// ワールド変換行列の再計算のフラグを立てる
 /// </summary>
 /// <param name="_scale"></param>
-void Actor::SetScale(const glm::vec3& _scale)
+void Actor::SetScale(const Vector3& _scale)
 {
 	m_scale = _scale;
 	m_recomputeWorldTransform = true;
 }
 
-void Actor::SetEulerAngle(const glm::vec3& _angle)
+void Actor::RotateToNewForward(const Vector3& in_forward)
 {
-	m_eulerAngles = _angle;
+	// X軸ベクトル(1, 0, 0)とforward間の角度を求める
+	float dot = Vector3::Dot(Vector3::UnitX, in_forward);
+	float angle = Math::Acos(dot);
+
+	// 下向きだった場合
+	if (dot > 0.9999f)
+	{
+		SetRotation(Quaternion::Identity);
+	}
+	// 上向きだった場合
+	else if (dot < -0.9999f)
+	{
+		SetRotation(Quaternion(Vector3::UnitZ, Math::Pi));
+	}
+	else
+	{
+		// 軸ベクトルとforwardとの外積から回転軸を求めて回転させる
+		Vector3 axis = Vector3::Cross(Vector3::UnitX, in_forward);
+		axis.Normalize();
+		SetRotation(Quaternion(axis, angle));
+	}
+}
+
+void Actor::SetRotation(const Quaternion& _rot)
+{
+	m_rotation = _rot;
 	m_recomputeWorldTransform = true;
 }
 

@@ -30,11 +30,11 @@ layout(std140, binding = 2) uniform Triggers
 // Directional Light
 layout(std140, binding = 3) uniform DirLight
 {
-	vec4 u_direction;
-	vec4 u_diffuseColor;
-	vec4 u_specularColor;
-	vec4 u_ambientColor;
-	float u_intensity;
+	vec3 u_dLightDir;
+	vec3 u_dLightDiffuse;
+	vec3 u_dLightSpecular;
+	vec3 u_dLightAmbient;
+	float u_dLightIntensity;
 };
 
 
@@ -60,18 +60,18 @@ void main()
 	float gSpec = gAlbedoSpec.a;
 
 	// ambient
-	vec3 ambient = u_ambientColor.xyz * gAlbedo;
-	vec3 lightDir = normalize(u_direction.xyz);
+	vec3 ambient = u_dLightAmbient * gAlbedo;
+	vec3 lightDir = normalize(u_dLightDir);
 	float diff = max(dot(gNormal, lightDir), 0.0f);
 
 	// diffuse
-	vec3 diffuse = u_diffuseColor.xyz * u_intensity * gAlbedo * diff;
+	vec3 diffuse = u_dLightDiffuse * u_dLightIntensity * gAlbedo * diff;
 
 	// specular
 	vec3 viewDir = normalize(u_viewPos - gPos);
 	vec3 halfVec = normalize(lightDir + viewDir);
 	float spec = pow(max(dot(gNormal, halfVec), 0.0f), 64.0f);
-	vec3 specular = u_specularColor.xyz * u_intensity * spec * gSpec;
+	vec3 specular = u_dLightSpecular * u_dLightIntensity * spec * gSpec;
 
 	// output to color buffer
 	vec3 result = ambient + diffuse + specular + texture(u_gBuffer.emissive, fs_in.fragTexCoords).rgb;

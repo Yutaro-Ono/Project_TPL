@@ -20,7 +20,7 @@ in VS_OUT
 // triggers
 layout(std140, binding = 2) uniform Triggers
 {
-	bool u_enableBloom;
+	int u_enableBloom;
 };
 
 uniform samplerCube u_cubeMap;    // sample CubeMap Texture
@@ -32,7 +32,7 @@ void main()
 	out_gAlbedoSpec = texture(u_cubeMap, fs_in.fragLocalPos);
 
 	// bloom
-	if(u_enableBloom)
+	if(u_enableBloom == 1)
 	{
 		out_gEmissive = texture(u_cubeMap, fs_in.fragLocalPos);
 	}

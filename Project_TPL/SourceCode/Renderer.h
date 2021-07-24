@@ -12,10 +12,12 @@
 #pragma once
 // インクルードファイル
 // ※gl3w→glfwの順番に記述
-#include <GL/gl3w.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <SDL.h>
+#include <Effekseer.h>
+#include <EffekseerRendererGL.h>
+#include "Math.h"
 #include "../imgui/imgui.h"
 #include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
@@ -55,8 +57,8 @@ public:
 
 	void BloomPass(unsigned int _highBrightBuffer, unsigned int _colorBuffer);
 
-	const glm::mat4 GetViewMatrix() { return m_viewMat; }
-	const glm::mat4 GetProjectionMatrix() { return m_projMat; }
+	const Matrix4& GetViewMatrix() const { return m_viewMat; }
+	const Matrix4& GetProjectionMatrix() const { return m_projMat; }
 
 	// Getter / Setter
 	class RenderBloom* GetBloom() { return m_bloomRender; }
@@ -67,7 +69,7 @@ public:
 	bool GetIsEnableVisualizeNormal() { return m_visualizeNormal; }
 	bool GetIsEnableBloom() { return m_enableBloom; }
 
-	void SetViewMatrix(const glm::mat4& _viewMat) { m_viewMat = _viewMat; }
+	void SetViewMatrix(const Matrix4& _viewMat) { m_viewMat = _viewMat; }
 
 private:
 
@@ -97,8 +99,8 @@ private:
 
 
 	// 描画用の行列関連
-	glm::mat4 m_viewMat;                             // ビュー行列
-	glm::mat4 m_projMat;                             // プロジェクション行列
+	Matrix4 m_viewMat;                             // ビュー行列
+	Matrix4 m_projMat;                             // プロジェクション行列
 
 	// uniformバッファ
 	unsigned int m_uboMatrices;                      // ビュー・プロジェクション行列用UBO

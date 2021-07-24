@@ -72,7 +72,7 @@ bool Debugger::Initialize()
 	const char* glsl_version = "#version 410 core";
 	ImGui_ImplGlfw_InitForOpenGL(m_debugWindow, true);
 	ImGui_ImplOpenGL3_Init(glsl_version);
-
+	
     return true;
 }
 

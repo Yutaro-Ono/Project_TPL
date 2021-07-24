@@ -20,7 +20,7 @@ layout(std140, binding = 0) uniform Matrices
 // camera variables
 layout(std140, binding = 1) uniform CameraVariable
 {
-	vec4 u_viewPos;
+	vec3 u_viewPos;
 };
 
 

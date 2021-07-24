@@ -9,10 +9,10 @@
 // 2021/ 3/25   コンパイル・リンク処理追加
 //----------------------------------------------------------------------------------+
 #pragma once
-#include <string>
-#include <unordered_map>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
+#include <string>
+#include <unordered_map>
 using namespace boost::property_tree;
 
 enum class SECTION_NAME : unsigned char

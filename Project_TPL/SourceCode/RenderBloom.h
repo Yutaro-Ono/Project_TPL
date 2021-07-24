@@ -9,7 +9,7 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include <vector>
-#include <glm/glm.hpp>
+#include "Math.h"
 
 class RenderBloom
 {
@@ -25,14 +25,12 @@ public:
 	void GaussBlur(class GLSLprogram* _gaussShader, class VertexArray* _screenVA);
 	void DrawBlendBloom(unsigned int _blendBuffer, class GLSLprogram* _bloomShader, class VertexArray* _screenVA);
 
-
+	void CalcGaussBlurParam(int _w, int _h, Vector2 _dir, float _deviation, Vector3* _offset);
+	float GaussianDistribution(const Vector2& _pos, float _rho);
 
 private:
 
 	void CreateBlurFBO();
-
-	void CalcGaussBlurParam(int _w, int _h, const glm::vec2& _dir, float _deviation, glm::vec3* _offset);
-	const  float& GaussianDistribution(const glm::vec2& _pos, float _rho) const;
 
 	// 縮小バッファとテクスチャ配列
 	std::vector<unsigned int> m_blurFBOs;

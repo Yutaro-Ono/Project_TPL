@@ -9,7 +9,7 @@
 // 2021/ 4/23   V‹Kì¬
 //----------------------------------------------------------------------------------+
 #pragma once
-#include <GL/gl3w.h>
+#include <GL/glew.h>
 #include <string>
 #include <iostream>
 

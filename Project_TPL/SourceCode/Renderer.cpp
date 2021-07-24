@@ -11,7 +11,7 @@
 //----------------------------------------------------------------------------------+
 #include "Renderer.h"
 #include <iostream>
-#include <glm/gtc/type_ptr.hpp>
+#include <gtc/type_ptr.hpp>
 #include "GameMain.h"
 #include "GameSettings.h"
 #include "ShaderManager.h"
@@ -67,6 +67,7 @@ Renderer::~Renderer()
 bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 {
 
+
 	//--------------------------------------+
     // GLFW初期化
     //--------------------------------------+
@@ -81,6 +82,18 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);                   // メジャーバージョン
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);                   // マイナーバージョン
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);   // コアプロファイルを使用
+
+	//--------------------------------------+
+	// GLEW初期化
+	//--------------------------------------+
+	glewExperimental = GL_TRUE;
+	if (glewInit() != GLEW_OK)
+	{
+		std::cout << "Error::GLEW Initialize" << std::endl;
+		return false;
+	}
+	// 幾つかのプラットホームでは、GLEWが無害なエラーコードを吐くのでクリアしておく
+	glGetError();
 
 	//--------------------------------------+
 	// ウィンドウオブジェクト定義
@@ -103,16 +116,6 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	// 作成したウィンドウを現在のスレッドのメインコンテキストとして設定
 	glfwMakeContextCurrent(m_window);
 
-	//---------------------------------------------------+
-	// gl3w初期化 (glfwMakeContextCurrent関数の後に)
-	//---------------------------------------------------+
-	GLenum error = gl3wInit();
-	if (GL3W_OK != error)
-	{
-		std::cout << "Error::GL3W Initialize" << std::endl;
-		return false;
-	}
-
 	//---------------------------------------+
 	// ビューポートの設定
 	//---------------------------------------+
@@ -120,12 +123,18 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	glViewport(0, 0, _width, _height);
 	// ウィンドウサイズ変更が行われた際に、コールバック関数 (今回は画面サイズの最適化関数)を呼び出すことを、GLFWに指示
 	glfwSetFramebufferSizeCallback(m_window, FrameBuffer_Size_Callback);
+	// カリングの設定
+	glFrontFace(GL_CCW);
+	glEnable(GL_CULL_FACE);
 
 	//---------------------------------------+
     // 行列の初期化
     //---------------------------------------+
-	m_viewMat = glm::lookAt(glm::vec3(0.0f, 0.0f, -20.0f), glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, 1.0, 0.0));
-	m_projMat = glm::perspective(glm::radians(75.0f), (float)_width / (float)_height, 0.1f, 10000.0f);
+	m_viewMat = Matrix4::CreateLookAt(Vector3(0.0f, 0.0f, -20.0f), Vector3::Zero, Vector3::UnitZ);
+	m_projMat = Matrix4::CreatePerspectiveFOV(Math::ToRadians(70.0f),
+		static_cast<float>(_width),
+		static_cast<float>(_height),
+		1.0f, 5000.0f);
 
 
 	return true;
@@ -169,14 +178,14 @@ bool Renderer::Load()
     // ビュー行列・プロジェクション行列UBO
 	glGenBuffers(1, &m_uboMatrices);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
-	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(glm::mat4), NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER, 2 * sizeof(Matrix4::mat), NULL, GL_DYNAMIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 0, m_uboMatrices);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// カメラ情報UBO
 	glGenBuffers(1, &m_uboCamera);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
-	glBufferData(GL_UNIFORM_BUFFER, 4 * sizeof(float), NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER, sizeof(Vector3::x) + sizeof(Vector3::y) + sizeof(Vector3::z), NULL, GL_DYNAMIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 1, m_uboCamera);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
@@ -191,7 +200,7 @@ bool Renderer::Load()
 	glGenBuffers(1, &m_uboDirLights);
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboDirLights);
 	auto byte = ((4 * sizeof(float)) * 4) + (1 * sizeof(float));
-	glBufferData(GL_UNIFORM_BUFFER, ((4 * sizeof(float)) * 4) + (1 * sizeof(float)), NULL, GL_DYNAMIC_DRAW);
+	glBufferData(GL_UNIFORM_BUFFER, (4 * (sizeof(Vector3::x) + sizeof(Vector3::y) + sizeof(Vector3::z))) + (1 * sizeof(float)), NULL, GL_DYNAMIC_DRAW);
 	glBindBufferBase(GL_UNIFORM_BUFFER, 3, m_uboDirLights);
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 	
@@ -333,14 +342,14 @@ void Renderer::SetUniformBuffer()
 {
 	// 行列UBO
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboMatrices);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(glm::mat4), glm::value_ptr(m_viewMat));
-	glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(glm::mat4), sizeof(glm::mat4), glm::value_ptr(m_projMat));
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(Matrix4::mat), m_viewMat.GetAsFloatPtr());
+	glBufferSubData(GL_UNIFORM_BUFFER, 1 * sizeof(Matrix4::mat), sizeof(Matrix4::mat), m_projMat.GetAsFloatPtr());
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// カメラUBO
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboCamera);
-	glm::vec3 viewPos = glm::vec3(m_viewMat[3][0], m_viewMat[3][1], m_viewMat[3][2]);
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 4, glm::value_ptr(glm::vec4(viewPos, 0.0f)));
+	Vector3 viewPos = m_viewMat.GetTranslation();
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(float) * 4, viewPos.GetAsFloatPtr());
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
 	// トリガーFBO
@@ -353,10 +362,10 @@ void Renderer::SetUniformBuffer()
 	glBindBuffer(GL_UNIFORM_BUFFER, m_uboDirLights);
 	// 送信時のストライド(シェーダー側ではvec4型として受け取り ※メモリ読み取りがうまくいかないため)
 	auto stride = sizeof(float) * 4;
-	glBufferSubData(GL_UNIFORM_BUFFER, 0, stride, glm::value_ptr(glm::vec4(m_dirLight->GetDirection(), 0.0f)));
-	glBufferSubData(GL_UNIFORM_BUFFER, stride, stride, glm::value_ptr(glm::vec4(m_dirLight->GetDiffuse(), 0.0f)));
-	glBufferSubData(GL_UNIFORM_BUFFER, stride * 2, stride, glm::value_ptr(glm::vec4(m_dirLight->GetSpecular(), 0.0f)));
-	glBufferSubData(GL_UNIFORM_BUFFER, stride * 3, stride, glm::value_ptr(glm::vec4(m_dirLight->GetAmbient(), 0.0f)));
+	glBufferSubData(GL_UNIFORM_BUFFER, 0, stride, m_dirLight->GetDirection().GetAsFloatPtr());
+	glBufferSubData(GL_UNIFORM_BUFFER, stride, stride, m_dirLight->GetDiffuse().GetAsFloatPtr());
+	glBufferSubData(GL_UNIFORM_BUFFER, stride * 2, stride, m_dirLight->GetSpecular().GetAsFloatPtr());
+	glBufferSubData(GL_UNIFORM_BUFFER, stride * 3, stride, m_dirLight->GetAmbient().GetAsFloatPtr());
 	glBufferSubData(GL_UNIFORM_BUFFER, stride * 4, sizeof(float), &m_dirLight->GetIntensity());
 	glBindBuffer(GL_UNIFORM_BUFFER, 0);
 

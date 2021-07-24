@@ -11,7 +11,6 @@
 #include "Actor.h"
 
 
-
 class CameraActor : public Actor
 {
 
@@ -24,20 +23,20 @@ public:
 	void UpdateActor(float _deltaTime) override;
 
 	void SetTargetActor(class Actor* _target);
-	void SetCameraLength(const glm::vec3& _length) { m_length = _length; }
+	void SetCameraLength(const Vector3& _length) { m_length = _length; }
 
 private:
 
 	void CreateViewMatrix();
 
 
-	glm::mat4 m_viewMat;
+	Matrix4 m_viewMat;
 
 	class Actor* m_targetActor;
-	glm::vec3 m_targetPos;
+	Vector3 m_targetPos;
 	bool m_targetExists;
 
-	glm::vec3 m_length;
+	Vector3 m_length;
 	float m_rotateAngle;
 	float m_upAngle;
 

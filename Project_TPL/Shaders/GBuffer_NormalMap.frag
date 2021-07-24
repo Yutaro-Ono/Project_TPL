@@ -33,11 +33,11 @@ layout(std140, binding = 2) uniform Triggers
 // Directional Light
 layout(std140, binding = 3) uniform DirLight
 {
-	vec4 u_direction;
-	vec4 u_diffuseColor;
-	vec4 u_specularColor;
-	vec4 u_ambientColor;
-	float u_intensity;
+	vec3 u_dLightDir;
+	vec3 u_dLightDiffuse;
+	vec3 u_dLightSpecular;
+	vec3 u_dLightAmbient;
+	float u_dLightIntensity;
 };
 
 // material structure
@@ -64,19 +64,19 @@ void main()
 	vec3 color = texture(u_mat.albedo, fs_in.fragTexCoords).rgb;
 
 	// ambient
-	vec3 ambient = u_ambientColor.rgb * color;
+	vec3 ambient = u_dLightAmbient * color;
 
 	// diffuse color
 	vec3 lightDir = normalize(fs_in.fragTangentLightPos - fs_in.fragTangentFragPos);
 	float diff = max(dot(lightDir, normal), 0.0);
-	vec3 diffuse = u_diffuseColor.rgb * diff * color;
+	vec3 diffuse = u_dLightDiffuse * diff * color;
 
 	// スペキュラ計算
 	vec3 viewDir = normalize(fs_in.fragTangentViewPos - fs_in.fragTangentFragPos);
 	vec3 reflectDir = reflect(-lightDir, normal);
 	vec3 halfwayDir = normalize(lightDir + viewDir);
 	float spec = pow(max(dot(normal, halfwayDir), 0.0), 32.0);
-	vec3 specular = u_specularColor.rgb * spec * texture(u_mat.specular, fs_in.fragTexCoords).rgb;
+	vec3 specular = u_dLightSpecular * spec * texture(u_mat.specular, fs_in.fragTexCoords).rgb;
 
 
 	// pass to output gBuffer

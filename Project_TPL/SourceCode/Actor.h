@@ -9,9 +9,7 @@
 //----------------------------------------------------------------------------------+
 #pragma once
 #include <vector>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/quaternion.hpp>
+#include "Math.h"
 #include "Tag.h"
 #include "Component.h"
 
@@ -44,27 +42,25 @@ public:
 	void AddComponent(class Component* _comp);
 	void RemoveComponent(class Component* _comp);
 
-	void SetPosition(const glm::vec3& _pos);
-	void SetScale(const glm::vec3& _scale);
-	void SetEulerAngle(const glm::vec3& _angle);
+	void SetPosition(const Vector3& _pos);
+	void SetScale(const Vector3& _scale);
+	void RotateToNewForward(const Vector3& _forward);
+	void SetRotation(const Quaternion& _rot);
 
-	const glm::mat4& GetWorldTransform() const { return m_worldTrans; }
-	const glm::vec3& GetPosition() const { return m_position; }
+	const Vector3& GetPosition() const { return m_position; }
+	const Matrix4& GetWorldTransform() const { return m_worldTrans; }
 
 protected:
 
 	ActorEnum::ACTOR_STATE m_state;
 
 	// ç¿ïWån
-	glm::vec3 m_position;
-	glm::mat4 m_worldTrans;
+	Vector3 m_position;
+	Matrix4 m_worldTrans;
 	// ïœä∑
-	glm::vec3 m_scale;
+	Vector3 m_scale;
 	// âÒì]çsóÒ
-	glm::vec3 m_eulerAngles;
-	glm::quat m_rotationX;
-	glm::quat m_rotationY;
-	glm::quat m_rotationZ;
+	Quaternion m_rotation;
 	
 	bool m_recomputeWorldTransform;
 

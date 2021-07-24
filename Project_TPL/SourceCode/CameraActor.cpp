@@ -11,9 +11,9 @@
 #include "GameMain.h"
 #include "Renderer.h"
 
-const glm::vec3 CAMERA_LENGTH = glm::vec3(0.0f, 500.0f, 2000.0f);
-const float CAMERA_ROTATE_ANGLE = -glm::two_over_pi<float>();
-const float CAMERA_UP_ANGLE = glm::two_over_pi<float>() * 0.5f;
+const Vector3 CAMERA_LENGTH = Vector3(2000.0f, 0.0f, 500.0f);
+const float CAMERA_ROTATE_ANGLE = -Math::PiOver2;
+const float CAMERA_UP_ANGLE = Math::PiOver2 * 0.5f;
 const float CAMERA_ROTATE_SPEED = 40.0f;
 
 CameraActor::CameraActor()
@@ -21,11 +21,11 @@ CameraActor::CameraActor()
 	,m_targetExists(false)
 	,m_targetActor(nullptr)
 	,m_length(CAMERA_LENGTH)
-	,m_targetPos(glm::vec3(0.0f))
+	,m_targetPos(Vector3::Zero)
 	,m_rotateAngle(1.0f)
 	,m_upAngle(1.0f)
 {
-	m_viewMat = glm::lookAt(m_position, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//m_viewMat = glm::lookAt(m_position, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 CameraActor::~CameraActor()
@@ -52,7 +52,7 @@ void CameraActor::UpdateActor(float _deltaTime)
 
 	}
 
-	m_viewMat = glm::lookAt(m_position, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//m_viewMat = glm::lookAt(m_position, glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 
 }
 

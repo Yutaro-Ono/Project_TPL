@@ -12,9 +12,9 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include "rapidjson/document.h"
+#include <glm.hpp>
+#include <gtc/matrix_transform.hpp>
+#include "document.h"
 
 // テクスチャの種類 (PBRマテリアル)
 enum class PBR_MATERIAL : unsigned char

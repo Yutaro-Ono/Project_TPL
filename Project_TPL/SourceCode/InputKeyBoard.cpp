@@ -22,72 +22,69 @@ InputKeyBoard::InputKeyBoard()
     }
 }
 
-InputKeyBoard::~InputKeyBoard()
-{
-}
-
 void InputKeyBoard::Update()
 {
-	//// 現在のキーと1つ前のキーの状態を入れ替える  0を１に、1を0に
-	//m_nowKey ^= 1;
-	//m_prevKey = m_nowKey ^ 1;
+	// 現在のキーと1つ前のキーの状態を入れ替える  0を１に、1を0に
+	m_nowKey ^= 1;
+	m_prevKey = m_nowKey ^ 1;
 
-	////キー状態取得
-	//const UINT* keys = glfwGetKey(NULL);
-	//memcpy(m_keyState[m_nowKey], keys, sizeof(char) * 256);
+	//キー状態取得
+	const Uint8* keys = SDL_GetKeyboardState(NULL);
+	memcpy(m_keyState[m_nowKey], keys, sizeof(char) * 256);
 
-	//for (int i = 0; i < 256; i++)
-	//{
-	//	char nowInput = m_keyState[m_nowKey][i];
-	//	char prevInput = m_keyState[m_prevKey][i];
+	for (int i = 0; i < 256; i++)
+	{
+		char nowInput = m_keyState[m_nowKey][i];
+		char prevInput = m_keyState[m_prevKey][i];
 
-	//	if (nowInput) //現在押されている
-	//	{
-	//		//前のフレームも押されていた？
-	//		if (prevInput)
-	//		{
-	//			m_key[i] = KEY_STATE_PRESSED; // 押されっぱなし
-	//		}
-	//		else {
-	//			m_key[i] = KEY_STATE_PUSHDOWN;// 今押された
-	//		}
+		if (nowInput) //現在押されている
+		{
+			//前のフレームも押されていた？
+			if (prevInput)
+			{
+				m_key[i] = KEY_STATE_PRESSED; // 押されっぱなし
+			}
+			else {
+				m_key[i] = KEY_STATE_PUSHDOWN;// 今押された
+			}
 
-	//	}
-	//	else // 現在キーは押されていない
-	//	{
-	//		// 前のフレームで押されていた？
-	//		if (prevInput)
-	//		{
-	//			m_key[i] = KEY_STATE_PULLUP;
-	//		}
-	//		else {
-	//			m_key[i] = KEY_STATE_OFF;
-	//		}
-	//	}
-	//}
+		}
+		else // 現在キーは押されていない
+		{
+			// 前のフレームで押されていた？
+			if (prevInput)
+			{
+				m_key[i] = KEY_STATE_PULLUP;
+			}
+			else {
+				m_key[i] = KEY_STATE_OFF;
+			}
+		}
+	}
 }
 
-char InputKeyBoard::GetInput(UINT _GLFW_KEYCODE)
+char InputKeyBoard::GetInput(Uint8 SDL_SCANCODE_key)
 {
-    return m_key[_GLFW_KEYCODE];
+	return m_key[SDL_SCANCODE_key];
 }
 
-bool InputKeyBoard::IsKeyPressed(UINT _GLFW_KEYCODE)
+bool InputKeyBoard::IsKeyPressed(Uint8 SDL_SCANCODE_key)
 {
-    return false;
+	return m_key[SDL_SCANCODE_key] == KEY_STATE_PRESSED;
 }
 
-bool InputKeyBoard::IsKeyPullUp(UINT _GLFW_KEYCODE)
+bool InputKeyBoard::IsKeyPullUp(Uint8 SDL_SCANCODE_key)
 {
-    return false;
+	return m_key[SDL_SCANCODE_key] == KEY_STATE_PULLUP;
 }
 
-bool InputKeyBoard::IsKeyPushDown(UINT _GLFW_KEYCODE)
+bool InputKeyBoard::IsKeyPushDown(Uint8 SDL_SCANCODE_key)
 {
-    return false;
+	return m_key[SDL_SCANCODE_key] == KEY_STATE_PUSHDOWN;
 }
 
-bool InputKeyBoard::IsKeyOff(UINT _GLFW_KEYCODE)
+bool InputKeyBoard::IsKeyOff(Uint8 SDL_SCANCODE_key)
 {
-    return false;
+	return m_key[SDL_SCANCODE_key] == KEY_STATE_OFF;
 }
+

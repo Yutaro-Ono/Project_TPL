@@ -24,21 +24,21 @@ in VS_OUT
 // camera variables
 layout(std140, binding = 1) uniform CameraVariable
 {
-	vec4 u_viewPos;
+	vec3 u_viewPos;
 };
 // triggers
 layout(std140, binding = 2) uniform Triggers
 {
-	bool u_enableBloom;
+	int u_enableBloom;
 };
 // Directional Light
 layout(std140, binding = 3) uniform DirLight
 {
-	vec4 u_direction;
-	vec4 u_diffuseColor;
-	vec4 u_specularColor;
-	vec4 u_ambientColor;
-	float u_intensity;
+	vec3 u_dLightDir;
+	vec3 u_dLightDiffuse;
+	vec3 u_dLightSpecular;
+	vec3 u_dLightAmbient;
+	float u_dLightIntensity;
 };
 
 // material structure
@@ -60,24 +60,24 @@ void main()
 {
 	// PhongLighting
 	vec3 N = normalize(fs_in.fragNormal);                    // Polygon Surface normal
-	vec3 L = normalize(-u_direction.xyz);                        // Vector from : Neg Light Direction
-	vec3 V = normalize(u_viewPos.xyz - fs_in.fragWorldPos);      // Vector from : Polygon Pos -> Camera Pos
+	vec3 L = normalize(-u_dLightDir);                        // Vector from : Neg Light Direction
+	vec3 V = normalize(u_viewPos - fs_in.fragWorldPos);      // Vector from : Polygon Pos -> Camera Pos
 	vec3 R = normalize(reflect(-L, N));                      // Reflect Vector from : Light Dir -> Polygon Surface
 	// Phong Reflection Calculation
-	vec3 Phong = u_ambientColor.xyz;
+	vec3 Phong = u_dLightAmbient;
 	float NdotL = dot(N, L);
 
-	vec3 diffuse = u_diffuseColor.xyz * max(NdotL, 0.0f);
-	vec3 specular = u_specularColor.xyz * pow(max(0.0f, dot(R, V)), u_specularPower);
+	vec3 diffuse = u_dLightDiffuse * max(NdotL, 0.0f);
+	vec3 specular = u_dLightSpecular * pow(max(0.0f, dot(R, V)), u_specularPower);
 
 	// pass to output gBuffer
 	out_gPosition = fs_in.fragWorldPos;
 	out_gNormal = normalize(fs_in.fragNormal);
-	out_gAlbedoSpec.rgb = texture(u_mat.albedo, fs_in.fragTexCoords).rgb * vec3(diffuse + u_ambientColor.xyz) + specular;
+	out_gAlbedoSpec.rgb = texture(u_mat.albedo, fs_in.fragTexCoords).rgb * vec3(diffuse + u_dLightAmbient) + specular;
 	out_gAlbedoSpec.a = texture(u_mat.specular, fs_in.fragTexCoords).r;
 
 	// bloom
-	if(u_enableBloom)
+	if(u_enableBloom == 1)
 	{
 		out_gEmissive = texture(u_mat.emissive, fs_in.fragTexCoords);
 	}
