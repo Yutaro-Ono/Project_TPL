@@ -21,9 +21,9 @@ int main()
 {
 
 	// 初期化・初期シーンのセット
-	if (GAME_INSTANCE.Initialize())
+	if (!GAME_INSTANCE.Initialize())
 	{
-		return 0;
+		return -1;
 	}
 
 	bool loop = true;

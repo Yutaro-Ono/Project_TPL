@@ -9,12 +9,12 @@
 // 2021/ 3/25   コンパイル・リンク処理追加
 //----------------------------------------------------------------------------------+
 #pragma once
-#include <glad/glad.h>
-#include "Math.h"
-#include <fstream>
-#include <sstream>
+#include <GL/glew.h>
 #include <iostream>
 #include <string>
+#include "Math.h"
+#include <sstream>
+#include <fstream>
 
 
 class GLSLprogram

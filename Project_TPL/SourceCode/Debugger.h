@@ -12,8 +12,8 @@
 #pragma once
 // インクルードファイル
 #include "../imgui/imgui.h"
-#include "../imgui/imgui_impl_glfw.h"
 #include "../imgui/imgui_impl_opengl3.h"
+#include "../imgui/imgui_impl_sdl.h"
 #include <vector>
 #include "Renderer.h"
 #include "Tag.h"
@@ -45,7 +45,7 @@ public:
 	const int& GetDebugBufferWidth() const { return m_debugWidth; }
 	const int& GetDebugBufferHeight() const { return m_debugHeight; }
 
-	GLFWwindow* GetDebugWindow() { return m_debugWindow; }
+	SDL_Window* GetDebugWindow() { return m_debugWindow; }
 
 
 private:
@@ -53,7 +53,9 @@ private:
 	void CreateDebugBuffers();
 
 	
-	GLFWwindow* m_debugWindow;            // デバッグ用ウィンドウ
+	SDL_Window* m_debugWindow;            // デバッグ用ウィンドウ
+	SDL_GLContext m_debugContext;         // デバッグ用コンテキスト
+	SDL_Renderer* m_debugRenderer;        // デバッグ用SDLレンダラー    
 
 	class GLSLprogram* m_debugShader;     // デバッグ用シェーダー
 	unsigned int m_debugCB;               // デバッグ用カラーバッファ

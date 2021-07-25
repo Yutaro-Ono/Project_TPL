@@ -12,13 +12,9 @@
 #include "TexturePool.h"
 #include "MeshPool.h"
 #include "ActorPool.h"
-
+#include "InputKeyBoard.h"
 #include <iostream>
-#include <typeinfo>
-#include <SDL.h>
-#include <SDL_types.h>
-#include <SDL_mixer.h>
-#include <SDL_image.h>
+
 
 /// <summary>
 /// コンストラクタ
@@ -31,10 +27,9 @@ GameMain::GameMain()
 	,m_renderer(nullptr)
 	,m_debugger(nullptr)
 	,m_scene(nullptr)
-	,m_deltaTime(1.0f)
-	,m_currentFrame(glfwGetTime() / 1000.0f)
-	,m_lastFrame(glfwGetTime() / 1000.0f)
-	,m_bulletTime(1.0f)
+	,m_deltaTime(0.0f)
+	,m_ticksCount(0)
+	,m_bulletTime(0.0f)
 {
 
 }
@@ -171,7 +166,7 @@ void GameMain::ProcessInput()
 	}
 
 	// キーボード入力更新
-	//INPUT_INSTANCE.Update();
+	INPUT_KEYBOARD_INSTANCE.Update();
 
 	// コントローラ入力更新
 	//CONTROLLER_INSTANCE.Update();
@@ -180,10 +175,11 @@ void GameMain::ProcessInput()
 	//MOUSE_INSTANCE.Update();
 
 	// ESCが押されたら終了
-	//if (INPUT_INSTANCE.IsKeyPullUp(SDL_SCANCODE_ESCAPE))
-	//{
-	//	m_isRunning = false;
-	//}
+	if (INPUT_KEYBOARD_INSTANCE.IsKeyPullUp(SDL_SCANCODE_ESCAPE))
+	{
+		m_isRunning = false;
+	}
+
 
 	// アクターデバッグ
 	//if (INPUT_INSTANCE.IsKeyPullUp(SDL_SCANCODE_F12))
@@ -229,13 +225,6 @@ void GameMain::ProcessInput()
 	//------------------------------------------------+
 	// イベントの更新
 	//------------------------------------------------+
-	glfwPollEvents();          // キーボード・マウスのトリガーを確認
-	// デバッグ画面
-	if (glfwGetKey(m_debugger->GetDebugWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS)
-	{
-		glfwSetWindowShouldClose(m_debugger->GetDebugWindow(), true);
-		m_isRunning = false;
-	}
 
 #endif
 }
@@ -305,26 +294,17 @@ bool GameMain::RunLoop()
 /// </summary>
 void GameMain::UpdateDeltaTime()
 {
-	bool updatePermit = false;
-	
-	// 現在のフレームを取得
-	m_currentFrame = glfwGetTime() / 1000.0f;
+	// 16ミリ秒(= 60フレーム/秒)になるように、前のフレームからの16ミリ秒以上経過するまで待つ
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), m_ticksCount + 16))
+		;
 
-	if (m_currentFrame >= m_lastFrame + (16.0f / 1000.0f))
-	{
-		updatePermit = true;
-	}
+	// 前のフレームから現在時刻までの経過時間算出(秒単位）
+	m_deltaTime = (SDL_GetTicks() - m_ticksCount + 16) / 1000.0f;
 
-	if (updatePermit)
-	{
-		// 前フレームから現在フレームまでの経過時間を算出(秒単位)
-		m_deltaTime = ((glfwGetTime() / 1000.0f) - m_lastFrame + (16.0f / 1000.0f));
-	}
+	//このフレームの開始時間保存（次のフレームまでの経過時間をはかるため）
+	m_ticksCount = SDL_GetTicks();
 
-	// フレームを更新
-	m_lastFrame = glfwGetTime() / 1000.0f;
-
-	// フレーム時間が経過しすぎている場合は0.05 → 20fps固定
+	// フレーム時間があまりにも経過している場合は0.05 → 20fps固定
 	if (m_deltaTime > 0.05f)
 	{
 		m_deltaTime = 0.05f;

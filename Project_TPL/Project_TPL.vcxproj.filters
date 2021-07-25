@@ -233,9 +233,6 @@
     <ClCompile Include="imgui\imgui_draw.cpp">
       <Filter>リソース ファイル\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="imgui\imgui_impl_glfw.cpp">
-      <Filter>リソース ファイル\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui_tables.cpp">
       <Filter>リソース ファイル\imgui</Filter>
     </ClCompile>
@@ -383,9 +380,6 @@
       <Filter>リソース ファイル\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui.h">
-      <Filter>リソース ファイル\imgui</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\imgui_impl_glfw.h">
       <Filter>リソース ファイル\imgui</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imgui_internal.h">
@@ -558,12 +552,6 @@
     <None Include="Shaders\BasicShader_SamplingTexture.frag">
       <Filter>Source\Shader\ShaderSource\Basic\TextureSample</Filter>
     </None>
-    <None Include="Shaders\SimpleShader_pos_color.frag">
-      <Filter>Source\Shader\ShaderSource\Simple</Filter>
-    </None>
-    <None Include="Shaders\SimpleShader_pos_color.vert">
-      <Filter>Source\Shader\ShaderSource\Simple</Filter>
-    </None>
     <None Include="Shaders\BasicShader.frag">
       <Filter>Source\Shader\ShaderSource\Basic</Filter>
     </None>
@@ -641,6 +629,12 @@
     </None>
     <None Include="Shaders\PBR_Basic.vert">
       <Filter>Source\Shader\ShaderSource\PBR</Filter>
+    </None>
+    <None Include="Shaders\SimpleShader_pos_color.frag">
+      <Filter>Source\Shader\ShaderSource\Simple</Filter>
+    </None>
+    <None Include="Shaders\SimpleShader_pos_color.vert">
+      <Filter>Source\Shader\ShaderSource\Simple</Filter>
     </None>
   </ItemGroup>
 </Project>

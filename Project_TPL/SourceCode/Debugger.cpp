@@ -8,6 +8,7 @@
 #include "Debugger.h"
 #include "DebugObjectBase.h"
 #include "DebugObjectPool.h"
+#include "GameMain.h"
 #include <iostream>
 
 /// <summary>
@@ -46,11 +47,30 @@ bool Debugger::Initialize()
     // デバッグウィンドウ定義
     //--------------------------------------+
     // ウィンドウ作成
-	m_debugWindow = glfwCreateWindow(m_windowH, m_windowW, "Debug_TPL", NULL, NULL);
+	m_debugWindow = SDL_CreateWindow
+	(
+		"Debug_TPL",                                 // ウィンドウの名称
+		0,                                                // x座標のウィンドウ描画原点
+		0,                                                // y座標のウィンドウ描画原点
+		m_windowW,                                    // 画面の横幅
+		m_windowH,                                   // 画面の縦幅
+		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
+	);
 	// ウィンドウ作成失敗時
-	if (m_debugWindow == NULL)
+	if (!m_debugWindow)
 	{
 		std::cout << "Failed : Create Debugger Window" << std::endl;
+		return false;
+	}
+
+	// デバッグウィンドウとコンテキストのリンク (レンダラーと共通のコンテキストを使用)
+	SDL_GL_MakeCurrent(m_debugWindow, GAME_INSTANCE.GetRenderer()->GetContext());
+
+	// SDLレンダラーの作成
+	m_debugRenderer = SDL_CreateRenderer(m_debugWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if (!m_debugRenderer)
+	{
+		std::cout << "Failed : Create Debugger Renderer" << std::endl;
 		return false;
 	}
 
@@ -70,7 +90,7 @@ bool Debugger::Initialize()
 	// GLとGLSLにバインド
 	// ver420を使用時でも、410 core としてセット
 	const char* glsl_version = "#version 410 core";
-	ImGui_ImplGlfw_InitForOpenGL(m_debugWindow, true);
+	ImGui_ImplSDL2_InitForOpenGL(m_debugWindow, m_debugContext);
 	ImGui_ImplOpenGL3_Init(glsl_version);
 
     return true;
@@ -87,10 +107,11 @@ void Debugger::Delete()
 
 	// imguiのクリーンアップ
 	ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
-	// windowの破棄
-	glfwDestroyWindow(m_debugWindow);
+	// SDLのクリーンアップ
+	SDL_GL_DeleteContext(m_debugContext);
+	SDL_DestroyWindow(m_debugWindow);
 }
 
 /// <summary>
@@ -99,12 +120,10 @@ void Debugger::Delete()
 /// </summary>
 void Debugger::UpdateImGui(float _deltaTime)
 {
-	// アクティブなウィンドウとしてデバッグ画面を設定
-	glfwMakeContextCurrent(m_debugWindow);
 
 	// imguiの新規フレームを開始する
 	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
+	ImGui_ImplSDL2_NewFrame(m_debugWindow);
 	ImGui::NewFrame();
 
 	//-------------------------------------------------------------------------------+
@@ -214,11 +233,11 @@ void Debugger::UpdateImGui(float _deltaTime)
 /// </summary>
 void Debugger::RenderImGui()
 {
-	// アクティブなウィンドウとしてデバッグ画面を設定
-	glfwMakeContextCurrent(m_debugWindow);
+	// コンテキスト関連付け (レンダラーと共通)
+	SDL_GL_MakeCurrent(m_debugWindow, GAME_INSTANCE.GetRenderer()->GetContext());
 
 	// フレームバッファサイズの取得
-	glfwGetFramebufferSize(m_debugWindow, &m_windowW, &m_windowH);
+	SDL_GetWindowSize(m_debugWindow, &m_windowW, &m_windowH);
 	// ビューポートの設定
 	glViewport(0, 0, m_windowW, m_windowH);
 	// カラーバッファをクリア
@@ -231,7 +250,7 @@ void Debugger::RenderImGui()
 	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
 	// 新しいカラーバッファを古いバッファと交換し、画面に表示
-	glfwSwapBuffers(m_debugWindow);
+	SDL_GL_SwapWindow(m_debugWindow);
 }
 
 

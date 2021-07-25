@@ -90,22 +90,23 @@ bool GLSLprogram::CompileShaderFromFile(const std::string& _shaderPath, GLenum _
 {
 
     // シェーダーファイルをオープン
-    std::ifstream shaderFile(_shaderPath);
-
+    std::ifstream shaderFile;
+    shaderFile.open(_shaderPath.c_str(), std::ios::in);
     if (shaderFile.is_open())
     {
         // 読み込んだシェーダーファイルの文字列を変換
         std::stringstream transText;
         transText << shaderFile.rdbuf();
-
+        
         std::string contents = transText.str(); 
         const char* contentsChar = contents.c_str();
+        shaderFile.close();
 
         // 引数に応じたタイプのシェーダーIDを作成・保管
         _outShader = glCreateShader(_shaderType);
 
         // 上で変換した文字列を用いてシェーダーをコンパイルする
-        glShaderSource(_outShader, 1, &(contentsChar), nullptr);
+        glShaderSource(_outShader, 1, &contentsChar, NULL);
         glCompileShader(_outShader);
 
         // 正常にコンパイルできたかチェック

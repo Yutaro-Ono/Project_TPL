@@ -91,10 +91,17 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	//--------------------------------------+
 	// ウィンドウオブジェクト定義
 	//--------------------------------------+
-		// Windowの作成
-	m_window = SDL_CreateWindow("SDL & GL Window",
-		100, 80,
-		_width, _height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	// Windowの作成
+	m_window = SDL_CreateWindow
+	(
+		"Project_TPL",
+		0,
+		0,
+		_width, 
+		_height, 
+		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE
+	);
+
 	if (!m_window)
 	{
 		printf("Windowの作成に失敗: %s", SDL_GetError());
@@ -110,6 +117,10 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 		glViewport(0, 0, _width, _height);
 	}
 
+	// OpenGLContextの作成
+	m_context = SDL_GL_CreateContext(m_window);
+	SDL_GL_MakeCurrent(m_window, m_context);
+
 	//SDLRendererの作成
 	m_sdlRenderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 	if (!m_sdlRenderer)
@@ -123,8 +134,6 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 		return false;
 	}
 
-	// OpenGLContextの作成
-	m_context = SDL_GL_CreateContext(m_window);
 
 	//--------------------------------------+
 	// GLEW初期化
@@ -137,21 +146,6 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 	}
 	// 幾つかのプラットホームでは、GLEWが無害なエラーコードを吐くのでクリアしておく
 	glGetError();
-
-	//--------------------------------------+
-    // GLFW初期化
-    //--------------------------------------+
-	if (!glfwInit())
-	{
-		std::cout << "Error::GLFW Initialize" << std::endl;
-		return false;
-	}
-	// GLFW構成オプションの設定
-	// (0：選択するオプション(列挙型), 1：オプションに設定する値)
-	// ver4.2を使用。※バージョンがインストールされていない場合、動作しない
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);                   // メジャーバージョン
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);                   // マイナーバージョン
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);   // コアプロファイルを使用
 
 
 	//---------------------------------------+
@@ -171,7 +165,6 @@ bool Renderer::Initialize(int _width, int _height, bool _fullScreen)
 		static_cast<float>(_width),
 		static_cast<float>(_height),
 		1.0f, 5000.0f);
-
 
 	return true;
 }
@@ -294,9 +287,6 @@ void Renderer::Delete()
 	}
 	m_renderMethods.clear();
 
-	// GLFWのクリーンアップ
-	glfwTerminate();
-
 	// SDLのクリーンアップ
 	SDL_GL_DeleteContext(m_context);
 	SDL_DestroyWindow(m_window);
@@ -307,6 +297,8 @@ void Renderer::Delete()
 /// </summary>
 void Renderer::Draw()
 {
+	// コンテキストをメイン画面と再リンク
+	SDL_GL_MakeCurrent(m_window, m_context);
 	
 	// ビューポートの更新
 	glViewport(0, 0, GAME_CONFIG.GetScreenSizeW(), GAME_CONFIG.GetScreenSizeH());

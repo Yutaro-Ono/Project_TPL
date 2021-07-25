@@ -13,15 +13,11 @@
 // インクルードファイル
 // ※gl3w→glfwの順番に記述
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <Effekseer.h>
 #include <EffekseerRendererGL.h>
 #include "Math.h"
-#include "../imgui/imgui.h"
-#include "../imgui/imgui_impl_glfw.h"
-#include "../imgui/imgui_impl_opengl3.h"
 #include <unordered_map>
 #include "RendererDebugObject.h"
 
@@ -51,6 +47,7 @@ public:
 
 
 	SDL_Window* GetMainWindow() { return m_window; }    // ウィンドウのゲッター
+	SDL_GLContext GetContext() { return m_context; }
 
 	class DrawableObjectManager* GetDrawableObjectManager() { return m_drawableObject; }
 

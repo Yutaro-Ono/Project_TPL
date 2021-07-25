@@ -13,8 +13,12 @@
 // インクルードファイル
 // ※gl3w→glfwの順番に記述
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
+#include <typeinfo>
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+#include <SDL_types.h>
+#include <SDL_mixer.h>
+#include <SDL_image.h>
 
 class GameMain
 {
@@ -68,8 +72,7 @@ private:
 
 	// フレーム更新に影響する変数
 	float m_deltaTime;
-	float m_currentFrame;
-	float m_lastFrame;
+	Uint32 m_ticksCount;
 	float m_bulletTime;
 };
 
